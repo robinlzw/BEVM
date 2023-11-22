@@ -2,6 +2,14 @@
 members = [
   "node",
   "runtime",
+
+  "primitives/assets-registrar",
+  "primitives/io",
+  "primitives/mining/common",
+  "primitives/mining/staking",
+  "primitives/protocol",
+  "primitives/rpc",
+  "primitives/runtime"
 ]
 resolver = "2"
 
@@ -22,6 +30,9 @@ jsonrpsee = { version = "0.16.2", features = ["server"] }
 parity-scale-codec = { version = "3.6.4", default-features = false, features = ["derive"] }
 scale-info = { version = "2.10.0", default-features = false, features = ["derive"] }
 serde = { version = "1.0", default-features = false, features = ["derive", "alloc"] }
+impl-trait-for-tuples = "0.2.2"
+jsonrpc-core = "18.0.0"
+serde_json = "1.0.108"
 
 # Substrate Client
 sc-basic-authorship = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0" }
@@ -40,6 +51,8 @@ sc-telemetry = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "po
 sc-transaction-pool = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0" }
 sc-transaction-pool-api = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0" }
 # Substrate Primitive
+sp-application-crypto = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+sp-arithmetic = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
 sp-api = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
 sp-block-builder = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
 sp-blockchain = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0" }
@@ -53,6 +66,7 @@ sp-io = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-
 sp-keyring = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0" }
 sp-offchain = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
 sp-runtime = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+sp-runtime-interface = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
 sp-session = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
 sp-std = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
 sp-storage = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }

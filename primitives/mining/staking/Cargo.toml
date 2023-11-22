@@ -1,0 +1,27 @@
+[package]
+name = "xp-mining-staking"
+version = "0.1.0"
+authors = { workspace = true }
+edition = { workspace = true }
+repository = { workspace = true }
+homepage = { workspace = true }
+
+[dependencies]
+# Substrate primitives
+sp-runtime = { workspace = true }
+sp-std = { workspace = true }
+
+# BEVM primitives
+bevm-primitives = { path = "../../../primitives", default-features = false }
+xp-mining-common = { path = "../common", default-features = false }
+
+[features]
+default = ["std"]
+std = [
+    # Substrate primitives
+    "sp-runtime/std",
+    "sp-std/std",
+    # BEVM primitives
+    "bevm-primitives/std",
+    "xp-mining-common/std",
+]

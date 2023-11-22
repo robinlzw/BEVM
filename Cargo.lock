@@ -785,6 +785,21 @@ dependencies = [
 ]
 
 [[package]]
+name = "bevm-primitives"
+version = "0.1.0"
+dependencies = [
+ "frame-system",
+ "impl-trait-for-tuples",
+ "parity-scale-codec",
+ "scale-info",
+ "serde",
+ "sp-application-crypto",
+ "sp-core",
+ "sp-runtime",
+ "sp-std",
+]
+
+[[package]]
 name = "bevm-runtime"
 version = "0.1.0"
 dependencies = [
@@ -3628,6 +3643,21 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "54c0c35952f67de54bb584e9fd912b3023117cbafc0a77d8f3dee1fb5f572fe8"
 dependencies = [
  "wasm-bindgen",
+]
+
+[[package]]
+name = "jsonrpc-core"
+version = "18.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "14f7f76aef2d054868398427f6c54943cf3d1caa9a7ec7d0c38d69df97a965eb"
+dependencies = [
+ "futures",
+ "futures-executor",
+ "futures-util",
+ "log",
+ "serde",
+ "serde_derive",
+ "serde_json",
 ]
 
 [[package]]
@@ -10621,6 +10651,83 @@ dependencies = [
  "rusticata-macros",
  "thiserror",
  "time",
+]
+
+[[package]]
+name = "xp-assets-registrar"
+version = "0.1.0"
+dependencies = [
+ "bevm-primitives",
+ "impl-trait-for-tuples",
+ "parity-scale-codec",
+ "scale-info",
+ "serde",
+ "sp-runtime",
+ "sp-std",
+]
+
+[[package]]
+name = "xp-io"
+version = "0.1.0"
+dependencies = [
+ "hex",
+ "parity-scale-codec",
+ "sp-core",
+ "sp-runtime",
+ "sp-runtime-interface",
+]
+
+[[package]]
+name = "xp-mining-common"
+version = "0.1.0"
+dependencies = [
+ "bevm-primitives",
+ "sp-arithmetic",
+ "sp-runtime",
+]
+
+[[package]]
+name = "xp-mining-staking"
+version = "0.1.0"
+dependencies = [
+ "bevm-primitives",
+ "sp-runtime",
+ "sp-std",
+ "xp-mining-common",
+]
+
+[[package]]
+name = "xp-protocol"
+version = "0.1.0"
+dependencies = [
+ "bevm-primitives",
+ "parity-scale-codec",
+ "scale-info",
+ "serde",
+ "sp-runtime",
+]
+
+[[package]]
+name = "xp-rpc"
+version = "0.1.0"
+dependencies = [
+ "hex",
+ "jsonrpc-core",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "xp-runtime"
+version = "0.1.0"
+dependencies = [
+ "hex",
+ "parity-scale-codec",
+ "scale-info",
+ "serde",
+ "sp-core",
+ "sp-runtime",
+ "sp-std",
 ]
 
 [[package]]

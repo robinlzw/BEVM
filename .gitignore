@@ -2,8 +2,8 @@
 **/*.rs.bk
 *.swp
 .wasm-binaries
-chainx/runtime/wasm/target/
-!runtime/wasm/target/wasm32-unknown-unknown/release/chainx_runtime.compact.wasm
+bevm/runtime/wasm/target/
+!runtime/wasm/target/wasm32-unknown-unknown/release/bevm_runtime.compact.wasm
 node_modules
 **/._*
 .vscode/
@@ -14,14 +14,13 @@ node_modules
 *.dll
 /target/
 *.exe
-**/*.rs.bk
 .vs/
 .idea/
-chainx/
-!runtime/chainx
-!rpc/src/chainx
+bevm/
+!runtime/bevm
+!rpc/src/bevm
 bak/
-.chainx/
+.bevm/
 .sub/
 log/
 

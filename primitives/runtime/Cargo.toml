@@ -1,0 +1,32 @@
+[package]
+name = "xp-runtime"
+version = "0.1.0"
+authors = { workspace = true }
+edition = { workspace = true }
+repository = { workspace = true }
+homepage = { workspace = true }
+
+[dependencies]
+parity-scale-codec = { workspace = true }
+serde = { workspace = true, optional = true }
+scale-info = { workspace = true }
+
+# Substrate primitives
+sp-core = { workspace = true }
+sp-runtime = { workspace = true }
+sp-std = { workspace = true }
+
+[dev-dependencies]
+hex = { workspace = true }
+
+[features]
+default = ["std"]
+std = [
+    "parity-scale-codec/std",
+    "serde",
+    "scale-info/std",
+    # Substrate primitives
+    "sp-core/std",
+    "sp-runtime/std",
+    "sp-std/std",
+]

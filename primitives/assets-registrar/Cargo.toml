@@ -1,0 +1,32 @@
+[package]
+name = "xp-assets-registrar"
+version = "0.1.0"
+authors = { workspace = true }
+edition = { workspace = true }
+repository = { workspace = true }
+homepage = { workspace = true }
+
+[dependencies]
+parity-scale-codec = { workspace = true }
+scale-info = { workspace = true }
+serde = { workspace = true, optional = true }
+impl-trait-for-tuples = { workspace = true }
+
+# Substrate primitives
+sp-runtime = { workspace = true }
+sp-std = { workspace = true }
+
+# BEVM primitives
+bevm-primitives = { path = "../../primitives", default-features = false }
+
+[features]
+default = ["std"]
+std = [
+    "parity-scale-codec/std",
+    "scale-info/std",
+    "serde",
+    # Substrate primitives
+    "sp-runtime/std",
+    # BEVM primitives
+    "bevm-primitives/std",
+]
