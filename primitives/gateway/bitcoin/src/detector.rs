@@ -6,249 +6,237 @@ use bevm_primitives::ReferralId;
 use log::{debug, warn};
 
 use light_bitcoin::{
-    chain::Transaction,
-    keys::{Address, Network},
-    primitives::hash_rev,
-    script::Script,
+	chain::Transaction,
+	keys::{Address, Network},
+	primitives::hash_rev,
+	script::Script,
 };
 
 use crate::{
-    types::{BtcDepositInfo, BtcTxMetaType, OpReturnAccount, TrusteePair},
-    utils::{
-        extract_addr_from_transaction, extract_opreturn_data, extract_output_addr, is_trustee_addr,
-    },
+	types::{BtcDepositInfo, BtcTxMetaType, OpReturnAccount, TrusteePair},
+	utils::{
+		extract_addr_from_transaction, extract_opreturn_data, extract_output_addr, is_trustee_addr,
+	},
 };
 
 /// A helper struct for detecting the bitcoin transaction type.
 #[derive(Clone, Debug)]
 pub struct BtcTxTypeDetector {
-    // The bitcoin network type (mainnet/testnet)
-    network: Network,
-    // The minimum deposit value of the `Deposit` transaction.
-    min_deposit: u64,
+	// The bitcoin network type (mainnet/testnet)
+	network: Network,
+	// The minimum deposit value of the `Deposit` transaction.
+	min_deposit: u64,
 }
 
 impl BtcTxTypeDetector {
-    /// Create a new bitcoin tx type detector.
-    pub fn new(network: Network, min_deposit: u64) -> Self {
-        Self {
-            network,
-            min_deposit,
-        }
-    }
+	/// Create a new bitcoin tx type detector.
+	pub fn new(network: Network, min_deposit: u64) -> Self {
+		Self { network, min_deposit }
+	}
 
-    /// Detect X-BTC transaction type.
-    ///
-    /// We would try to detect `Withdrawal`/`TrusteeTransition`/`HotAndCold` transaction types
-    /// when passing `Some(prev_tx)`, otherwise, we would just detect `Deposit` type.
-    ///
-    /// If the transaction type is `Deposit`, and parsing opreturn successfully,
-    /// we would use opreturn data as account info, otherwise, we would use input_addr, which is
-    /// extracted from `prev_tx`, as the account.
-    ///
-    // If we meet with `prev_tx`, we would parse tx's inputs/outputs into Option<Address>.
-    // e.g. notice the relay tx only has the first input
-    //        _________
-    //  addr |        | Some(addr)
-    //       |   tx   | Some(addr)
-    //       |________| None (OP_RETURN or something unknown)
-    pub fn detect_transaction_type<AccountId, Extractor>(
-        &self,
-        tx: &Transaction,
-        prev_tx: Option<&Transaction>,
-        extract_account: Extractor,
-        current_trustee_pair: TrusteePair,
-        prev_trustee_pair: Option<TrusteePair>,
-    ) -> BtcTxMetaType<AccountId>
-    where
-        AccountId: Debug,
-        Extractor: Fn(&[u8]) -> Option<(OpReturnAccount<AccountId>, Option<ReferralId>)>,
-    {
-        // extract input addr from the output of previous transaction
-        let input_addr = prev_tx.and_then(|prev_tx| {
-            let outpoint = &tx.inputs[0].previous_output;
-            extract_addr_from_transaction(prev_tx, outpoint.index as usize, self.network)
-        });
+	/// Detect X-BTC transaction type.
+	///
+	/// We would try to detect `Withdrawal`/`TrusteeTransition`/`HotAndCold` transaction types
+	/// when passing `Some(prev_tx)`, otherwise, we would just detect `Deposit` type.
+	///
+	/// If the transaction type is `Deposit`, and parsing opreturn successfully,
+	/// we would use opreturn data as account info, otherwise, we would use input_addr, which is
+	/// extracted from `prev_tx`, as the account.
+	// If we meet with `prev_tx`, we would parse tx's inputs/outputs into Option<Address>.
+	// e.g. notice the relay tx only has the first input
+	//        _________
+	//  addr |        | Some(addr)
+	//       |   tx   | Some(addr)
+	//       |________| None (OP_RETURN or something unknown)
+	pub fn detect_transaction_type<AccountId, Extractor>(
+		&self,
+		tx: &Transaction,
+		prev_tx: Option<&Transaction>,
+		extract_account: Extractor,
+		current_trustee_pair: TrusteePair,
+		prev_trustee_pair: Option<TrusteePair>,
+	) -> BtcTxMetaType<AccountId>
+	where
+		AccountId: Debug,
+		Extractor: Fn(&[u8]) -> Option<(OpReturnAccount<AccountId>, Option<ReferralId>)>,
+	{
+		// extract input addr from the output of previous transaction
+		let input_addr = prev_tx.and_then(|prev_tx| {
+			let outpoint = &tx.inputs[0].previous_output;
+			extract_addr_from_transaction(prev_tx, outpoint.index as usize, self.network)
+		});
 
-        // detect X-BTC `Withdrawal`/`HotAndCold`/`TrusteeTransition` transaction
-        if let Some(input_addr) = input_addr {
-            let all_outputs_is_trustee = tx
-                .outputs
-                .iter()
-                .map(|output| extract_output_addr(output, self.network).unwrap_or_default())
-                .all(|addr| is_trustee_addr(addr, current_trustee_pair));
+		// detect X-BTC `Withdrawal`/`HotAndCold`/`TrusteeTransition` transaction
+		if let Some(input_addr) = input_addr {
+			let all_outputs_is_trustee = tx
+				.outputs
+				.iter()
+				.map(|output| extract_output_addr(output, self.network).unwrap_or_default())
+				.all(|addr| is_trustee_addr(addr, current_trustee_pair));
 
-            if is_trustee_addr(input_addr, current_trustee_pair) {
-                return if all_outputs_is_trustee {
-                    BtcTxMetaType::HotAndCold
-                } else {
-                    // outputs contains other address, it's a user address, thus it's a withdrawal
-                    BtcTxMetaType::Withdrawal
-                };
-            }
-            if let Some(prev_trustee_pair) = prev_trustee_pair {
-                // inputs: previous trustee cold address --> outputs: current trustee cold address
-                let all_outputs_is_cold_address = tx
-                    .outputs
-                    .iter()
-                    .map(|output| extract_output_addr(output, self.network).unwrap_or_default())
-                    .all(|addr| addr.hash == current_trustee_pair.1.hash);
-                if input_addr.hash == prev_trustee_pair.1.hash && all_outputs_is_cold_address {
-                    return BtcTxMetaType::TrusteeTransition;
-                }
-            }
-        }
+			if is_trustee_addr(input_addr, current_trustee_pair) {
+				return if all_outputs_is_trustee {
+					BtcTxMetaType::HotAndCold
+				} else {
+					// outputs contains other address, it's a user address, thus it's a withdrawal
+					BtcTxMetaType::Withdrawal
+				}
+			}
+			if let Some(prev_trustee_pair) = prev_trustee_pair {
+				// inputs: previous trustee cold address --> outputs: current trustee cold address
+				let all_outputs_is_cold_address = tx
+					.outputs
+					.iter()
+					.map(|output| extract_output_addr(output, self.network).unwrap_or_default())
+					.all(|addr| addr.hash == current_trustee_pair.1.hash);
+				if input_addr.hash == prev_trustee_pair.1.hash && all_outputs_is_cold_address {
+					return BtcTxMetaType::TrusteeTransition
+				}
+			}
+		}
 
-        // detect X-BTC `Deposit` transaction
-        self.detect_deposit_transaction_type(tx, input_addr, extract_account, current_trustee_pair)
-    }
+		// detect X-BTC `Deposit` transaction
+		self.detect_deposit_transaction_type(tx, input_addr, extract_account, current_trustee_pair)
+	}
 
-    /// Detect X-BTC `Deposit` transaction
-    ///
-    /// # Format
-    ///
-    /// The outputs of X-BTC `Deposit` transaction must be in the following
-    /// format (ignore the outputs order):
-    ///
-    /// - 1 outputs (e.g. txid=987f12d3ebfaf875c19553bf5e1d4277f24d2be64cbdd8942174d1cd232fdaf8):
-    ///   - X-BTC hot trustee address (deposit value)
-    ///
-    ///   **Precondition**: sent a correct deposit transaction with the same BTC address before.
-    ///   **Solution**: call `push_transaction` with the previous transaction of the transaction
-    ///   with 1 outputs to get the BTC address.
-    ///
-    /// - 2 outputs (e.g. txid=7cd6d752c51100c7bc51657433b52facd04a0fea203b8e7776e6420c477912c2):
-    ///   - X-BTC hot trustee address (deposit value)
-    ///   - Change address (don't care)
-    ///
-    ///   **Solution**: send a correct deposit transaction with the same BTC address.
-    ///
-    /// - 2 outputs (e.g. txid=e3639343ca806fe3bf2513971b79130eef88aa05000ce538c6af199dd8ef3ca7) (Recommended):
-    ///   - X-BTC hot trustee address (deposit value)
-    ///   - Null data transaction (opreturn data with valid account info)
-    ///
-    /// - 3 outputs (e.g. txid=003e7e005b172fe0046fd06a83679fbcdc5e3dd64c8ef9295662a463dea486aa) (Recommended):
-    ///   - X-BTC hot trustee address (deposit value)
-    ///   - Change address (don't care)
-    ///   - Null data transaction (opreturn data with valid account info)
-    ///
-    /// - 3+ outputs (Not recommended):
-    ///   - X-BTC hot trustee address (deposit value)
-    ///   - Null data transaction (opreturn data with valid account info)
-    ///   - Null data transaction (useless for us)
-    ///   - Null data transaction (useless for us)
-    ///   - ...
-    ///   - Null data transaction (useless for us)
-    ///
-    /// # NOTE
-    ///
-    /// We only handle the first valid opreturn with valid account info, so ensure that there is
-    /// **ONLY ONE** opreturn in the transaction outputs as much as possible when constructing
-    /// X-BTC deposit transaction.
-    pub fn detect_deposit_transaction_type<AccountId, Extractor>(
-        &self,
-        tx: &Transaction,
-        input_addr: Option<Address>,
-        extract_account: Extractor,
-        current_trustee_pair: TrusteePair,
-    ) -> BtcTxMetaType<AccountId>
-    where
-        AccountId: Debug,
-        Extractor: Fn(&[u8]) -> Option<(OpReturnAccount<AccountId>, Option<ReferralId>)>,
-    {
-        let (op_return, deposit_value) =
-            self.parse_deposit_transaction_outputs(tx, extract_account, current_trustee_pair);
-        // check if deposit value is greater than minimum deposit value.
-        if deposit_value >= self.min_deposit {
-            // if opreturn.is_none() && input_addr.is_none()
-            // we still think it's a deposit tx, but won't process it.
-            BtcTxMetaType::Deposit(BtcDepositInfo {
-                deposit_value,
-                op_return,
-                input_addr,
-            })
-        } else {
-            warn!(
+	/// Detect X-BTC `Deposit` transaction
+	///
+	/// # Format
+	///
+	/// The outputs of X-BTC `Deposit` transaction must be in the following
+	/// format (ignore the outputs order):
+	///
+	/// - 1 outputs (e.g. txid=987f12d3ebfaf875c19553bf5e1d4277f24d2be64cbdd8942174d1cd232fdaf8):
+	///   - X-BTC hot trustee address (deposit value)
+	///
+	///   **Precondition**: sent a correct deposit transaction with the same BTC address before.
+	///   **Solution**: call `push_transaction` with the previous transaction of the transaction
+	///   with 1 outputs to get the BTC address.
+	///
+	/// - 2 outputs (e.g. txid=7cd6d752c51100c7bc51657433b52facd04a0fea203b8e7776e6420c477912c2):
+	///   - X-BTC hot trustee address (deposit value)
+	///   - Change address (don't care)
+	///
+	///   **Solution**: send a correct deposit transaction with the same BTC address.
+	///
+	/// - 2 outputs (e.g. txid=e3639343ca806fe3bf2513971b79130eef88aa05000ce538c6af199dd8ef3ca7)
+	///   (Recommended):
+	///   - X-BTC hot trustee address (deposit value)
+	///   - Null data transaction (opreturn data with valid account info)
+	///
+	/// - 3 outputs (e.g. txid=003e7e005b172fe0046fd06a83679fbcdc5e3dd64c8ef9295662a463dea486aa)
+	///   (Recommended):
+	///   - X-BTC hot trustee address (deposit value)
+	///   - Change address (don't care)
+	///   - Null data transaction (opreturn data with valid account info)
+	///
+	/// - 3+ outputs (Not recommended):
+	///   - X-BTC hot trustee address (deposit value)
+	///   - Null data transaction (opreturn data with valid account info)
+	///   - Null data transaction (useless for us)
+	///   - Null data transaction (useless for us)
+	///   - ...
+	///   - Null data transaction (useless for us)
+	///
+	/// # NOTE
+	///
+	/// We only handle the first valid opreturn with valid account info, so ensure that there is
+	/// **ONLY ONE** opreturn in the transaction outputs as much as possible when constructing
+	/// X-BTC deposit transaction.
+	pub fn detect_deposit_transaction_type<AccountId, Extractor>(
+		&self,
+		tx: &Transaction,
+		input_addr: Option<Address>,
+		extract_account: Extractor,
+		current_trustee_pair: TrusteePair,
+	) -> BtcTxMetaType<AccountId>
+	where
+		AccountId: Debug,
+		Extractor: Fn(&[u8]) -> Option<(OpReturnAccount<AccountId>, Option<ReferralId>)>,
+	{
+		let (op_return, deposit_value) =
+			self.parse_deposit_transaction_outputs(tx, extract_account, current_trustee_pair);
+		// check if deposit value is greater than minimum deposit value.
+		if deposit_value >= self.min_deposit {
+			// if opreturn.is_none() && input_addr.is_none()
+			// we still think it's a deposit tx, but won't process it.
+			BtcTxMetaType::Deposit(BtcDepositInfo { deposit_value, op_return, input_addr })
+		} else {
+			warn!(
                 "[detect_deposit_transaction_type] Receive a deposit tx ({:?}), but deposit value ({:}) is too low, drop it",
                 hash_rev(tx.hash()), deposit_value,
             );
-            BtcTxMetaType::Irrelevance
-        }
-    }
+			BtcTxMetaType::Irrelevance
+		}
+	}
 
-    /// Parse the outputs of X-BTC `Deposit` transaction.
-    /// Return the account info that extracted from OP_RETURN data and the deposit value.
-    pub fn parse_deposit_transaction_outputs<AccountId, Extractor>(
-        &self,
-        tx: &Transaction,
-        extract_account: Extractor,
-        current_trustee_pair: TrusteePair,
-    ) -> (
-        Option<(OpReturnAccount<AccountId>, Option<ReferralId>)>,
-        u64,
-    )
-    where
-        AccountId: Debug,
-        Extractor: Fn(&[u8]) -> Option<(OpReturnAccount<AccountId>, Option<ReferralId>)>,
-    {
-        let mut account_info = None;
-        // only handle first valid opreturn with account info, other opreturn would be dropped
-        for op_return_script in tx
-            .outputs
-            .iter()
-            .map(|output| Script::new(output.script_pubkey.clone()))
-            .filter(|script| script.is_null_data_script())
-        {
-            debug!(
-                "[parse_deposit_transaction_outputs] op_return_script:{:?}",
-                op_return_script
-            );
-            if let Some(info) = extract_opreturn_data(&op_return_script)
-                .and_then(|opreturn| extract_account(&opreturn))
-            {
-                account_info = Some(info);
-                break;
-            }
-        }
+	/// Parse the outputs of X-BTC `Deposit` transaction.
+	/// Return the account info that extracted from OP_RETURN data and the deposit value.
+	pub fn parse_deposit_transaction_outputs<AccountId, Extractor>(
+		&self,
+		tx: &Transaction,
+		extract_account: Extractor,
+		current_trustee_pair: TrusteePair,
+	) -> (Option<(OpReturnAccount<AccountId>, Option<ReferralId>)>, u64)
+	where
+		AccountId: Debug,
+		Extractor: Fn(&[u8]) -> Option<(OpReturnAccount<AccountId>, Option<ReferralId>)>,
+	{
+		let mut account_info = None;
+		// only handle first valid opreturn with account info, other opreturn would be dropped
+		for op_return_script in tx
+			.outputs
+			.iter()
+			.map(|output| Script::new(output.script_pubkey.clone()))
+			.filter(|script| script.is_null_data_script())
+		{
+			debug!("[parse_deposit_transaction_outputs] op_return_script:{:?}", op_return_script);
+			if let Some(info) = extract_opreturn_data(&op_return_script)
+				.and_then(|opreturn| extract_account(&opreturn))
+			{
+				account_info = Some(info);
+				break
+			}
+		}
 
-        let mut deposit_value = 0;
-        let (hot_addr, _) = current_trustee_pair;
-        for output in &tx.outputs {
-            // extract destination address from the script of output.
-            if let Some(dest_addr) = extract_output_addr(output, self.network) {
-                // check if the script address of the output is the hot trustee address
-                if dest_addr.hash == hot_addr.hash && output.value > 0 {
-                    deposit_value += output.value;
-                }
-            }
-        }
-        debug!(
-            "[parse_deposit_transaction_outputs] account_info:{:?}, deposit_value:{}",
-            account_info, deposit_value
-        );
-        (account_info, deposit_value)
-    }
+		let mut deposit_value = 0;
+		let (hot_addr, _) = current_trustee_pair;
+		for output in &tx.outputs {
+			// extract destination address from the script of output.
+			if let Some(dest_addr) = extract_output_addr(output, self.network) {
+				// check if the script address of the output is the hot trustee address
+				if dest_addr.hash == hot_addr.hash && output.value > 0 {
+					deposit_value += output.value;
+				}
+			}
+		}
+		debug!(
+			"[parse_deposit_transaction_outputs] account_info:{:?}, deposit_value:{}",
+			account_info, deposit_value
+		);
+		(account_info, deposit_value)
+	}
 }
 
 #[cfg(test)]
 mod tests {
-    use sp_core::crypto::{set_default_ss58_version, Ss58AddressFormatRegistry};
-    use sp_runtime::AccountId32;
-    use xp_gateway_common::OpReturnAccount;
+	use sp_core::crypto::{set_default_ss58_version, Ss58AddressFormatRegistry};
+	use sp_runtime::AccountId32;
+	use xp_gateway_common::OpReturnAccount;
 
-    use super::{Address, BtcTxTypeDetector, Network, Transaction};
-    use crate::extractor::{AccountExtractor, OpReturnExtractor};
+	use super::{Address, BtcTxTypeDetector, Network, Transaction};
+	use crate::extractor::{AccountExtractor, OpReturnExtractor};
 
-    fn account(addr: &str) -> AccountId32 {
-        addr.parse::<AccountId32>().unwrap()
-    }
+	fn account(addr: &str) -> AccountId32 {
+		addr.parse::<AccountId32>().unwrap()
+	}
 
-    #[test]
-    fn test_parse_deposit_transaction_outputs() {
-        set_default_ss58_version(Ss58AddressFormatRegistry::ChainxAccount.into());
+	#[test]
+	fn test_parse_deposit_transaction_outputs() {
+		set_default_ss58_version(Ss58AddressFormatRegistry::ChainxAccount.into());
 
-        // tx from MathWallet test
-        let cases = vec![
+		// tx from MathWallet test
+		let cases = vec![
             // txid: b368d3b822ec6656af441ccfa0ea2c846ec445286fd264e94a9a6edf0d7a1108
             // opreturn normal with addr (5Uj3ehamDZWPfgA8iAZenhcAmPDakjf4aMbkBB4dXVvjoW6x) (witness)
             // 3 outputs:
@@ -377,21 +365,21 @@ mod tests {
             )
         ];
 
-        const DEPOSIT_HOT_ADDR: &str = "3LFSUKkP26hun42J1Dy6RATsbgmBJb27NF";
-        const DEPOSIT_COLD_ADDR: &str = "3FLBhPfEqmw4Wn5EQMeUzPLrQtJMprgwnw";
-        let btc_tx_detector = BtcTxTypeDetector::new(Network::Mainnet, 0);
+		const DEPOSIT_HOT_ADDR: &str = "3LFSUKkP26hun42J1Dy6RATsbgmBJb27NF";
+		const DEPOSIT_COLD_ADDR: &str = "3FLBhPfEqmw4Wn5EQMeUzPLrQtJMprgwnw";
+		let btc_tx_detector = BtcTxTypeDetector::new(Network::Mainnet, 0);
 
-        let current_trustee_pair = (
-            DEPOSIT_HOT_ADDR.parse::<Address>().unwrap(),
-            DEPOSIT_COLD_ADDR.parse::<Address>().unwrap(),
-        );
-        for (tx, expect) in cases {
-            let got = btc_tx_detector.parse_deposit_transaction_outputs(
-                &tx,
-                OpReturnExtractor::extract_account,
-                current_trustee_pair,
-            );
-            assert_eq!(got, expect);
-        }
-    }
+		let current_trustee_pair = (
+			DEPOSIT_HOT_ADDR.parse::<Address>().unwrap(),
+			DEPOSIT_COLD_ADDR.parse::<Address>().unwrap(),
+		);
+		for (tx, expect) in cases {
+			let got = btc_tx_detector.parse_deposit_transaction_outputs(
+				&tx,
+				OpReturnExtractor::extract_account,
+				current_trustee_pair,
+			);
+			assert_eq!(got, expect);
+		}
+	}
 }

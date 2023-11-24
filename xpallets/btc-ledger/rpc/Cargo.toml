@@ -1,0 +1,25 @@
+[package]
+name = "xpallet-btc-ledger-rpc"
+version = "0.1.0"
+authors = { workspace = true }
+edition = { workspace = true }
+repository = { workspace = true }
+homepage = { workspace = true }
+
+[package.metadata.docs.rs]
+targets = ["x86_64-unknown-linux-gnu"]
+
+[dependencies]
+parity-scale-codec = { workspace = true }
+jsonrpsee = { workspace = true, features = ["client-core", "server", "macros"] }
+
+# Substrate primitives
+sp-api = { workspace = true }
+sp-blockchain = { workspace = true }
+sp-runtime = { workspace = true }
+
+# rpc primitives
+xp-rpc = { path = "../../../primitives/rpc" }
+
+# pallets api
+xpallet-btc-ledger-runtime-api = { path = "./runtime-api" }

@@ -1,3 +1,5 @@
+// Copyright 2023 BEVM Project Authors. Licensed under GPL-3.0.
+
 fn main() {
 	#[cfg(feature = "std")]
 	{

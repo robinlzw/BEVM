@@ -36,7 +36,7 @@ const CHAINS: [Chain; 1] = [Chain::Bitcoin];
 pub enum Chain {
 	/// Bitcoin
 	#[default]
-	Bitcoin
+	Bitcoin,
 }
 
 impl Chain {

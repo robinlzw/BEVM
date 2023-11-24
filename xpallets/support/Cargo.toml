@@ -1,5 +1,5 @@
 [package]
-name = "xp-rpc"
+name = "xpallet-support"
 version = "0.1.0"
 authors = { workspace = true }
 edition = { workspace = true }
@@ -8,8 +8,14 @@ homepage = { workspace = true }
 
 [dependencies]
 hex = { workspace = true }
-jsonrpsee = { workspace = true }
-serde = { workspace = true }
 
-[dev-dependencies]
-serde_json = { workspace = true }
+# Substrate primitives
+sp-std = { workspace = true }
+
+[features]
+default = ["std"]
+std = [
+    "hex/std",
+    # Substrate primitives
+    "sp-std/std",
+]

@@ -11,4 +11,3 @@ pub const BEVM_DECIMALS: Decimals = 8;
 pub const BTC: AssetId = 1;
 /// Decimals of BTC.
 pub const BTC_DECIMALS: Decimals = 8;
-

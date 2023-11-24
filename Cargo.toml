@@ -11,7 +11,12 @@ members = [
   "primitives/mining/staking",
   "primitives/protocol",
   "primitives/rpc",
-  "primitives/runtime"
+  "primitives/runtime",
+
+  "xpallets/btc-ledger",
+  "xpallets/btc-ledger/rpc",
+  "xpallets/btc-ledger/rpc/runtime-api",
+  "xpallets/support"
 ]
 resolver = "2"
 
