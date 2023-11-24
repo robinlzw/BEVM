@@ -4,6 +4,8 @@ members = [
   "runtime",
 
   "primitives/assets-registrar",
+  "primitives/gateway/bitcoin",
+  "primitives/gateway/common",
   "primitives/io",
   "primitives/mining/common",
   "primitives/mining/staking",
@@ -33,6 +35,8 @@ serde = { version = "1.0", default-features = false, features = ["derive", "allo
 impl-trait-for-tuples = "0.2.2"
 jsonrpc-core = "18.0.0"
 serde_json = "1.0.108"
+bs58 = { version = "0.3", default-features = false, features = ["alloc"] }
+log = { version = "0.4.17", default-features = false }
 
 # Substrate Client
 sc-basic-authorship = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0" }

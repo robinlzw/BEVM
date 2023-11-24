@@ -733,6 +733,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8c3c1a368f70d6cf7302d78f8f7093da241fb8e8807c05cc9e51a125895a6d5b"
 
 [[package]]
+name = "bech32"
+version = "0.8.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "cf9ff0bbfd639f15c74af777d81383cf53efb7c93613f6cab67c6c11e05bbf8b"
+
+[[package]]
 name = "beef"
 version = "0.5.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -864,6 +870,23 @@ dependencies = [
  "rustc-hash",
  "shlex",
  "syn 2.0.39",
+]
+
+[[package]]
+name = "bitcoin-bech32"
+version = "0.12.1"
+source = "git+https://github.com/chainx-org/rust-bech32-bitcoin?branch=master#1de465d410c8f83e16409e71303b3389a82a3e50"
+dependencies = [
+ "bech32",
+]
+
+[[package]]
+name = "bitcoin_hashes"
+version = "0.10.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "006cc91e1a1d99819bc5b8214be3555c1f0611b169f527a1fdc54ed1f2b745b0"
+dependencies = [
+ "core2 0.3.3",
 ]
 
 [[package]]
@@ -1012,6 +1035,12 @@ dependencies = [
  "scale-info",
  "serde",
 ]
+
+[[package]]
+name = "bs58"
+version = "0.3.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "476e9cd489f9e121e02ffa6014a8ef220ecb15c05ed23fc34cca13925dc283fb"
 
 [[package]]
 name = "bs58"
@@ -1242,7 +1271,7 @@ version = "0.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b9b68e3193982cd54187d71afdb2a271ad4cf8af157858e9cb911b91321de143"
 dependencies = [
- "core2",
+ "core2 0.4.0",
  "multibase",
  "multihash",
  "serde",
@@ -1451,6 +1480,15 @@ name = "core-foundation-sys"
 version = "0.8.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e496a50fda8aacccc86d7529e2c1e0892dbd0f898a6b5645b5561b89c3210efa"
+
+[[package]]
+name = "core2"
+version = "0.3.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "239fa3ae9b63c2dc74bd3fa852d4792b8b305ae64eeede946265b6af62f1fff3"
+dependencies = [
+ "memchr",
+]
 
 [[package]]
 name = "core2"
@@ -2483,6 +2521,18 @@ dependencies = [
 
 [[package]]
 name = "fixed-hash"
+version = "0.7.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "cfcf0ed7fe52a17a03854ec54a9f76d6d84508d1c0e66bc1793301c73fc8493c"
+dependencies = [
+ "byteorder",
+ "rand 0.8.5",
+ "rustc-hex",
+ "static_assertions",
+]
+
+[[package]]
+name = "fixed-hash"
 version = "0.8.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "835c052cb0c08c1acf6ffd71c022172e18723949c8282f2b9f27efbc51e64534"
@@ -3449,6 +3499,15 @@ dependencies = [
 
 [[package]]
 name = "impl-serde"
+version = "0.3.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4551f042f3438e64dbd6226b20527fc84a6e1fe65688b58746a2f53623f25f5c"
+dependencies = [
+ "serde",
+]
+
+[[package]]
+name = "impl-serde"
 version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ebc88fc67028ae3db0c853baa36269d398d5f45b6982f95549ff5def78c935cd"
@@ -3870,6 +3929,9 @@ name = "lazy_static"
 version = "1.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e2abad23fbc42b3700f2f279844dc832adb2b2eb069b2df918f455c4e18cc646"
+dependencies = [
+ "spin 0.5.2",
+]
 
 [[package]]
 name = "lazycell"
@@ -4352,6 +4414,24 @@ dependencies = [
 
 [[package]]
 name = "libsecp256k1"
+version = "0.7.0"
+source = "git+https://github.com/chainx-org/libsecp256k1?branch=develop-2022#7dc70232c6d8e1d3a746c1eaeb701410b61609c2"
+dependencies = [
+ "arrayref",
+ "base64 0.13.1",
+ "digest 0.9.0",
+ "hmac-drbg",
+ "libsecp256k1-core 0.3.0 (git+https://github.com/chainx-org/libsecp256k1?branch=develop-2022)",
+ "libsecp256k1-gen-ecmult 0.3.0 (git+https://github.com/chainx-org/libsecp256k1?branch=develop-2022)",
+ "libsecp256k1-gen-genmult 0.3.0 (git+https://github.com/chainx-org/libsecp256k1?branch=develop-2022)",
+ "rand 0.8.5",
+ "serde",
+ "sha2 0.9.9",
+ "typenum",
+]
+
+[[package]]
+name = "libsecp256k1"
 version = "0.7.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "95b09eff1b35ed3b33b877ced3a691fc7a481919c7e29c53c906226fcf55e2a1"
@@ -4360,9 +4440,9 @@ dependencies = [
  "base64 0.13.1",
  "digest 0.9.0",
  "hmac-drbg",
- "libsecp256k1-core",
- "libsecp256k1-gen-ecmult",
- "libsecp256k1-gen-genmult",
+ "libsecp256k1-core 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "libsecp256k1-gen-ecmult 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "libsecp256k1-gen-genmult 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "rand 0.8.5",
  "serde",
  "sha2 0.9.9",
@@ -4381,12 +4461,32 @@ dependencies = [
 ]
 
 [[package]]
+name = "libsecp256k1-core"
+version = "0.3.0"
+source = "git+https://github.com/chainx-org/libsecp256k1?branch=develop-2022#7dc70232c6d8e1d3a746c1eaeb701410b61609c2"
+dependencies = [
+ "crunchy",
+ "digest 0.9.0",
+ "parity-scale-codec",
+ "scale-info",
+ "subtle 2.4.1",
+]
+
+[[package]]
 name = "libsecp256k1-gen-ecmult"
 version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3038c808c55c87e8a172643a7d87187fc6c4174468159cb3090659d55bcb4809"
 dependencies = [
- "libsecp256k1-core",
+ "libsecp256k1-core 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
+name = "libsecp256k1-gen-ecmult"
+version = "0.3.0"
+source = "git+https://github.com/chainx-org/libsecp256k1?branch=develop-2022#7dc70232c6d8e1d3a746c1eaeb701410b61609c2"
+dependencies = [
+ "libsecp256k1-core 0.3.0 (git+https://github.com/chainx-org/libsecp256k1?branch=develop-2022)",
 ]
 
 [[package]]
@@ -4395,7 +4495,15 @@ version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3db8d6ba2cec9eacc40e6e8ccc98931840301f1006e95647ceb2dd5c3aa06f7c"
 dependencies = [
- "libsecp256k1-core",
+ "libsecp256k1-core 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
+name = "libsecp256k1-gen-genmult"
+version = "0.3.0"
+source = "git+https://github.com/chainx-org/libsecp256k1?branch=develop-2022#7dc70232c6d8e1d3a746c1eaeb701410b61609c2"
+dependencies = [
+ "libsecp256k1-core 0.3.0 (git+https://github.com/chainx-org/libsecp256k1?branch=develop-2022)",
 ]
 
 [[package]]
@@ -4407,6 +4515,159 @@ dependencies = [
  "cc",
  "pkg-config",
  "vcpkg",
+]
+
+[[package]]
+name = "light-bitcoin"
+version = "0.2.0"
+source = "git+https://github.com/btclayer2/light-bitcoin?branch=develop-2022#9bd2e10ca487782089e4de5c0e3df295f113ce54"
+dependencies = [
+ "light-bitcoin-chain",
+ "light-bitcoin-crypto",
+ "light-bitcoin-keys",
+ "light-bitcoin-mast",
+ "light-bitcoin-merkle",
+ "light-bitcoin-primitives",
+ "light-bitcoin-script",
+ "light-bitcoin-serialization",
+]
+
+[[package]]
+name = "light-bitcoin-chain"
+version = "0.2.0"
+source = "git+https://github.com/btclayer2/light-bitcoin?branch=develop-2022#9bd2e10ca487782089e4de5c0e3df295f113ce54"
+dependencies = [
+ "hex",
+ "light-bitcoin-crypto",
+ "light-bitcoin-primitives",
+ "light-bitcoin-serialization",
+ "parity-scale-codec",
+ "scale-info",
+ "serde",
+]
+
+[[package]]
+name = "light-bitcoin-crypto"
+version = "0.2.0"
+source = "git+https://github.com/btclayer2/light-bitcoin?branch=develop-2022#9bd2e10ca487782089e4de5c0e3df295f113ce54"
+dependencies = [
+ "digest 0.9.0",
+ "light-bitcoin-primitives",
+ "ripemd160",
+ "sha-1",
+ "sha2 0.9.9",
+ "siphasher",
+]
+
+[[package]]
+name = "light-bitcoin-keys"
+version = "0.2.0"
+source = "git+https://github.com/btclayer2/light-bitcoin?branch=develop-2022#9bd2e10ca487782089e4de5c0e3df295f113ce54"
+dependencies = [
+ "arrayref",
+ "bitcoin-bech32",
+ "bs58 0.4.0",
+ "digest 0.9.0",
+ "hex",
+ "libsecp256k1 0.7.0",
+ "light-bitcoin-crypto",
+ "light-bitcoin-primitives",
+ "light-bitcoin-serialization",
+ "parity-scale-codec",
+ "scale-info",
+ "serde",
+ "sha2 0.9.9",
+]
+
+[[package]]
+name = "light-bitcoin-mast"
+version = "0.2.0"
+source = "git+https://github.com/btclayer2/light-bitcoin?branch=develop-2022#9bd2e10ca487782089e4de5c0e3df295f113ce54"
+dependencies = [
+ "arrayref",
+ "bitcoin-bech32",
+ "bitcoin_hashes",
+ "core2 0.3.3",
+ "digest 0.9.0",
+ "hex",
+ "lazy_static",
+ "libsecp256k1 0.7.0",
+ "light-bitcoin-crypto",
+ "light-bitcoin-keys",
+ "light-bitcoin-script",
+ "light-bitcoin-serialization",
+ "parity-scale-codec",
+ "rand_core 0.6.4",
+ "rayon",
+ "scale-info",
+ "serde",
+ "sha2 0.9.9",
+]
+
+[[package]]
+name = "light-bitcoin-merkle"
+version = "0.2.0"
+source = "git+https://github.com/btclayer2/light-bitcoin?branch=develop-2022#9bd2e10ca487782089e4de5c0e3df295f113ce54"
+dependencies = [
+ "light-bitcoin-chain",
+ "light-bitcoin-primitives",
+ "light-bitcoin-serialization",
+ "parity-scale-codec",
+ "scale-info",
+]
+
+[[package]]
+name = "light-bitcoin-primitives"
+version = "0.2.0"
+source = "git+https://github.com/btclayer2/light-bitcoin?branch=develop-2022#9bd2e10ca487782089e4de5c0e3df295f113ce54"
+dependencies = [
+ "byteorder",
+ "fixed-hash 0.7.0",
+ "hex",
+ "impl-codec",
+ "impl-serde 0.3.2",
+ "parity-scale-codec",
+ "primitive-types 0.11.1",
+ "scale-info",
+ "serde",
+]
+
+[[package]]
+name = "light-bitcoin-script"
+version = "0.2.0"
+source = "git+https://github.com/btclayer2/light-bitcoin?branch=develop-2022#9bd2e10ca487782089e4de5c0e3df295f113ce54"
+dependencies = [
+ "hex",
+ "libsecp256k1 0.7.0",
+ "light-bitcoin-chain",
+ "light-bitcoin-crypto",
+ "light-bitcoin-keys",
+ "light-bitcoin-primitives",
+ "light-bitcoin-serialization",
+ "parity-scale-codec",
+ "scale-info",
+ "sha2 0.9.9",
+]
+
+[[package]]
+name = "light-bitcoin-serialization"
+version = "0.2.0"
+source = "git+https://github.com/btclayer2/light-bitcoin?branch=develop-2022#9bd2e10ca487782089e4de5c0e3df295f113ce54"
+dependencies = [
+ "light-bitcoin-primitives",
+ "light-bitcoin-serialization-derive",
+ "parity-scale-codec",
+ "scale-info",
+]
+
+[[package]]
+name = "light-bitcoin-serialization-derive"
+version = "0.2.0"
+source = "git+https://github.com/btclayer2/light-bitcoin?branch=develop-2022#9bd2e10ca487782089e4de5c0e3df295f113ce54"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 1.0.109",
 ]
 
 [[package]]
@@ -4831,7 +5092,7 @@ dependencies = [
  "blake2b_simd",
  "blake2s_simd",
  "blake3",
- "core2",
+ "core2 0.4.0",
  "digest 0.10.7",
  "multihash-derive",
  "sha2 0.10.8",
@@ -5767,13 +6028,26 @@ dependencies = [
 
 [[package]]
 name = "primitive-types"
+version = "0.11.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e28720988bff275df1f51b171e1b2a18c30d194c4d2b61defdacecd625a5d94a"
+dependencies = [
+ "fixed-hash 0.7.0",
+ "impl-codec",
+ "impl-serde 0.3.2",
+ "scale-info",
+ "uint",
+]
+
+[[package]]
+name = "primitive-types"
 version = "0.12.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0b34d9fd68ae0b74a41b21c03c2f62847aa0ffea044eee893b4c140b37e244e2"
 dependencies = [
- "fixed-hash",
+ "fixed-hash 0.8.0",
  "impl-codec",
- "impl-serde",
+ "impl-serde 0.4.0",
  "scale-info",
  "uint",
 ]
@@ -6333,6 +6607,17 @@ dependencies = [
  "spin 0.9.8",
  "untrusted 0.9.0",
  "windows-sys 0.48.0",
+]
+
+[[package]]
+name = "ripemd160"
+version = "0.9.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2eca4ecc81b7f313189bf73ce724400a07da2a6dac19588b03c8bd76a2dcc251"
+dependencies = [
+ "block-buffer 0.9.0",
+ "digest 0.9.0",
+ "opaque-debug 0.3.0",
 ]
 
 [[package]]
@@ -8162,15 +8447,15 @@ dependencies = [
  "futures",
  "hash-db",
  "hash256-std-hasher",
- "impl-serde",
+ "impl-serde 0.4.0",
  "lazy_static",
- "libsecp256k1",
+ "libsecp256k1 0.7.1",
  "log",
  "merlin 2.0.1",
  "parity-scale-codec",
  "parking_lot 0.12.1",
  "paste",
- "primitive-types",
+ "primitive-types 0.12.2",
  "rand 0.8.5",
  "regex",
  "scale-info",
@@ -8278,7 +8563,7 @@ source = "git+https://github.com/btclayer2/polkadot-sdk?branch=polkadot-v1.3.0#7
 dependencies = [
  "bytes",
  "ed25519-dalek",
- "libsecp256k1",
+ "libsecp256k1 0.7.1",
  "log",
  "parity-scale-codec",
  "rustversion",
@@ -8410,7 +8695,7 @@ dependencies = [
  "bytes",
  "impl-trait-for-tuples",
  "parity-scale-codec",
- "primitive-types",
+ "primitive-types 0.12.2",
  "sp-externalities",
  "sp-runtime-interface-proc-macro",
  "sp-std",
@@ -8516,7 +8801,7 @@ name = "sp-storage"
 version = "13.0.0"
 source = "git+https://github.com/btclayer2/polkadot-sdk?branch=polkadot-v1.3.0#7c9fd83805cc446983a7698c7a3281677cf655c8"
 dependencies = [
- "impl-serde",
+ "impl-serde 0.4.0",
  "parity-scale-codec",
  "ref-cast",
  "serde",
@@ -8602,7 +8887,7 @@ name = "sp-version"
 version = "22.0.0"
 source = "git+https://github.com/btclayer2/polkadot-sdk?branch=polkadot-v1.3.0#7c9fd83805cc446983a7698c7a3281677cf655c8"
 dependencies = [
- "impl-serde",
+ "impl-serde 0.4.0",
  "parity-scale-codec",
  "parity-wasm",
  "scale-info",
@@ -10664,6 +10949,36 @@ dependencies = [
  "serde",
  "sp-runtime",
  "sp-std",
+]
+
+[[package]]
+name = "xp-gateway-bitcoin"
+version = "0.1.0"
+dependencies = [
+ "bevm-primitives",
+ "hex",
+ "light-bitcoin",
+ "log",
+ "parity-scale-codec",
+ "scale-info",
+ "serde",
+ "sp-core",
+ "sp-runtime",
+ "sp-std",
+ "xp-gateway-common",
+]
+
+[[package]]
+name = "xp-gateway-common"
+version = "0.1.0"
+dependencies = [
+ "bs58 0.3.1",
+ "hex",
+ "log",
+ "parity-scale-codec",
+ "scale-info",
+ "sp-core",
+ "xp-io",
 ]
 
 [[package]]
