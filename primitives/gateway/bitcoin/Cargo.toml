@@ -23,7 +23,7 @@ bevm-primitives = { path = "../../../primitives", default-features = false }
 xp-gateway-common = { path = "../../gateway/common", default-features = false }
 
 # light-bitcoin
-light-bitcoin = { git = "https://github.com/btclayer2/light-bitcoin", branch = "develop-2022", default-features = false }
+light-bitcoin = { workspace = true }
 
 [features]
 default = ["std"]

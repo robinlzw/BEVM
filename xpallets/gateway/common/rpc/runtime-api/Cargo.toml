@@ -1,0 +1,44 @@
+[package]
+name = "xpallet-gateway-common-rpc-runtime-api"
+version = "0.1.0"
+authors = { workspace = true }
+edition = { workspace = true }
+repository = { workspace = true }
+homepage = { workspace = true }
+
+[package.metadata.docs.rs]
+targets = ["x86_64-unknown-linux-gnu"]
+
+[dependencies]
+parity-scale-codec = { workspace = true }
+
+# Substrate primitives
+sp-api = { workspace = true }
+sp-runtime = { workspace = true }
+sp-std = { workspace = true }
+
+# BEVM primitives
+bevm-primitives = { path = "../../../../../primitives", default-features = false }
+xp-assets-registrar = { path = "../../../../../primitives/assets-registrar", default-features = false }
+xp-runtime = { path = "../../../../../primitives/runtime", default-features = false }
+
+# BEVM pallets
+xpallet-gateway-common = { path = "../../", default-features = false }
+xpallet-gateway-records = { path = "../../../records", default-features = false }
+
+[features]
+default = ["std"]
+std = [
+    "parity-scale-codec/std",
+    # Substrate primitives
+    "sp-api/std",
+    "sp-runtime/std",
+    "sp-std/std",
+    # BEVM primitives
+    "bevm-primitives/std",
+    "xp-assets-registrar/std",
+    "xp-runtime/std",
+    # BEVM pallets
+    "xpallet-gateway-common/std",
+    "xpallet-gateway-records/std",
+]

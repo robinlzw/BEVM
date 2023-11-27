@@ -10,7 +10,7 @@ use scale_info::TypeInfo;
 #[cfg(feature = "std")]
 use serde::{Deserialize, Serialize};
 
-use sp_runtime::{DispatchResult, RuntimeDebug};
+use sp_runtime::{DispatchError, DispatchResult, RuntimeDebug};
 use sp_std::slice::Iter;
 
 use bevm_primitives::AssetId;
@@ -37,6 +37,9 @@ pub enum Chain {
 	/// Bitcoin
 	#[default]
 	Bitcoin,
+
+	/// Placeholder
+	NotSupportedChain,
 }
 
 impl Chain {
@@ -69,5 +72,33 @@ impl RegistrarHandler for Tuple {
 	fn on_deregister(asset_id: &AssetId) -> DispatchResult {
 		for_tuples!( #( Tuple::on_deregister(asset_id)?; )* );
 		Ok(())
+	}
+}
+
+#[derive(PartialEq, Eq, Clone, Default, Encode, Decode, RuntimeDebug, TypeInfo)]
+#[cfg_attr(feature = "std", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "std", serde(rename_all = "camelCase"))]
+/// BTC withdraw limit parameters
+pub struct WithdrawalLimit<Balance> {
+	/// Minimal balance
+	pub minimal_withdrawal: Balance,
+	/// Fee balance
+	pub fee: Balance,
+}
+
+/// Bitcoin config
+pub trait ChainT<Balance: Default> {
+	/// ASSET should be the native Asset for this chain.
+	/// BTC is Default 0
+	fn asset_id() -> AssetId;
+	/// Chain type
+	fn chain() -> Chain;
+	/// Check address
+	fn check_addr(_addr: &[u8], _ext: &[u8]) -> DispatchResult {
+		Ok(())
+	}
+	/// Withdraw limit
+	fn withdrawal_limit(_asset_id: &AssetId) -> Result<WithdrawalLimit<Balance>, DispatchError> {
+		Ok(WithdrawalLimit::default())
 	}
 }
