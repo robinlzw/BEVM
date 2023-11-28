@@ -18,6 +18,7 @@ sp-std = { workspace = true, default-features = false }
 
 # BEVM primitives
 bevm-primitives = { path = "../../../../../primitives", default-features = false }
+xp-assets-registrar = { path = "../../../../../primitives/assets-registrar", default-features = false }
 
 # BEVM pallets
 xpallet-gateway-records = { path = "../../", default-features = false }
@@ -31,6 +32,7 @@ std = [
     "sp-std/std",
     # BEVM primitives
     "bevm-primitives/std",
+    "xp-assets-registrar/std",
     # BEVM pallets
     "xpallet-gateway-records/std",
 ]

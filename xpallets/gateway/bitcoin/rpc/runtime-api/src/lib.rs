@@ -4,25 +4,25 @@
 
 #![cfg_attr(not(feature = "std"), no_std)]
 
+use parity_scale_codec::Codec;
 use sp_runtime::DispatchError;
 use sp_std::vec::Vec;
-use parity_scale_codec::Codec;
 pub use xpallet_gateway_bitcoin::{types::BtcHeaderInfo, BtcHeader, BtcWithdrawalProposal, H256};
 
 sp_api::decl_runtime_apis! {
-    pub trait XGatewayBitcoinApi<AccountId>
-        where AccountId: Codec
-    {
-        fn verify_tx_valid(
-            raw_tx: Vec<u8>,
-            withdrawal_id_list: Vec<u32>,
-            full_amount: bool,
-        ) -> Result<bool, DispatchError>;
+	pub trait XGatewayBitcoinApi<AccountId>
+		where AccountId: Codec
+	{
+		fn verify_tx_valid(
+			raw_tx: Vec<u8>,
+			withdrawal_id_list: Vec<u32>,
+			full_amount: bool,
+		) -> Result<bool, DispatchError>;
 
-        fn get_withdrawal_proposal() -> Option<BtcWithdrawalProposal<AccountId>>;
+		fn get_withdrawal_proposal() -> Option<BtcWithdrawalProposal<AccountId>>;
 
-        fn get_genesis_info() -> (BtcHeader, u32);
+		fn get_genesis_info() -> (BtcHeader, u32);
 
-        fn get_btc_block_header(txid: H256) -> Option<BtcHeaderInfo>;
-    }
+		fn get_btc_block_header(txid: H256) -> Option<BtcHeaderInfo>;
+	}
 }

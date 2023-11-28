@@ -11133,6 +11133,35 @@ dependencies = [
 ]
 
 [[package]]
+name = "xpallet-gateway-bitcoin-rpc"
+version = "0.1.0"
+dependencies = [
+ "hex",
+ "jsonrpsee",
+ "parity-scale-codec",
+ "serde",
+ "sp-api",
+ "sp-blockchain",
+ "sp-runtime",
+ "xp-rpc",
+ "xpallet-gateway-bitcoin-rpc-runtime-api",
+]
+
+[[package]]
+name = "xpallet-gateway-bitcoin-rpc-runtime-api"
+version = "0.1.0"
+dependencies = [
+ "bevm-primitives",
+ "parity-scale-codec",
+ "sp-api",
+ "sp-runtime",
+ "sp-std",
+ "xp-assets-registrar",
+ "xp-runtime",
+ "xpallet-gateway-bitcoin",
+]
+
+[[package]]
 name = "xpallet-gateway-common"
 version = "0.1.0"
 dependencies = [
@@ -11168,6 +11197,36 @@ dependencies = [
 ]
 
 [[package]]
+name = "xpallet-gateway-common-rpc"
+version = "0.1.0"
+dependencies = [
+ "hex",
+ "jsonrpsee",
+ "parity-scale-codec",
+ "serde",
+ "sp-api",
+ "sp-blockchain",
+ "sp-runtime",
+ "xp-rpc",
+ "xpallet-gateway-common-rpc-runtime-api",
+]
+
+[[package]]
+name = "xpallet-gateway-common-rpc-runtime-api"
+version = "0.1.0"
+dependencies = [
+ "bevm-primitives",
+ "parity-scale-codec",
+ "sp-api",
+ "sp-runtime",
+ "sp-std",
+ "xp-assets-registrar",
+ "xp-runtime",
+ "xpallet-gateway-common",
+ "xpallet-gateway-records",
+]
+
+[[package]]
 name = "xpallet-gateway-records"
 version = "0.1.0"
 dependencies = [
@@ -11189,6 +11248,32 @@ dependencies = [
  "xp-runtime",
  "xpallet-btc-ledger",
  "xpallet-support",
+]
+
+[[package]]
+name = "xpallet-gateway-records-rpc"
+version = "0.1.0"
+dependencies = [
+ "jsonrpsee",
+ "parity-scale-codec",
+ "serde",
+ "sp-api",
+ "sp-blockchain",
+ "sp-runtime",
+ "xp-rpc",
+ "xpallet-gateway-records-rpc-runtime-api",
+]
+
+[[package]]
+name = "xpallet-gateway-records-rpc-runtime-api"
+version = "0.1.0"
+dependencies = [
+ "bevm-primitives",
+ "parity-scale-codec",
+ "sp-api",
+ "sp-std",
+ "xp-assets-registrar",
+ "xpallet-gateway-records",
 ]
 
 [[package]]
@@ -11218,6 +11303,29 @@ dependencies = [
  "xp-rpc",
  "xp-runtime",
  "xpallet-support",
+]
+
+[[package]]
+name = "xpallet-mining-staking-rpc"
+version = "0.1.0"
+dependencies = [
+ "jsonrpsee",
+ "parity-scale-codec",
+ "sp-api",
+ "sp-blockchain",
+ "sp-runtime",
+ "xp-rpc",
+ "xpallet-mining-staking-rpc-runtime-api",
+]
+
+[[package]]
+name = "xpallet-mining-staking-rpc-runtime-api"
+version = "0.1.0"
+dependencies = [
+ "parity-scale-codec",
+ "sp-api",
+ "sp-std",
+ "xpallet-mining-staking",
 ]
 
 [[package]]

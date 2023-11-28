@@ -11,6 +11,7 @@ targets = ["x86_64-unknown-linux-gnu"]
 
 [dependencies]
 parity-scale-codec = { workspace = true }
+jsonrpsee = { workspace = true, features = ["client-core", "server", "macros"] }
 
 # Substrate primitives
 sp-api = { workspace = true }
@@ -18,7 +19,7 @@ sp-blockchain = { workspace = true }
 sp-runtime = { workspace = true }
 
 # BEVM primitives
-xp-rpc = { path = "../../../../primitives/rpc" }
+xp-rpc = { path = "../../../primitives/rpc" }
 
 # BEVM pallets api
 xpallet-mining-staking-rpc-runtime-api = { path = "./runtime-api" }
