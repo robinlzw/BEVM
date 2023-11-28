@@ -250,3 +250,80 @@ fn set_balance_handles_total_issuance() {
 		assert_eq!(BtcLedger::free_balance(&CHARLIE.into()), 69);
 	});
 }
+
+#[test]
+fn lock_balance() {
+	new_test_ext().execute_with(|| {
+		let old_total_issuance = BtcLedger::total_issuance();
+		assert_ok!(BtcLedger::set_balance(RuntimeOrigin::root(), CHARLIE.into(), 69));
+		assert_eq!(BtcLedger::total_issuance(), old_total_issuance + 69);
+		assert_eq!(BtcLedger::total_balance(&CHARLIE.into()), 69);
+		assert_eq!(BtcLedger::free_balance(&CHARLIE.into()), 69);
+		assert_eq!(BtcLedger::free_reserved_withdrawal(&CHARLIE.into()), 0);
+
+		assert_ok!(BtcLedger::lock(&CHARLIE.into(), 10));
+		assert_eq!(BtcLedger::total_issuance(), old_total_issuance + 69);
+		assert_eq!(BtcLedger::total_balance(&CHARLIE.into()), 69);
+		assert_eq!(BtcLedger::free_balance(&CHARLIE.into()), 59);
+		assert_eq!(BtcLedger::free_reserved_withdrawal(&CHARLIE.into()), 10);
+
+		assert_ok!(BtcLedger::lock(&CHARLIE.into(), 10));
+		assert_eq!(BtcLedger::total_issuance(), old_total_issuance + 69);
+		assert_eq!(BtcLedger::total_balance(&CHARLIE.into()), 69);
+		assert_eq!(BtcLedger::free_balance(&CHARLIE.into()), 49);
+		assert_eq!(BtcLedger::free_reserved_withdrawal(&CHARLIE.into()), 20);
+	});
+}
+
+#[test]
+fn unlock_balance() {
+	new_test_ext().execute_with(|| {
+		let old_total_issuance = BtcLedger::total_issuance();
+		assert_ok!(BtcLedger::set_balance(RuntimeOrigin::root(), CHARLIE.into(), 69));
+
+		assert_ok!(BtcLedger::lock(&CHARLIE.into(), 20));
+		assert_eq!(BtcLedger::total_issuance(), old_total_issuance + 69);
+		assert_eq!(BtcLedger::total_balance(&CHARLIE.into()), 69);
+		assert_eq!(BtcLedger::free_balance(&CHARLIE.into()), 49);
+		assert_eq!(BtcLedger::free_reserved_withdrawal(&CHARLIE.into()), 20);
+
+		assert_ok!(BtcLedger::unlock(&CHARLIE.into(), 10));
+		assert_eq!(BtcLedger::total_issuance(), old_total_issuance + 69);
+		assert_eq!(BtcLedger::total_balance(&CHARLIE.into()), 69);
+		assert_eq!(BtcLedger::free_balance(&CHARLIE.into()), 59);
+		assert_eq!(BtcLedger::free_reserved_withdrawal(&CHARLIE.into()), 10);
+
+		assert_ok!(BtcLedger::unlock(&CHARLIE.into(), Balance::max_value()));
+		assert_eq!(BtcLedger::total_issuance(), old_total_issuance + 69);
+		assert_eq!(BtcLedger::total_balance(&CHARLIE.into()), 69);
+		assert_eq!(BtcLedger::free_balance(&CHARLIE.into()), 69);
+		assert_eq!(BtcLedger::free_reserved_withdrawal(&CHARLIE.into()), 0);
+	});
+}
+
+#[test]
+fn destroy_balance() {
+	new_test_ext().execute_with(|| {
+		let old_total_issuance = BtcLedger::total_issuance();
+		assert_ok!(BtcLedger::set_balance(RuntimeOrigin::root(), CHARLIE.into(), 69));
+
+		assert_ok!(BtcLedger::lock(&CHARLIE.into(), 20));
+		assert_ok!(BtcLedger::unlock(&CHARLIE.into(), 10));
+		assert_eq!(BtcLedger::total_issuance(), old_total_issuance + 69);
+		assert_eq!(BtcLedger::total_balance(&CHARLIE.into()), 69);
+		assert_eq!(BtcLedger::free_balance(&CHARLIE.into()), 59);
+		assert_eq!(BtcLedger::free_reserved_withdrawal(&CHARLIE.into()), 10);
+
+		assert_ok!(BtcLedger::destroy(&CHARLIE.into(), Balance::max_value()));
+		assert_eq!(BtcLedger::total_issuance(), old_total_issuance + 69 - 10);
+		assert_eq!(BtcLedger::total_balance(&CHARLIE.into()), 69 - 10);
+		assert_eq!(BtcLedger::free_balance(&CHARLIE.into()), 69 - 10);
+		assert_eq!(BtcLedger::free_reserved_withdrawal(&CHARLIE.into()), 0);
+
+		assert_ok!(BtcLedger::destroy(&CHARLIE.into(), Balance::max_value()));
+		assert_eq!(BtcLedger::total_issuance(), old_total_issuance + 69 - 10);
+		assert_eq!(BtcLedger::total_balance(&CHARLIE.into()), 69 - 10);
+		assert_eq!(BtcLedger::free_balance(&CHARLIE.into()), 69 - 10);
+		assert_eq!(BtcLedger::free_reserved_withdrawal(&CHARLIE.into()), 0);
+	});
+}

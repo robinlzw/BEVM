@@ -12,7 +12,7 @@ The users can see their bitcoin balance on **metamask**.
 ```json
 "btcledger": {
     "getBalance": {
-        "description": "get the btc balance of the account",
+        "description": "get the btc free balance of the account",
         "params": [
             {
                 "name": "who",

@@ -91,7 +91,7 @@ pub mod pallet {
 			origin: OriginFor<T>,
 			dest: <T::Lookup as StaticLookup>::Source,
 			#[pallet::compact] value: T::Balance,
-		) -> DispatchResultWithPostInfo {
+		) -> DispatchResult {
 			let transactor = ensure_signed(origin)?;
 			let dest = T::Lookup::lookup(dest)?;
 			<Self as Currency<_>>::transfer(
@@ -99,8 +99,7 @@ pub mod pallet {
 				&dest,
 				value,
 				ExistenceRequirement::AllowDeath,
-			)?;
-			Ok(().into())
+			)
 		}
 
 		/// Set the balances of a given account.
@@ -114,7 +113,7 @@ pub mod pallet {
 			origin: OriginFor<T>,
 			who: <T::Lookup as StaticLookup>::Source,
 			#[pallet::compact] new_free: T::Balance,
-		) -> DispatchResultWithPostInfo {
+		) -> DispatchResult {
 			T::CouncilOrigin::try_origin(origin).map(|_| ()).or_else(ensure_root)?;
 
 			let who = T::Lookup::lookup(who)?;
@@ -138,7 +137,7 @@ pub mod pallet {
 
 			Self::deposit_event(Event::BalanceSet { who, free: new_free });
 
-			Ok(().into())
+			Ok(())
 		}
 
 		/// Exactly as `transfer`, except the origin must be root and
@@ -151,18 +150,30 @@ pub mod pallet {
 			source: <T::Lookup as StaticLookup>::Source,
 			dest: <T::Lookup as StaticLookup>::Source,
 			#[pallet::compact] value: T::Balance,
-		) -> DispatchResultWithPostInfo {
+		) -> DispatchResult {
 			T::CouncilOrigin::try_origin(origin).map(|_| ()).or_else(ensure_root)?;
 
 			let source = T::Lookup::lookup(source)?;
 			let dest = T::Lookup::lookup(dest)?;
-			<Self as Currency<_>>::transfer(
-				&source,
-				&dest,
-				value,
-				ExistenceRequirement::AllowDeath,
-			)?;
-			Ok(().into())
+			<Self as Currency<_>>::transfer(&source, &dest, value, ExistenceRequirement::AllowDeath)
+		}
+
+		/// Force unlock balance,
+		/// The dispatch origin for this call is `root`.
+		#[pallet::weight({0})]
+		#[pallet::call_index(3)]
+		pub fn force_unlock(
+			origin: OriginFor<T>,
+			who: <T::Lookup as StaticLookup>::Source,
+		) -> DispatchResult {
+			T::CouncilOrigin::try_origin(origin).map(|_| ()).or_else(ensure_root)?;
+
+			let who = T::Lookup::lookup(who)?;
+			let unlock_value = Self::unlock(&who, T::Balance::max_value())?;
+
+			Self::deposit_event(Event::Unlock { who, amount: unlock_value });
+
+			Ok(())
 		}
 	}
 
@@ -179,6 +190,8 @@ pub mod pallet {
 		Deposit { who: T::AccountId, amount: T::Balance },
 		/// Some amount was withdrawn from the account (e.g. for transaction fees).
 		Withdraw { who: T::AccountId, amount: T::Balance },
+		/// Some amount was unlocked from the account.
+		Unlock { who: T::AccountId, amount: T::Balance },
 	}
 
 	#[pallet::error]
@@ -243,7 +256,10 @@ pub mod pallet {
 			);
 
 			for &(ref who, free) in self.balances.iter() {
-				AccountStore::<T>::insert(who, AccountData { free });
+				AccountStore::<T>::insert(
+					who,
+					AccountData { free, reserved_withdrawal: Default::default() },
+				);
 			}
 		}
 	}
@@ -255,10 +271,16 @@ pub struct AccountData<Balance> {
 	/// This is the only balance that matters in terms of most operations on tokens. It
 	/// alone is used to determine the balance when in the contract execution environment.
 	pub free: Balance,
+	/// Reserved balance when an account redeems its bridged BTC.
+	pub reserved_withdrawal: Balance,
 }
 
 impl<Balance: Saturating + Copy + Ord> AccountData<Balance> {
 	fn total(&self) -> Balance {
+		self.free.saturating_add(self.reserved_withdrawal)
+	}
+
+	fn free(&self) -> Balance {
 		self.free
 	}
 }
@@ -282,6 +304,11 @@ impl<T: Config> Pallet<T> {
 	/// Get the free balance of an account.
 	pub fn free_balance(who: impl sp_std::borrow::Borrow<T::AccountId>) -> T::Balance {
 		Self::account(who.borrow()).free
+	}
+
+	/// Get the reserved_withdrawal balance of an account.
+	pub fn free_reserved_withdrawal(who: impl sp_std::borrow::Borrow<T::AccountId>) -> T::Balance {
+		Self::account(who.borrow()).reserved_withdrawal
 	}
 
 	/// Get the total balance
@@ -328,7 +355,7 @@ impl<T: Config> Pallet<T> {
 			return WithdrawConsequence::Underflow
 		}
 
-		if account.total().checked_sub(&amount).is_none() {
+		if account.free().checked_sub(&amount).is_none() {
 			return WithdrawConsequence::BalanceLow
 		};
 
@@ -380,6 +407,58 @@ impl<T: Config> Pallet<T> {
 			})
 		})
 	}
+
+	/// Move free balance to reserved_withdrawal balance
+	pub fn lock(who: &T::AccountId, amount: T::Balance) -> DispatchResult {
+		if amount.is_zero() {
+			return Ok(())
+		}
+
+		Self::try_mutate_account(who, |account, _is_new| -> Result<T::Balance, DispatchError> {
+			Self::withdraw_consequence(who, amount, account).into_result(false)?;
+
+			account.free -= amount;
+			account.reserved_withdrawal += amount;
+
+			Ok(amount)
+		})?;
+
+		Ok(())
+	}
+
+	/// Move reserved_withdrawal balance to free balance
+	pub fn unlock(who: &T::AccountId, amount: T::Balance) -> Result<T::Balance, DispatchError> {
+		let unlock_value = amount.min(Self::free_reserved_withdrawal(who));
+
+		if unlock_value.is_zero() {
+			return Ok(unlock_value)
+		}
+
+		Self::try_mutate_account(who, |account, _is_new| -> Result<T::Balance, DispatchError> {
+			account.reserved_withdrawal -= unlock_value;
+			account.free += unlock_value;
+
+			Ok(unlock_value)
+		})
+	}
+
+	/// Burn reserved_withdrawal balance after withdrawal
+	pub fn destroy(who: &T::AccountId, amount: T::Balance) -> Result<T::Balance, DispatchError> {
+		let unlock_value = Self::unlock(who, amount)?;
+
+		Self::try_mutate_account(who, |account, _is_new| -> Result<T::Balance, DispatchError> {
+			Self::withdraw_consequence(who, unlock_value, account).into_result(false)?;
+			account.free -= unlock_value;
+
+			Ok(unlock_value)
+		})?;
+
+		TotalInComing::<T>::mutate(|t| *t -= unlock_value);
+
+		Self::deposit_event(Event::Withdraw { who: who.clone(), amount: unlock_value });
+
+		Ok(unlock_value)
+	}
 }
 
 impl<T: Config> fungible::Inspect<T::AccountId> for Pallet<T> {
@@ -397,14 +476,14 @@ impl<T: Config> fungible::Inspect<T::AccountId> for Pallet<T> {
 	}
 
 	fn balance(who: &T::AccountId) -> Self::Balance {
-		Self::account(who).total()
+		Self::account(who).free()
 	}
 	fn reducible_balance(
 		who: &T::AccountId,
 		_preservation: Preservation,
 		_force: Fortitude,
 	) -> Self::Balance {
-		Self::account(who).total()
+		Self::account(who).free()
 	}
 	fn can_deposit(
 		who: &T::AccountId,
