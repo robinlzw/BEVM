@@ -7,19 +7,19 @@ repository = { workspace = true }
 homepage = { workspace = true }
 
 [dependencies]
-parity-scale-codec = { workspace = true }
+parity-scale-codec = { workspace = true, default-features = false }
+scale-info = { workspace = true, default-features = false }
 serde = { workspace = true, optional = true }
-scale-info = { workspace = true }
-log = { workspace = true }
+log = { workspace = true, default-features = false }
 
 # Substrate primitives
-sp-runtime = { workspace = true }
-sp-std = { workspace = true }
+sp-runtime = { workspace = true, default-features = false }
+sp-std = { workspace = true, default-features = false }
 
 # Substrate pallets
 frame-benchmarking = { workspace = true, optional = true }
-frame-support = { workspace = true }
-frame-system = { workspace = true }
+frame-support = { workspace = true, default-features = false }
+frame-system = { workspace = true, default-features = false }
 
 # BEVM primitives
 bevm-primitives = { path = "../../../primitives", default-features = false }
@@ -40,13 +40,14 @@ pallet-balances = { workspace = true }
 default = ["std"]
 std = [
     "parity-scale-codec/std",
-    "serde",
     "scale-info/std",
+    "serde",
     "log/std",
     # Substrate primitives
     "sp-runtime/std",
     "sp-std/std",
     # Substrate pallets
+    "frame-benchmarking?/std",
     "frame-support/std",
     "frame-system/std",
     # BEVM primitives

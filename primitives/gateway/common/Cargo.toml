@@ -7,14 +7,14 @@ repository = { workspace = true }
 homepage = { workspace = true }
 
 [dependencies]
-bs58 = { workspace = true }
-parity-scale-codec = { workspace = true }
-scale-info = { workspace = true }
-hex = { workspace = true }
-log = { workspace = true }
+parity-scale-codec = { workspace = true, default-features = false }
+scale-info = { workspace = true, default-features = false }
+hex = { workspace = true, default-features = false }
+log = { workspace = true, default-features = false }
+bs58 = { workspace = true, default-features = false }
 
 # Substrate primitives
-sp-core = { workspace = true }
+sp-core = { workspace = true, default-features = false }
 
 # BEVM primitives
 xp-io = { path = "../../io", default-features = false, optional = true }

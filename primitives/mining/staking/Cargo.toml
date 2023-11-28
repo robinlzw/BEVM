@@ -8,8 +8,8 @@ homepage = { workspace = true }
 
 [dependencies]
 # Substrate primitives
-sp-runtime = { workspace = true }
-sp-std = { workspace = true }
+sp-runtime = { workspace = true, default-features = false }
+sp-std = { workspace = true, default-features = false }
 
 # BEVM primitives
 bevm-primitives = { path = "../../../primitives", default-features = false }

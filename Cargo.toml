@@ -41,23 +41,24 @@ description = "A community-driven BTC Layer2 project"
 repository = "https://github.com/btclayer2/BEVM"
 
 [workspace.dependencies]
-clap = { version = "4.4.6", features = ["derive"] }
-futures = "0.3.28"
-hex = { version = "0.4.3", default-features = false, features = ["alloc"] }
-hex-literal = "0.4.1"
+parity-scale-codec = { version = "3.6.5", features = ["derive"], default-features = false }
+scale-info = { version = "2.10.0", features = ["derive"], default-features = false }
+hex = { version = "0.4.3", features = ["alloc"], default-features = false }
+bs58 = { version = "0.3", features = ["alloc"], default-features = false }
+log = { version = "0.4.17", default-features = false}
+serde = { version = "1.0", features = ["derive", "alloc"] }
 jsonrpsee = { version = "0.16.2", features = ["server"] }
-parity-scale-codec = { version = "3.6.5", default-features = false, features = ["derive"] }
-scale-info = { version = "2.10.0", default-features = false, features = ["derive"] }
-serde = { version = "1.0", default-features = false, features = ["derive", "alloc"] }
+clap = { version = "4.4.6", features = ["derive"] }
 impl-trait-for-tuples = "0.2.2"
+
+futures = "0.3.28"
+hex-literal = "0.4.1"
 serde_json = "1.0.108"
-bs58 = { version = "0.3", default-features = false, features = ["alloc"] }
-log = { version = "0.4.17", default-features = false }
 lazy_static = "1.4"
 
 # Substrate Client
 sc-basic-authorship = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0" }
-sc-cli = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+sc-cli = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0" }
 sc-client-api = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0" }
 sc-consensus = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0" }
 sc-consensus-aura = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0" }
@@ -67,7 +68,7 @@ sc-network = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polk
 sc-offchain = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0" }
 sc-rpc = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0" }
 sc-rpc-api = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0" }
-sc-service = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+sc-service = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0" }
 sc-telemetry = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0" }
 sc-transaction-pool = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0" }
 sc-transaction-pool-api = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0" }
@@ -76,15 +77,15 @@ sp-application-crypto = { git = "https://github.com/btclayer2/polkadot-sdk", bra
 sp-arithmetic = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
 sp-api = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
 sp-block-builder = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
-sp-blockchain = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0" }
-sp-consensus = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0" }
+sp-blockchain = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+sp-consensus = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
 sp-consensus-aura = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
 sp-consensus-grandpa = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
 sp-core = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
 sp-genesis-builder = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
 sp-inherents = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
 sp-io = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
-sp-keyring = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0" }
+sp-keyring = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
 sp-offchain = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
 sp-runtime = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
 sp-runtime-interface = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }

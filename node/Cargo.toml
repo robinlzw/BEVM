@@ -39,7 +39,7 @@ sp-timestamp = { workspace = true }
 sp-inherents = { workspace = true }
 sp-keyring = { workspace = true }
 frame-system = { workspace = true }
-pallet-transaction-payment = { workspace = true }
+pallet-transaction-payment = { workspace = true, default-features = false }
 
 # These dependencies are used for the node template's RPCs
 jsonrpsee = { workspace = true }
@@ -59,7 +59,7 @@ frame-benchmarking-cli = { workspace = true }
 bevm-runtime = { path = "../runtime" }
 
 # CLI-specific dependencies
-try-runtime-cli = { workspace = true }
+try-runtime-cli = { workspace = true, optional = true }
 
 [build-dependencies]
 substrate-build-script-utils = { workspace = true }

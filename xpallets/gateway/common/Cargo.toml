@@ -7,23 +7,23 @@ repository = { workspace = true }
 homepage = { workspace = true }
 
 [dependencies]
-parity-scale-codec = { workspace = true }
-hex = { workspace = true, optional = true }
+parity-scale-codec = { workspace = true, default-features = false }
+scale-info = { workspace = true, default-features = false }
 serde = { workspace = true, optional = true }
-scale-info = { workspace = true }
-log = { workspace = true }
+hex = { workspace = true, optional = true, default-features = false }
+log = { workspace = true, default-features = false }
 
 # Substrate primitives
-sp-core = { workspace = true }
-sp-runtime = { workspace = true }
-sp-std = { workspace = true }
+sp-core = { workspace = true, default-features = false }
+sp-runtime = { workspace = true, default-features = false }
+sp-std = { workspace = true, default-features = false }
 
 # Substrate pallets
 frame-benchmarking = { workspace = true, optional = true }
-frame-support = { workspace = true }
-frame-system = { workspace = true }
+frame-support = { workspace = true, default-features = false }
+frame-system = { workspace = true, default-features = false }
 
-pallet-elections-phragmen = { workspace = true }
+pallet-elections-phragmen = { workspace = true, default-features = false }
 
 # BEVM primitives
 bevm-primitives = { path = "../../../primitives", default-features = false }
@@ -39,7 +39,7 @@ xpallet-gateway-records = { path = "../records", default-features = false }
 xpallet-support = { path = "../../support", default-features = false }
 
 # light-bitcoin
-light-bitcoin = { workspace = true }
+light-bitcoin = { workspace = true, default-features = false }
 
 [dev-dependencies]
 lazy_static = { workspace = true }
@@ -57,15 +57,16 @@ xpallet-gateway-bitcoin = { path = "../bitcoin" }
 default = ["std"]
 std = [
   "parity-scale-codec/std",
-  "hex/std",
-  "serde",
   "scale-info/std",
+  "serde",
+  "hex/std",
   "log/std",
   # Substrate primitives
   "sp-core/std",
   "sp-runtime/std",
   "sp-std/std",
   # Substrate pallets
+  "frame-benchmarking?/std",
   "frame-support/std",
   "frame-system/std",
   "pallet-elections-phragmen/std",

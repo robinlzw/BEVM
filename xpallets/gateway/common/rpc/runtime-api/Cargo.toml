@@ -10,12 +10,12 @@ homepage = { workspace = true }
 targets = ["x86_64-unknown-linux-gnu"]
 
 [dependencies]
-parity-scale-codec = { workspace = true }
+parity-scale-codec = { workspace = true, default-features = false }
 
 # Substrate primitives
-sp-api = { workspace = true }
-sp-runtime = { workspace = true }
-sp-std = { workspace = true }
+sp-api = { workspace = true, default-features = false }
+sp-runtime = { workspace = true, default-features = false }
+sp-std = { workspace = true, default-features = false }
 
 # BEVM primitives
 bevm-primitives = { path = "../../../../../primitives", default-features = false }

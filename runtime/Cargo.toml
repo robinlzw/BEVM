@@ -11,41 +11,41 @@ homepage = { workspace = true }
 targets = ["x86_64-unknown-linux-gnu"]
 
 [dependencies]
-parity-scale-codec = { workspace = true }
-scale-info = { workspace = true }
+parity-scale-codec = { workspace = true, default-features = false }
+scale-info = { workspace = true, default-features = false }
 
-pallet-aura = { workspace = true }
-pallet-balances = { workspace = true }
-frame-support = { workspace = true }
-pallet-grandpa = { workspace = true }
-pallet-sudo = { workspace = true }
-frame-system = { workspace = true }
-frame-try-runtime = { workspace = true, optional = true }
-pallet-timestamp = { workspace = true }
-pallet-transaction-payment = { workspace = true }
-frame-executive = { workspace = true }
-sp-api = { workspace = true }
-sp-block-builder = { workspace = true }
-sp-consensus-aura = { workspace = true }
-sp-consensus-grandpa = { workspace = true }
-sp-core = { workspace = true }
-sp-inherents = { workspace = true }
-sp-offchain = { workspace = true }
-sp-runtime = { workspace = true }
-sp-session = { workspace = true }
-sp-std = { workspace = true }
-sp-storage = { workspace = true }
-sp-transaction-pool = { workspace = true }
-sp-version = { workspace = true }
-sp-genesis-builder = { workspace = true }
+# Substrate primitivies
+sp-api = { workspace = true, default-features = false }
+sp-block-builder = { workspace = true, default-features = false }
+sp-consensus-aura = { workspace = true, default-features = false }
+sp-consensus-grandpa = { workspace = true, default-features = false }
+sp-core = { workspace = true, default-features = false }
+sp-inherents = { workspace = true, default-features = false }
+sp-offchain = { workspace = true, default-features = false }
+sp-runtime = { workspace = true, default-features = false }
+sp-session = { workspace = true, default-features = false }
+sp-std = { workspace = true, default-features = false }
+sp-storage = { workspace = true, default-features = false }
+sp-transaction-pool = { workspace = true, default-features = false }
+sp-version = { workspace = true, default-features = false }
+sp-genesis-builder = { workspace = true, default-features = false }
 
-# Used for the node template's RPCs
-frame-system-rpc-runtime-api = { workspace = true }
-pallet-transaction-payment-rpc-runtime-api = { workspace = true }
-
-# Used for runtime benchmarking
+# Substrate pallets
 frame-benchmarking = { workspace = true, optional = true }
+frame-executive = { workspace = true, default-features = false }
+frame-support = { workspace = true, default-features = false }
 frame-system-benchmarking = { workspace = true, optional = true }
+frame-system-rpc-runtime-api = { workspace = true }
+frame-system = { workspace = true, default-features = false }
+frame-try-runtime = { workspace = true, optional = true }
+pallet-aura = { workspace = true, default-features = false }
+pallet-balances = { workspace = true, default-features = false }
+pallet-grandpa = { workspace = true, default-features = false }
+pallet-sudo = { workspace = true, default-features = false }
+pallet-timestamp = { workspace = true, default-features = false }
+pallet-transaction-payment = { workspace = true, default-features = false }
+pallet-transaction-payment-rpc-runtime-api = { workspace = true, default-features = false }
+
 
 [build-dependencies]
 substrate-wasm-builder = { workspace = true, optional = true }
@@ -55,6 +55,22 @@ default = [ "std" ]
 std = [
 	"parity-scale-codec/std",
 	"scale-info/std",
+
+	"sp-api/std",
+	"sp-block-builder/std",
+	"sp-consensus-aura/std",
+	"sp-consensus-grandpa/std",
+	"sp-core/std",
+	"sp-inherents/std",
+	"sp-offchain/std",
+	"sp-runtime/std",
+	"sp-session/std",
+	"sp-std/std",
+	"sp-storage/std",
+	"sp-transaction-pool/std",
+	"sp-version/std",
+	"sp-genesis-builder/std",
+
 	"frame-benchmarking?/std",
 	"frame-executive/std",
 	"frame-support/std",
@@ -69,21 +85,7 @@ std = [
 	"pallet-timestamp/std",
 	"pallet-transaction-payment-rpc-runtime-api/std",
 	"pallet-transaction-payment/std",
-	"scale-info/std",
-	"sp-api/std",
-	"sp-block-builder/std",
-	"sp-consensus-aura/std",
-	"sp-consensus-grandpa/std",
-	"sp-core/std",
-	"sp-genesis-builder/std",
-	"sp-inherents/std",
-	"sp-offchain/std",
-	"sp-runtime/std",
-	"sp-session/std",
-	"sp-std/std",
-	"sp-storage/std",
-	"sp-transaction-pool/std",
-	"sp-version/std",
+
 	"substrate-wasm-builder",
 ]
 runtime-benchmarks = [

@@ -7,10 +7,10 @@ repository = { workspace = true }
 homepage = { workspace = true }
 
 [dependencies]
-hex = { workspace = true }
+hex = { workspace = true, default-features = false }
 
 # Substrate primitives
-sp-std = { workspace = true }
+sp-std = { workspace = true, default-features = false }
 
 [features]
 default = ["std"]

@@ -7,14 +7,14 @@ repository = { workspace = true }
 homepage = { workspace = true }
 
 [dependencies]
-parity-scale-codec = { workspace = true }
-scale-info = { workspace = true }
+parity-scale-codec = { workspace = true, default-features = false }
+scale-info = { workspace = true, default-features = false }
 serde = { workspace = true, optional = true }
 impl-trait-for-tuples = { workspace = true }
 
 # Substrate primitives
-sp-runtime = { workspace = true }
-sp-std = { workspace = true }
+sp-runtime = { workspace = true, default-features = false }
+sp-std = { workspace = true, default-features = false }
 
 # BEVM primitives
 bevm-primitives = { path = "../../primitives", default-features = false }
