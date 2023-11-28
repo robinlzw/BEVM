@@ -1,0 +1,75 @@
+[package]
+name = "xpallet-mining-staking"
+version = "0.1.0"
+authors = { workspace = true }
+edition = { workspace = true }
+repository = { workspace = true }
+homepage = { workspace = true }
+
+[dependencies]
+parity-scale-codec = { workspace = true }
+serde = { workspace = true, optional = true }
+scale-info = { workspace = true }
+log = { workspace = true }
+
+# Substrate primitives
+sp-arithmetic =  { workspace = true }
+sp-core =  { workspace = true }
+sp-runtime =  { workspace = true }
+sp-staking =  { workspace = true }
+sp-std =  { workspace = true }
+
+# Substrate pallets
+frame-benchmarking = { workspace = true, optional = true }
+frame-support = { workspace = true }
+frame-system = { workspace = true }
+pallet-balances = { workspace = true }
+pallet-session = { workspace = true }
+
+# BEVM primitives
+bevm-primitives = { path = "../../primitives", default-features = false }
+xp-mining-common = { path  = "../../primitives/mining/common", default-features = false }
+xp-mining-staking = { path  = "../../primitives/mining/staking", default-features = false }
+xp-rpc = { path = "../../primitives/rpc", optional = true }
+xp-runtime = { path = "../../primitives/runtime", default-features = false }
+
+# BEVM pallets
+xpallet-support = { path = "../support", default-features = false }
+
+[dev-dependencies]
+sp-core = { workspace = true }
+sp-io = { workspace = true }
+frame-benchmarking = { workspace = true }
+pallet-timestamp = { workspace = true }
+xp-protocol = { path = "../../primitives/protocol" }
+
+[features]
+default = ["std"]
+std = [
+    "parity-scale-codec/std",
+    "serde",
+    "scale-info/std",
+    # Substate primitives
+    "sp-arithmetic/std",
+    "sp-core/std",
+    "sp-runtime/std",
+    "sp-staking/std",
+    "sp-std/std",
+    # Substrate pallets
+    "frame-support/std",
+    "frame-system/std",
+    "pallet-balances/std",
+    "pallet-session/std",
+    # BEVM primitives
+    "bevm-primitives/std",
+    "xp-mining-common/std",
+    "xp-mining-staking/std",
+    "xp-rpc",
+    "xp-runtime/std",
+    # BEVM pallets
+    "xpallet-support/std",
+]
+runtime-benchmarks = [
+    "frame-benchmarking",
+]
+try-runtime = ["frame-support/try-runtime"]

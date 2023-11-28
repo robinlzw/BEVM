@@ -1,0 +1,31 @@
+[package]
+name = "xpallet-mining-staking-rpc-runtime-api"
+version = "0.1.0"
+authors = { workspace = true }
+edition = { workspace = true }
+repository = { workspace = true }
+homepage = { workspace = true }
+
+[package.metadata.docs.rs]
+targets = ["x86_64-unknown-linux-gnu"]
+
+[dependencies]
+parity-scale-codec = { workspace = true }
+
+# Substrate primitives
+sp-api = { workspace = true }
+sp-std = { workspace = true }
+
+# BEVM pallets
+xpallet-mining-staking = { path = "../..", default-features = false }
+
+[features]
+default = ["std"]
+std = [
+    "parity-scale-codec/std",
+    # Substrate primitives
+    "sp-api/std",
+    "sp-std/std",
+    # BEVM pallets
+    "xpallet-mining-staking/std",
+]

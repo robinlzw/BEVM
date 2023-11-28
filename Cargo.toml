@@ -25,6 +25,9 @@ members = [
   "xpallets/gateway/records",
 #  "xpallets/gateway/records/rpc",
 #  "xpallets/gateway/records/rpc/runtime-api",
+  "xpallets/staking",
+#  "xpallets/staking/rpc",
+#  "xpallets/staking/rpc/runtime-api",
   "xpallets/support"
 ]
 resolver = "2"
@@ -87,6 +90,7 @@ sp-runtime = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polk
 sp-runtime-interface = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
 sp-session = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
 sp-std = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+sp-staking = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
 sp-storage = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
 sp-timestamp = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
 sp-transaction-pool = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
@@ -104,6 +108,7 @@ pallet-balances = { git = "https://github.com/btclayer2/polkadot-sdk", branch = 
 pallet-elections-phragmen = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
 pallet-grandpa = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
 pallet-sudo = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+pallet-session = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
 pallet-timestamp = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
 pallet-transaction-payment = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
 pallet-transaction-payment-rpc = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0" }

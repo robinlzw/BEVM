@@ -11192,6 +11192,35 @@ dependencies = [
 ]
 
 [[package]]
+name = "xpallet-mining-staking"
+version = "0.1.0"
+dependencies = [
+ "bevm-primitives",
+ "frame-benchmarking",
+ "frame-support",
+ "frame-system",
+ "log",
+ "pallet-balances",
+ "pallet-session",
+ "pallet-timestamp",
+ "parity-scale-codec",
+ "scale-info",
+ "serde",
+ "sp-arithmetic",
+ "sp-core",
+ "sp-io",
+ "sp-runtime",
+ "sp-staking",
+ "sp-std",
+ "xp-mining-common",
+ "xp-mining-staking",
+ "xp-protocol",
+ "xp-rpc",
+ "xp-runtime",
+ "xpallet-support",
+]
+
+[[package]]
 name = "xpallet-support"
 version = "0.1.0"
 dependencies = [
