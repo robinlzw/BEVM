@@ -196,16 +196,15 @@ impl<T: Config> Pallet<T> {
 	}
 
 	fn ensure_withdrawal_available_balance(
-		_who: &T::AccountId,
-		_asset_id: AssetId,
-		_value: T::Balance,
+		who: &T::AccountId,
+		asset_id: AssetId,
+		value: T::Balance,
 	) -> DispatchResult {
-		// TODO: fix me
-		// let available = xpallet_assets::Pallet::<T>::usable_balance(who, &asset_id);
-		// ensure!(
-		//     available >= value,
-		//     xpallet_assets::Error::<T>::InsufficientBalance
-		// );
+		ensure!(asset_id == AssetId::default(), Error::<T>::UnexpectedAsset);
+
+		let available = xpallet_btc_ledger::Pallet::<T>::free_balance(who);
+		ensure!(available >= value, xpallet_btc_ledger::Error::<T>::InsufficientBalance);
+
 		Ok(())
 	}
 
@@ -524,37 +523,25 @@ impl<T: Config> Pallet<T> {
 		Self::set_withdrawal_state(frame_system::RawOrigin::Root.into(), id, new_state)
 	}
 
-	fn lock(_who: &T::AccountId, _asset_id: AssetId, _value: T::Balance) -> DispatchResult {
-		// TODO: fix me
-		// xpallet_assets::Pallet::<T>::move_balance(
-		//     &asset_id,
-		//     who,
-		//     AssetType::Usable,
-		//     who,
-		//     AssetType::ReservedWithdrawal,
-		//     value,
-		// )
-		// .map_err::<xpallet_assets::Error<T>, _>(Into::into)?;
+	fn lock(who: &T::AccountId, asset_id: AssetId, value: T::Balance) -> DispatchResult {
+		ensure!(asset_id == AssetId::default(), Error::<T>::UnexpectedAsset);
+
+		xpallet_btc_ledger::Pallet::<T>::lock(who, value)
+	}
+
+	fn unlock(who: &T::AccountId, asset_id: AssetId, value: T::Balance) -> DispatchResult {
+		ensure!(asset_id == AssetId::default(), Error::<T>::UnexpectedAsset);
+
+		let _ = xpallet_btc_ledger::Pallet::<T>::unlock(who, value)?;
+
 		Ok(())
 	}
 
-	fn unlock(_who: &T::AccountId, _asset_id: AssetId, _value: T::Balance) -> DispatchResult {
-		// TODO: fix me
-		// xpallet_assets::Pallet::<T>::move_balance(
-		//     &asset_id,
-		//     who,
-		//     AssetType::ReservedWithdrawal,
-		//     who,
-		//     AssetType::Usable,
-		//     value,
-		// )
-		// .map_err::<xpallet_assets::Error<T>, _>(Into::into)?;
-		Ok(())
-	}
+	fn destroy(who: &T::AccountId, asset_id: AssetId, value: T::Balance) -> DispatchResult {
+		ensure!(asset_id == AssetId::default(), Error::<T>::UnexpectedAsset);
 
-	fn destroy(_who: &T::AccountId, _asset_id: AssetId, _value: T::Balance) -> DispatchResult {
-		// TODO: fix me
-		// xpallet_assets::Pallet::<T>::destroy_reserved_withdrawal(&asset_id, who, value)?;
+		let _ = xpallet_btc_ledger::Pallet::<T>::destroy(who, value)?;
+
 		Ok(())
 	}
 
