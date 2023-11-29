@@ -13,6 +13,7 @@ members = [
   "primitives/rpc",
   "primitives/runtime",
 
+  "xpallets/assets-bridge",
   "xpallets/btc-ledger",
   "xpallets/btc-ledger/rpc",
   "xpallets/btc-ledger/rpc/runtime-api",
@@ -50,7 +51,7 @@ serde = { version = "1.0", features = ["derive", "alloc"] }
 jsonrpsee = { version = "0.16.2", features = ["server"] }
 clap = { version = "4.4.6", features = ["derive"] }
 impl-trait-for-tuples = "0.2.2"
-
+ethabi = { version = "18.0.0" }
 futures = "0.3.28"
 hex-literal = "0.4.1"
 serde_json = "1.0.108"
@@ -124,6 +125,9 @@ frame-try-runtime = { git = "https://github.com/btclayer2/polkadot-sdk", branch 
 
 # light-bitcoin
 light-bitcoin = { git = "https://github.com/btclayer2/light-bitcoin", branch = "develop-2022", default-features = false }
+
+# evm
+pallet-evm = { git = "https://github.com/btclayer2/frontier", branch = "polkadot-sdk-v1.3.0", default-features = false }
 
 # make sure dev builds with backtrace do
 # not slow us down

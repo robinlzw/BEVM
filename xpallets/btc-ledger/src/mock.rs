@@ -32,7 +32,7 @@ parameter_types! {
 		frame_system::limits::BlockWeights::simple_max(
 			frame_support::weights::Weight::from_parts(1024, u64::MAX),
 		);
-	pub const BtcLedgerPalletId: PalletId = PalletId(*b"pcx/trsy");
+	pub const BtcLedgerPalletId: PalletId = PalletId(*b"bevmtrsy");
 }
 impl frame_system::Config for Test {
 	type BaseCallFilter = frame_support::traits::Everything;
