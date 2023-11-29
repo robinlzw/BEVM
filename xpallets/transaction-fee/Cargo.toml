@@ -1,0 +1,39 @@
+[package]
+name = "xpallet-transaction-fee"
+version = "0.1.0"
+authors = { workspace = true }
+edition = { workspace = true }
+repository = { workspace = true }
+homepage = { workspace = true }
+
+[package.metadata.docs.rs]
+targets = ["x86_64-unknown-linux-gnu"]
+
+[dependencies]
+parity-scale-codec = { workspace = true, default-features = false }
+scale-info = { workspace = true, default-features = false }
+serde = { workspace = true, optional = true }
+
+# Substrate primitives
+sp-runtime = { workspace = true }
+sp-std = { workspace = true }
+
+# Substrate pallets
+frame-support = { workspace = true, default-features = false }
+frame-system = { workspace = true, default-features = false }
+pallet-transaction-payment = { workspace = true, default-features = false }
+
+[features]
+default = ["std"]
+std = [
+    "parity-scale-codec/std",
+    "serde",
+    "scale-info/std",
+    # Substrate primitives
+    "sp-runtime/std",
+    "sp-std/std",
+    # Substrate pallets
+    "frame-support/std",
+    "frame-system/std",
+    "pallet-transaction-payment/std",
+]

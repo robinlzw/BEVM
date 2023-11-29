@@ -29,7 +29,10 @@ members = [
   "xpallets/staking",
   "xpallets/staking/rpc",
   "xpallets/staking/rpc/runtime-api",
-  "xpallets/support"
+  "xpallets/support",
+  "xpallets/transaction-fee",
+  "xpallets/transaction-fee/rpc",
+  "xpallets/transaction-fee/rpc/runtime-api"
 ]
 resolver = "2"
 

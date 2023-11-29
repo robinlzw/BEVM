@@ -1,0 +1,31 @@
+[package]
+name = "xpallet-transaction-fee-rpc-runtime-api"
+version = "0.1.0"
+authors = { workspace = true }
+edition = { workspace = true }
+repository = { workspace = true }
+homepage = { workspace = true }
+
+[package.metadata.docs.rs]
+targets = ["x86_64-unknown-linux-gnu"]
+
+[dependencies]
+parity-scale-codec = { workspace = true, default-features = false }
+
+# Substrate primtives
+sp-api = { workspace = true, default-features = false }
+sp-runtime = { workspace = true, default-features = false }
+
+# BEVM pallets
+xpallet-transaction-fee = { path = "../..", default-features = false }
+
+[features]
+default = ["std"]
+std = [
+    "parity-scale-codec/std",
+    # Substrate primtives
+    "sp-api/std",
+    "sp-runtime/std",
+    # BEVM pallets
+    "xpallet-transaction-fee/std",
+]

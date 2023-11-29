@@ -66,6 +66,15 @@ pub fn hex_decode_error_into_rpc_err(err: impl Debug) -> Error {
 	)))
 }
 
+/// Converts a tx fee runtime error into an RPC error.
+pub fn tx_fee_error_into_rpc_err(err: impl Debug) -> Error {
+	Error::Call(CallError::Custom(ErrorObject::owned(
+		RUNTIME_ERROR,
+		"Unable to query dispatch info.",
+		Some(format!("{:?}", err)),
+	)))
+}
+
 /// Balance type when interacting with RPC.
 pub type RpcBalance<Balance> = RpcU128<Balance>;
 
