@@ -25,10 +25,10 @@ frame-benchmarking = { workspace = true, optional = true }
 frame-support = { workspace = true, default-features = false }
 frame-system = { workspace = true, default-features = false }
 pallet-timestamp = { workspace = true, default-features = false }
-#pallet-evm = { git = "https://github.com/chainx-org/frontier", branch = "polkadot-v0.9.18-btc", default-features = false, features = ["chainx-adaptor"] }
+pallet-evm = { workspace = true, default-features = false }
 
 # Asset bridge
-#xpallet-assets-bridge = { path = "../../assets-bridge", default-features = false }
+xpallet-assets-bridge = { path = "../../assets-bridge", default-features = false }
 
 
 # BEVM primitives
@@ -77,9 +77,9 @@ std = [
     "frame-support/std",
     "frame-system/std",
     "pallet-timestamp/std",
-#    "pallet-evm/std",
+    "pallet-evm/std",
     # Asset bridge
-#    "xpallet-assets-bridge/std",
+    "xpallet-assets-bridge/std",
     # BEVM primitives
     "bevm-primitives/std",
     "xp-gateway-bitcoin/std",
