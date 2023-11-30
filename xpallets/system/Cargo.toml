@@ -1,0 +1,37 @@
+[package]
+name = "xpallet-system"
+version = "0.1.0"
+authors = { workspace = true }
+edition = { workspace = true }
+repository = { workspace = true }
+homepage = { workspace = true }
+
+[dependencies]
+parity-scale-codec = { workspace = true, default-features = false }
+scale-info = { workspace = true, default-features = false }
+
+# Substrate primitives
+sp-runtime = { workspace = true, default-features = false }
+sp-std = { workspace = true, default-features = false }
+
+# Substrate pallets
+frame-support = { workspace = true, default-features = false }
+frame-system = { workspace = true, default-features = false }
+
+# BEVM primitives
+xp-protocol = { path = "../../primitives/protocol", default-features = false }
+
+[features]
+default = ["std"]
+std = [
+    "parity-scale-codec/std",
+    "scale-info/std",
+    # Substrate primitives
+    "sp-runtime/std",
+    "sp-std/std",
+    # Substrate pallets
+    "frame-support/std",
+    "frame-system/std",
+    # BEVM primitives
+    "xp-protocol/std",
+]
