@@ -1,0 +1,41 @@
+[package]
+name = "runtime-common"
+version = "0.1.0"
+authors = { workspace = true }
+edition = { workspace = true }
+repository = { workspace = true }
+homepage = { workspace = true }
+
+[package.metadata.docs.rs]
+targets = ["x86_64-unknown-linux-gnu"]
+
+[dependencies]
+smallvec = { workspace = true }
+static_assertions = { workspace = true }
+
+# Substrate primitives
+sp-runtime = { workspace = true, default-features = false }
+sp-staking = { workspace = true, default-features = false }
+
+# Substrate pallets
+frame-support =  { workspace = true, default-features = false }
+frame-system =  { workspace = true, default-features = false }
+pallet-balances =  { workspace = true, default-features = false }
+pallet-transaction-payment =  { workspace = true, default-features = false }
+
+# BEVM primitives
+bevm-primitives = { path = "../../primitives", default-features = false }
+
+[features]
+default = ["std"]
+std = [
+    # Substrate primitives
+    "sp-runtime/std",
+    # Substrate pallets
+    "frame-support/std",
+    "frame-system/std",
+    "pallet-balances/std",
+    "pallet-transaction-payment/std",
+    # BEVM primitives
+    "bevm-primitives/std",
+]

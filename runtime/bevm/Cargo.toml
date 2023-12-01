@@ -1,0 +1,237 @@
+[package]
+name = "bevm-runtime"
+version = "0.1.0"
+description = "A bevm runtime"
+authors = { workspace = true }
+edition = { workspace = true }
+repository = { workspace = true }
+homepage = { workspace = true }
+
+[package.metadata.docs.rs]
+targets = ["x86_64-unknown-linux-gnu"]
+
+[dependencies]
+parity-scale-codec = { workspace = true, default-features = false }
+scale-info = { workspace = true, default-features = false }
+serde = { workspace = true, optional = true }
+smallvec = { workspace = true }
+static_assertions = { workspace = true }
+log = { workspace = true, optional = true }
+
+# Substrate primitives
+sp-api = { workspace = true, default-features = false }
+sp-authority-discovery = { workspace = true, default-features = false }
+sp-block-builder = { workspace = true, default-features = false }
+sp-consensus-babe = { workspace = true, default-features = false }
+sp-consensus-grandpa = { workspace = true, default-features = false }
+sp-core = { workspace = true, default-features = false }
+sp-inherents = { workspace = true, default-features = false }
+sp-io = { workspace = true, default-features = false }
+sp-offchain = { workspace = true, default-features = false }
+sp-runtime = { workspace = true, default-features = false }
+sp-session = { workspace = true, default-features = false }
+sp-staking = { workspace = true, default-features = false }
+sp-std = { workspace = true, default-features = false }
+sp-transaction-pool = { workspace = true, default-features = false }
+sp-version = { workspace = true, default-features = false }
+
+# Substrate pallets
+frame-executive = { workspace = true, default-features = false }
+frame-support = { workspace = true, default-features = false }
+frame-system = { workspace = true, default-features = false }
+frame-system-rpc-runtime-api = { workspace = true, default-features = false }
+pallet-authority-discovery = { workspace = true, default-features = false }
+pallet-authorship = { workspace = true, default-features = false }
+pallet-babe = { workspace = true, default-features = false }
+pallet-balances = { workspace = true, default-features = false }
+pallet-bounties = { workspace = true, default-features = false }
+pallet-collective = { workspace = true, default-features = false }
+pallet-democracy = { workspace = true, default-features = false }
+pallet-elections-phragmen = { workspace = true, default-features = false }
+pallet-grandpa = { workspace = true, default-features = false }
+pallet-identity = { workspace = true, default-features = false }
+pallet-im-online = { workspace = true, default-features = false }
+pallet-indices = { workspace = true, default-features = false }
+pallet-membership = { workspace = true, default-features = false }
+pallet-multisig = { workspace = true, default-features = false }
+pallet-offences = { workspace = true, default-features = false }
+pallet-proxy = { workspace = true, default-features = false }
+pallet-preimage = { workspace = true, default-features = false }
+pallet-scheduler = { workspace = true, default-features = false }
+pallet-session = { workspace = true, default-features = false, features = ["historical"] }
+pallet-sudo = { workspace = true, default-features = false }
+pallet-timestamp = { workspace = true, default-features = false }
+pallet-tips = { workspace = true, default-features = false }
+pallet-transaction-payment = { workspace = true, default-features = false }
+pallet-transaction-payment-rpc-runtime-api = { workspace = true, default-features = false }
+pallet-treasury = { workspace = true, default-features = false }
+pallet-utility = { workspace = true, default-features = false }
+
+frame-benchmarking = { workspace = true, default-features = false, optional = true }
+frame-system-benchmarking = { workspace = true, default-features = false, optional = true }
+frame-try-runtime = { workspace = true, default-features = false, optional = true }
+
+# BEVM primitives
+bevm-primitives = { path = "../../primitives", default-features = false }
+runtime-common = { path = "../common", default-features = false }
+# Use feature "ss58check" for using local runtime-interface to check address, if in parachain, do not use this feature
+xp-gateway-bitcoin = { path = "../../primitives/gateway/bitcoin", default-features = false, features = ["ss58check"] }
+xp-mining-staking = { path = "../../primitives/mining/staking", default-features = false }
+xp-protocol = { path = "../../primitives/protocol", default-features = false }
+xp-runtime = { path = "../../primitives/runtime", default-features = false }
+xp-assets-registrar = { path = "../../primitives/assets-registrar", default-features = false }
+
+# BEVM pallets
+xpallet-assets-bridge = { path = "../../xpallets/assets-bridge", default-features = false }
+xpallet-ethereum-chain-id = { path = "../../xpallets/ethereum-chain-id", default-features = false }
+xpallet-gateway-bitcoin = { path = "../../xpallets/gateway/bitcoin", default-features = false }
+xpallet-gateway-bitcoin-rpc-runtime-api = { path = "../../xpallets/gateway/bitcoin/rpc/runtime-api", default-features = false }
+xpallet-gateway-common = { path = "../../xpallets/gateway/common", default-features = false }
+xpallet-gateway-common-rpc-runtime-api = { path = "../../xpallets/gateway/common/rpc/runtime-api", default-features = false }
+xpallet-gateway-records = { path = "../../xpallets/gateway/records", default-features = false }
+xpallet-gateway-records-rpc-runtime-api = { path = "../../xpallets/gateway/records/rpc/runtime-api", default-features = false }
+xpallet-mining-staking = { path = "../../xpallets/staking", default-features = false }
+xpallet-mining-staking-rpc-runtime-api = { path = "../../xpallets/staking/rpc/runtime-api", default-features = false }
+xpallet-support = { path = "../../xpallets/support", default-features = false }
+xpallet-system = { path = "../../xpallets/system", default-features = false }
+xpallet-transaction-fee = { path = "../../xpallets/transaction-fee", default-features = false }
+xpallet-btc-ledger = { path = "../../xpallets/btc-ledger", default-features = false }
+xpallet-btc-ledger-runtime-api = { path = "../../xpallets/btc-ledger/rpc/runtime-api", default-features = false }
+
+
+[build-dependencies]
+substrate-wasm-builder = { workspace = true }
+
+[features]
+default = ["std"]
+std = [
+	"parity-scale-codec/std",
+	"scale-info/std",
+	"serde",
+	"log/std",
+	# Substrate primitives
+	"sp-api/std",
+	"sp-authority-discovery/std",
+	"sp-block-builder/std",
+	"sp-consensus-babe/std",
+	"sp-consensus-grandpa/std",
+	"sp-core/std",
+	"sp-inherents/std",
+	"sp-io/std",
+	"sp-offchain/std",
+	"sp-runtime/std",
+	"sp-session/std",
+	"sp-staking/std",
+	"sp-std/std",
+	"sp-transaction-pool/std",
+	"sp-version/std",
+	# Substrate pallets
+	"frame-executive/std",
+	"frame-support/std",
+	"frame-system/std",
+	"frame-system-rpc-runtime-api/std",
+	"frame-benchmarking/std",
+	"frame-try-runtime/std",
+	"pallet-authority-discovery/std",
+	"pallet-authorship/std",
+	"pallet-babe/std",
+	"pallet-balances/std",
+	"pallet-bounties/std",
+	"pallet-collective/std",
+	"pallet-democracy/std",
+	"pallet-elections-phragmen/std",
+	"pallet-grandpa/std",
+	"pallet-identity/std",
+	"pallet-im-online/std",
+	"pallet-indices/std",
+	"pallet-membership/std",
+	"pallet-multisig/std",
+	"pallet-offences/std",
+	"pallet-proxy/std",
+	"pallet-preimage/std",
+	"pallet-scheduler/std",
+	"pallet-session/std",
+	"pallet-sudo/std",
+	"pallet-timestamp/std",
+	"pallet-tips/std",
+	"pallet-transaction-payment/std",
+	"pallet-transaction-payment-rpc-runtime-api/std",
+	"pallet-treasury/std",
+	"pallet-utility/std",
+	# BEVM primitives
+	"bevm-primitives/std",
+	"runtime-common/std",
+	"xp-gateway-bitcoin/std",
+	"xp-mining-staking/std",
+	"xp-protocol/std",
+	"xp-runtime/std",
+	"xp-assets-registrar/std",
+	# BEVM pallets
+	"xpallet-assets-bridge/std",
+	"xpallet-ethereum-chain-id/std",
+	"xpallet-gateway-bitcoin/std",
+	"xpallet-gateway-bitcoin-rpc-runtime-api/std",
+	"xpallet-gateway-common/std",
+	"xpallet-gateway-common-rpc-runtime-api/std",
+	"xpallet-gateway-records/std",
+	"xpallet-gateway-records-rpc-runtime-api/std",
+	"xpallet-mining-staking/std",
+	"xpallet-mining-staking-rpc-runtime-api/std",
+	"xpallet-support/std",
+	"xpallet-system/std",
+	"xpallet-transaction-fee/std",
+	"xpallet-btc-ledger/std",
+	"xpallet-btc-ledger-runtime-api/std",
+]
+runtime-benchmarks = [
+	"frame-benchmarking",
+	"frame-support/runtime-benchmarks",
+	"frame-system-benchmarking",
+	"frame-system/runtime-benchmarks",
+	"sp-runtime/runtime-benchmarks",
+	"pallet-balances/runtime-benchmarks",
+	"pallet-collective/runtime-benchmarks",
+	"xpallet-gateway-bitcoin/runtime-benchmarks",
+	"xpallet-gateway-common/runtime-benchmarks",
+	"xpallet-gateway-records/runtime-benchmarks",
+	"xpallet-mining-staking/runtime-benchmarks",
+]
+
+try-runtime = [
+	"frame-try-runtime",
+	"frame-executive/try-runtime",
+	"frame-system/try-runtime",
+
+	"pallet-authority-discovery/try-runtime",
+	"pallet-authorship/try-runtime",
+	"pallet-babe/try-runtime",
+	"pallet-balances/try-runtime",
+	"pallet-bounties/try-runtime",
+	"pallet-collective/try-runtime",
+	"pallet-democracy/try-runtime",
+	"pallet-elections-phragmen/try-runtime",
+	"pallet-grandpa/try-runtime",
+	"pallet-identity/try-runtime",
+	"pallet-im-online/try-runtime",
+	"pallet-indices/try-runtime",
+	"pallet-membership/try-runtime",
+	"pallet-multisig/try-runtime",
+	"pallet-offences/try-runtime",
+	"pallet-proxy/try-runtime",
+	"pallet-preimage/try-runtime",
+	"pallet-scheduler/try-runtime",
+	"pallet-session/try-runtime",
+	"pallet-sudo/try-runtime",
+	"pallet-timestamp/try-runtime",
+	"pallet-tips/try-runtime",
+	"pallet-transaction-payment/try-runtime",
+	"pallet-treasury/try-runtime",
+	"pallet-utility/try-runtime",
+
+	# BEVM pallets
+	"xpallet-gateway-bitcoin/try-runtime",
+	"xpallet-gateway-common/try-runtime",
+	"xpallet-gateway-records/try-runtime",
+	"xpallet-mining-staking/try-runtime",
+	"xpallet-btc-ledger/try-runtime",
+]

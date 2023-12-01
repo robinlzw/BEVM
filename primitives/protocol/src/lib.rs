@@ -1,23 +1,35 @@
 // Copyright 2023 BEVM Project Authors. Licensed under GPL-3.0.
 
-//! Some protocol details in the BEVM.
+use parity_scale_codec::{Decode, Encode};
+use scale_info::TypeInfo;
+#[cfg(feature = "std")]
+use serde::{Deserialize, Serialize};
+use sp_runtime::RuntimeDebug;
 
-#![cfg_attr(not(feature = "std"), no_std)]
-#![deny(missing_docs)]
+/// The network type of BEVM.
+#[derive(PartialEq, Eq, Clone, Copy, Default, Encode, Decode, RuntimeDebug, TypeInfo)]
+#[cfg_attr(feature = "std", derive(Serialize, Deserialize))]
+pub enum NetworkType {
+    /// Main network type
+    Mainnet,
+    /// Test network type
+    #[default]
+    Testnet,
+}
 
-mod asset;
-mod network;
+impl NetworkType {
+    /// Return the ss58 address format identifier of the network type.
+    pub fn ss58_addr_format_id(&self) -> Ss58AddressFormatId {
+        match self {
+            NetworkType::Mainnet => MAINNET_ADDRESS_FORMAT_ID,
+            NetworkType::Testnet => TESTNET_ADDRESS_FORMAT_ID,
+        }
+    }
+}
 
-pub use self::{asset::*, network::*};
-
-/// The maximum length of asset token symbol
-pub const ASSET_TOKEN_SYMBOL_MAX_LEN: usize = 24;
-
-/// The maximum length of asset token name
-pub const ASSET_TOKEN_NAME_MAX_LEN: usize = 48;
-
-/// The maximum length of asset description
-pub const ASSET_DESC_MAX_LEN: usize = 128;
-
-/// The maximum length of memo
-pub const MEMO_MAX_LEN: usize = 80;
+/// Ss58AddressFormat identifier
+pub type Ss58AddressFormatId = u8;
+/// BEVM main network ss58 address format identifier
+pub const MAINNET_ADDRESS_FORMAT_ID: Ss58AddressFormatId = 44; // 44 is Ss58AddressFormat::BEVMAccount
+/// BEVM test network ss58 address format identifier
+pub const TESTNET_ADDRESS_FORMAT_ID: Ss58AddressFormatId = 42; // 42 is Ss58AddressFormat::SubstrateAccount

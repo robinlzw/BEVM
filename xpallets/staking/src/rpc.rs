@@ -8,6 +8,7 @@ use parity_scale_codec::{Decode, Encode};
 use serde::{Deserialize, Serialize};
 
 use frame_system::pallet_prelude::BlockNumberFor;
+use scale_info::TypeInfo;
 use sp_runtime::RuntimeDebug;
 use xp_mining_common::RewardPotAccountFor;
 
@@ -17,7 +18,7 @@ use crate::{
 };
 
 /// Total information about a validator.
-#[derive(PartialEq, Eq, Clone, Encode, Decode, RuntimeDebug)]
+#[derive(PartialEq, Eq, Clone, Encode, Decode, RuntimeDebug, TypeInfo)]
 #[cfg_attr(feature = "std", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "std", serde(rename_all = "camelCase"))]
 pub struct ValidatorInfo<AccountId, Balance, VoteWeight, BlockNumber> {
@@ -38,7 +39,7 @@ pub struct ValidatorInfo<AccountId, Balance, VoteWeight, BlockNumber> {
 }
 
 /// Profile of staking nominator.
-#[derive(PartialEq, Eq, Clone, Default, Encode, Decode, RuntimeDebug)]
+#[derive(PartialEq, Eq, Clone, Default, Encode, Decode, RuntimeDebug, TypeInfo)]
 #[cfg_attr(feature = "std", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "std", serde(rename_all = "camelCase"))]
 pub struct NominatorInfo<BlockNumber> {

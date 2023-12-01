@@ -180,24 +180,25 @@ fn deposit_wasm<T: Config>(txid: H256, who: &T::AccountId, balance: u64) -> Disp
 }
 
 fn deposit_evm<T: Config>(txid: H256, who: &H160, balance: u64) -> DispatchResult {
-	match xpallet_assets_bridge::Pallet::<T>::apply_direct_deposit_btc(*who, balance as u128) {
-		Ok(_) => {
-			Pallet::<T>::deposit_event(Event::<T>::DepositedEvm(
-				txid,
-				*who,
-				balance.saturated_into(),
-			));
-			Ok(())
-		},
-		Err(err) => {
-			error!(
-				target: "runtime::bitcoin",
-				"[deposit_token] Deposit error:{:?}, must use root to fix it",
-				err
-			);
-			Err(err)
-		},
-	}
+	// match xpallet_assets_bridge::Pallet::<T>::apply_direct_deposit_btc(*who, balance as u128) {
+	// 	Ok(_) => {
+	// 		Pallet::<T>::deposit_event(Event::<T>::DepositedEvm(
+	// 			txid,
+	// 			*who,
+	// 			balance.saturated_into(),
+	// 		));
+	// 		Ok(())
+	// 	},
+	// 	Err(err) => {
+	// 		error!(
+	// 			target: "runtime::bitcoin",
+	// 			"[deposit_token] Deposit error:{:?}, must use root to fix it",
+	// 			err
+	// 		);
+	// 		Err(err)
+	// 	},
+	// }
+	todo!()
 }
 
 fn deposit_aptos<T: Config>(txid: H256, who: &H256, balance: u64) -> DispatchResult {

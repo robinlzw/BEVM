@@ -1,0 +1,18 @@
+[package]
+name = "bevm-executor"
+version = "0.1.0"
+authors = { workspace = true }
+edition = { workspace = true }
+repository = { workspace = true }
+homepage = { workspace = true }
+
+[dependencies]
+frame-benchmarking = { workspace = true , default-features = true }
+sc-executor = { workspace = true }
+
+# BEVM runtime
+bevm-runtime = { path = "../runtime/bevm" }
+
+
+# BEVM primitives
+xp-io = { path = "../primitives/io" }

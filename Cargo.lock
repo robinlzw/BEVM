@@ -760,36 +760,52 @@ dependencies = [
 ]
 
 [[package]]
-name = "bevm"
+name = "bevm-cli"
 version = "0.1.0"
 dependencies = [
+ "bevm-executor",
+ "bevm-primitives",
+ "bevm-rpc",
  "bevm-runtime",
  "clap",
  "frame-benchmarking",
  "frame-benchmarking-cli",
  "frame-system",
+ "frame-system-rpc-runtime-api",
  "futures",
+ "hex",
+ "hex-literal",
  "jsonrpsee",
+ "pallet-im-online",
  "pallet-transaction-payment",
  "pallet-transaction-payment-rpc",
+ "sc-authority-discovery",
  "sc-basic-authorship",
+ "sc-chain-spec",
  "sc-cli",
  "sc-client-api",
  "sc-consensus",
- "sc-consensus-aura",
+ "sc-consensus-babe",
  "sc-consensus-grandpa",
  "sc-executor",
  "sc-network",
+ "sc-network-statement",
+ "sc-network-sync",
  "sc-offchain",
+ "sc-rpc",
  "sc-rpc-api",
  "sc-service",
+ "sc-sync-state-rpc",
  "sc-telemetry",
  "sc-transaction-pool",
  "sc-transaction-pool-api",
+ "serde",
+ "serde_json",
  "sp-api",
+ "sp-authority-discovery",
  "sp-block-builder",
  "sp-blockchain",
- "sp-consensus-aura",
+ "sp-consensus-babe",
  "sp-consensus-grandpa",
  "sp-core",
  "sp-inherents",
@@ -797,9 +813,24 @@ dependencies = [
  "sp-keyring",
  "sp-runtime",
  "sp-timestamp",
+ "sp-transaction-storage-proof",
  "substrate-build-script-utils",
  "substrate-frame-rpc-system",
  "try-runtime-cli",
+ "xp-assets-registrar",
+ "xp-protocol",
+ "xpallet-gateway-bitcoin",
+ "xpallet-gateway-common",
+]
+
+[[package]]
+name = "bevm-executor"
+version = "0.1.0"
+dependencies = [
+ "bevm-runtime",
+ "frame-benchmarking",
+ "sc-executor",
+ "xp-io",
 ]
 
 [[package]]
@@ -818,9 +849,40 @@ dependencies = [
 ]
 
 [[package]]
+name = "bevm-rpc"
+version = "0.1.0"
+dependencies = [
+ "bevm-primitives",
+ "bevm-runtime",
+ "jsonrpsee",
+ "pallet-transaction-payment-rpc",
+ "sc-chain-spec",
+ "sc-client-api",
+ "sc-consensus-babe",
+ "sc-consensus-babe-rpc",
+ "sc-consensus-grandpa",
+ "sc-consensus-grandpa-rpc",
+ "sc-rpc",
+ "sc-rpc-api",
+ "sc-rpc-spec-v2",
+ "sc-sync-state-rpc",
+ "sc-transaction-pool-api",
+ "sp-api",
+ "sp-block-builder",
+ "sp-blockchain",
+ "sp-consensus",
+ "sp-consensus-babe",
+ "sp-keystore",
+ "sp-runtime",
+ "sp-statement-store",
+ "substrate-frame-rpc-system",
+]
+
+[[package]]
 name = "bevm-runtime"
 version = "0.1.0"
 dependencies = [
+ "bevm-primitives",
  "frame-benchmarking",
  "frame-executive",
  "frame-support",
@@ -828,30 +890,75 @@ dependencies = [
  "frame-system-benchmarking",
  "frame-system-rpc-runtime-api",
  "frame-try-runtime",
- "pallet-aura",
+ "log",
+ "pallet-authority-discovery",
+ "pallet-authorship",
+ "pallet-babe",
  "pallet-balances",
+ "pallet-bounties",
+ "pallet-collective",
+ "pallet-democracy",
+ "pallet-elections-phragmen",
  "pallet-grandpa",
+ "pallet-identity",
+ "pallet-im-online",
+ "pallet-indices",
+ "pallet-membership",
+ "pallet-multisig",
+ "pallet-offences",
+ "pallet-preimage",
+ "pallet-proxy",
+ "pallet-scheduler",
+ "pallet-session",
  "pallet-sudo",
  "pallet-timestamp",
+ "pallet-tips",
  "pallet-transaction-payment",
  "pallet-transaction-payment-rpc-runtime-api",
+ "pallet-treasury",
+ "pallet-utility",
  "parity-scale-codec",
+ "runtime-common",
  "scale-info",
+ "serde",
+ "smallvec",
  "sp-api",
+ "sp-authority-discovery",
  "sp-block-builder",
- "sp-consensus-aura",
+ "sp-consensus-babe",
  "sp-consensus-grandpa",
  "sp-core",
- "sp-genesis-builder",
  "sp-inherents",
+ "sp-io",
  "sp-offchain",
  "sp-runtime",
  "sp-session",
+ "sp-staking",
  "sp-std",
- "sp-storage",
  "sp-transaction-pool",
  "sp-version",
+ "static_assertions",
  "substrate-wasm-builder",
+ "xp-assets-registrar",
+ "xp-gateway-bitcoin",
+ "xp-mining-staking",
+ "xp-protocol",
+ "xp-runtime",
+ "xpallet-assets-bridge",
+ "xpallet-btc-ledger",
+ "xpallet-btc-ledger-runtime-api",
+ "xpallet-ethereum-chain-id",
+ "xpallet-gateway-bitcoin",
+ "xpallet-gateway-bitcoin-rpc-runtime-api",
+ "xpallet-gateway-common",
+ "xpallet-gateway-common-rpc-runtime-api",
+ "xpallet-gateway-records",
+ "xpallet-gateway-records-rpc-runtime-api",
+ "xpallet-mining-staking",
+ "xpallet-mining-staking-rpc-runtime-api",
+ "xpallet-support",
+ "xpallet-system",
+ "xpallet-transaction-fee",
 ]
 
 [[package]]
@@ -1399,7 +1506,7 @@ dependencies = [
 [[package]]
 name = "common"
 version = "0.1.0"
-source = "git+https://github.com/w3f/ring-proof#9d79ccf8bb72b132262ccc86e4e42e4396d1bfb8"
+source = "git+https://github.com/w3f/ring-proof#61e7b528bc0170d6bf541be32440d569b784425d"
 dependencies = [
  "ark-ec",
  "ark-ff",
@@ -2357,6 +2464,26 @@ dependencies = [
 ]
 
 [[package]]
+name = "enumflags2"
+version = "0.7.8"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5998b4f30320c9d93aed72f63af821bfdac50465b75428fce77b48ec482c3939"
+dependencies = [
+ "enumflags2_derive",
+]
+
+[[package]]
+name = "enumflags2_derive"
+version = "0.7.8"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f95e2801cd355d4a1a3e3953ce6ee5ae9603a5c833455343a8bfe3f44d418246"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.39",
+]
+
+[[package]]
 name = "env_logger"
 version = "0.10.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2598,7 +2725,7 @@ dependencies = [
 [[package]]
 name = "fflonk"
 version = "0.1.0"
-source = "git+https://github.com/w3f/fflonk#1beb0585e1c8488956fac7f05da061f9b41e8948"
+source = "git+https://github.com/w3f/fflonk#95f3a57d1f4252fe95310c1567d153f25f3066b4"
 dependencies = [
  "ark-ec",
  "ark-ff",
@@ -3225,7 +3352,6 @@ version = "0.0.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6ea1015b5a70616b688dc230cfe50c8af89d972cb132d5a622814d29773b10b9"
 dependencies = [
- "rand 0.8.5",
  "rand_core 0.6.4",
 ]
 
@@ -5491,6 +5617,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0638a1c9d0a3c0914158145bc76cff373a75a627e6ecbfb71cbe6f453a5a19b0"
 dependencies = [
  "autocfg",
+ "num-bigint",
  "num-integer",
  "num-traits",
 ]
@@ -5634,18 +5761,17 @@ dependencies = [
 ]
 
 [[package]]
-name = "pallet-aura"
+name = "pallet-authority-discovery"
 version = "4.0.0-dev"
 source = "git+https://github.com/btclayer2/polkadot-sdk?branch=polkadot-v1.3.0#7c9fd83805cc446983a7698c7a3281677cf655c8"
 dependencies = [
  "frame-support",
  "frame-system",
- "log",
- "pallet-timestamp",
+ "pallet-session",
  "parity-scale-codec",
  "scale-info",
  "sp-application-crypto",
- "sp-consensus-aura",
+ "sp-authority-discovery",
  "sp-runtime",
  "sp-std",
 ]
@@ -5665,6 +5791,30 @@ dependencies = [
 ]
 
 [[package]]
+name = "pallet-babe"
+version = "4.0.0-dev"
+source = "git+https://github.com/btclayer2/polkadot-sdk?branch=polkadot-v1.3.0#7c9fd83805cc446983a7698c7a3281677cf655c8"
+dependencies = [
+ "frame-benchmarking",
+ "frame-support",
+ "frame-system",
+ "log",
+ "pallet-authorship",
+ "pallet-session",
+ "pallet-timestamp",
+ "parity-scale-codec",
+ "scale-info",
+ "sp-application-crypto",
+ "sp-consensus-babe",
+ "sp-core",
+ "sp-io",
+ "sp-runtime",
+ "sp-session",
+ "sp-staking",
+ "sp-std",
+]
+
+[[package]]
 name = "pallet-balances"
 version = "4.0.0-dev"
 source = "git+https://github.com/btclayer2/polkadot-sdk?branch=polkadot-v1.3.0#7c9fd83805cc446983a7698c7a3281677cf655c8"
@@ -5675,6 +5825,59 @@ dependencies = [
  "log",
  "parity-scale-codec",
  "scale-info",
+ "sp-runtime",
+ "sp-std",
+]
+
+[[package]]
+name = "pallet-bounties"
+version = "4.0.0-dev"
+source = "git+https://github.com/btclayer2/polkadot-sdk?branch=polkadot-v1.3.0#7c9fd83805cc446983a7698c7a3281677cf655c8"
+dependencies = [
+ "frame-benchmarking",
+ "frame-support",
+ "frame-system",
+ "log",
+ "pallet-treasury",
+ "parity-scale-codec",
+ "scale-info",
+ "sp-core",
+ "sp-io",
+ "sp-runtime",
+ "sp-std",
+]
+
+[[package]]
+name = "pallet-collective"
+version = "4.0.0-dev"
+source = "git+https://github.com/btclayer2/polkadot-sdk?branch=polkadot-v1.3.0#7c9fd83805cc446983a7698c7a3281677cf655c8"
+dependencies = [
+ "frame-benchmarking",
+ "frame-support",
+ "frame-system",
+ "log",
+ "parity-scale-codec",
+ "scale-info",
+ "sp-core",
+ "sp-io",
+ "sp-runtime",
+ "sp-std",
+]
+
+[[package]]
+name = "pallet-democracy"
+version = "4.0.0-dev"
+source = "git+https://github.com/btclayer2/polkadot-sdk?branch=polkadot-v1.3.0#7c9fd83805cc446983a7698c7a3281677cf655c8"
+dependencies = [
+ "frame-benchmarking",
+ "frame-support",
+ "frame-system",
+ "log",
+ "parity-scale-codec",
+ "scale-info",
+ "serde",
+ "sp-core",
+ "sp-io",
  "sp-runtime",
  "sp-std",
 ]
@@ -5748,6 +5951,159 @@ dependencies = [
 ]
 
 [[package]]
+name = "pallet-identity"
+version = "4.0.0-dev"
+source = "git+https://github.com/btclayer2/polkadot-sdk?branch=polkadot-v1.3.0#7c9fd83805cc446983a7698c7a3281677cf655c8"
+dependencies = [
+ "enumflags2",
+ "frame-benchmarking",
+ "frame-support",
+ "frame-system",
+ "parity-scale-codec",
+ "scale-info",
+ "sp-io",
+ "sp-runtime",
+ "sp-std",
+]
+
+[[package]]
+name = "pallet-im-online"
+version = "4.0.0-dev"
+source = "git+https://github.com/btclayer2/polkadot-sdk?branch=polkadot-v1.3.0#7c9fd83805cc446983a7698c7a3281677cf655c8"
+dependencies = [
+ "frame-benchmarking",
+ "frame-support",
+ "frame-system",
+ "log",
+ "pallet-authorship",
+ "parity-scale-codec",
+ "scale-info",
+ "sp-application-crypto",
+ "sp-core",
+ "sp-io",
+ "sp-runtime",
+ "sp-staking",
+ "sp-std",
+]
+
+[[package]]
+name = "pallet-indices"
+version = "4.0.0-dev"
+source = "git+https://github.com/btclayer2/polkadot-sdk?branch=polkadot-v1.3.0#7c9fd83805cc446983a7698c7a3281677cf655c8"
+dependencies = [
+ "frame-benchmarking",
+ "frame-support",
+ "frame-system",
+ "parity-scale-codec",
+ "scale-info",
+ "sp-core",
+ "sp-io",
+ "sp-keyring",
+ "sp-runtime",
+ "sp-std",
+]
+
+[[package]]
+name = "pallet-membership"
+version = "4.0.0-dev"
+source = "git+https://github.com/btclayer2/polkadot-sdk?branch=polkadot-v1.3.0#7c9fd83805cc446983a7698c7a3281677cf655c8"
+dependencies = [
+ "frame-benchmarking",
+ "frame-support",
+ "frame-system",
+ "log",
+ "parity-scale-codec",
+ "scale-info",
+ "sp-core",
+ "sp-io",
+ "sp-runtime",
+ "sp-std",
+]
+
+[[package]]
+name = "pallet-multisig"
+version = "4.0.0-dev"
+source = "git+https://github.com/btclayer2/polkadot-sdk?branch=polkadot-v1.3.0#7c9fd83805cc446983a7698c7a3281677cf655c8"
+dependencies = [
+ "frame-benchmarking",
+ "frame-support",
+ "frame-system",
+ "log",
+ "parity-scale-codec",
+ "scale-info",
+ "sp-io",
+ "sp-runtime",
+ "sp-std",
+]
+
+[[package]]
+name = "pallet-offences"
+version = "4.0.0-dev"
+source = "git+https://github.com/btclayer2/polkadot-sdk?branch=polkadot-v1.3.0#7c9fd83805cc446983a7698c7a3281677cf655c8"
+dependencies = [
+ "frame-support",
+ "frame-system",
+ "log",
+ "pallet-balances",
+ "parity-scale-codec",
+ "scale-info",
+ "serde",
+ "sp-runtime",
+ "sp-staking",
+ "sp-std",
+]
+
+[[package]]
+name = "pallet-preimage"
+version = "4.0.0-dev"
+source = "git+https://github.com/btclayer2/polkadot-sdk?branch=polkadot-v1.3.0#7c9fd83805cc446983a7698c7a3281677cf655c8"
+dependencies = [
+ "frame-benchmarking",
+ "frame-support",
+ "frame-system",
+ "log",
+ "parity-scale-codec",
+ "scale-info",
+ "sp-core",
+ "sp-io",
+ "sp-runtime",
+ "sp-std",
+]
+
+[[package]]
+name = "pallet-proxy"
+version = "4.0.0-dev"
+source = "git+https://github.com/btclayer2/polkadot-sdk?branch=polkadot-v1.3.0#7c9fd83805cc446983a7698c7a3281677cf655c8"
+dependencies = [
+ "frame-benchmarking",
+ "frame-support",
+ "frame-system",
+ "parity-scale-codec",
+ "scale-info",
+ "sp-io",
+ "sp-runtime",
+ "sp-std",
+]
+
+[[package]]
+name = "pallet-scheduler"
+version = "4.0.0-dev"
+source = "git+https://github.com/btclayer2/polkadot-sdk?branch=polkadot-v1.3.0#7c9fd83805cc446983a7698c7a3281677cf655c8"
+dependencies = [
+ "docify",
+ "frame-benchmarking",
+ "frame-support",
+ "frame-system",
+ "log",
+ "parity-scale-codec",
+ "scale-info",
+ "sp-io",
+ "sp-runtime",
+ "sp-std",
+ "sp-weights",
+]
+
+[[package]]
 name = "pallet-session"
 version = "4.0.0-dev"
 source = "git+https://github.com/btclayer2/polkadot-sdk?branch=polkadot-v1.3.0#7c9fd83805cc446983a7698c7a3281677cf655c8"
@@ -5806,6 +6162,25 @@ dependencies = [
 ]
 
 [[package]]
+name = "pallet-tips"
+version = "4.0.0-dev"
+source = "git+https://github.com/btclayer2/polkadot-sdk?branch=polkadot-v1.3.0#7c9fd83805cc446983a7698c7a3281677cf655c8"
+dependencies = [
+ "frame-benchmarking",
+ "frame-support",
+ "frame-system",
+ "log",
+ "pallet-treasury",
+ "parity-scale-codec",
+ "scale-info",
+ "serde",
+ "sp-core",
+ "sp-io",
+ "sp-runtime",
+ "sp-std",
+]
+
+[[package]]
 name = "pallet-transaction-payment"
 version = "4.0.0-dev"
 source = "git+https://github.com/btclayer2/polkadot-sdk?branch=polkadot-v1.3.0#7c9fd83805cc446983a7698c7a3281677cf655c8"
@@ -5847,6 +6222,41 @@ dependencies = [
  "sp-api",
  "sp-runtime",
  "sp-weights",
+]
+
+[[package]]
+name = "pallet-treasury"
+version = "4.0.0-dev"
+source = "git+https://github.com/btclayer2/polkadot-sdk?branch=polkadot-v1.3.0#7c9fd83805cc446983a7698c7a3281677cf655c8"
+dependencies = [
+ "docify",
+ "frame-benchmarking",
+ "frame-support",
+ "frame-system",
+ "impl-trait-for-tuples",
+ "pallet-balances",
+ "parity-scale-codec",
+ "scale-info",
+ "serde",
+ "sp-core",
+ "sp-runtime",
+ "sp-std",
+]
+
+[[package]]
+name = "pallet-utility"
+version = "4.0.0-dev"
+source = "git+https://github.com/btclayer2/polkadot-sdk?branch=polkadot-v1.3.0#7c9fd83805cc446983a7698c7a3281677cf655c8"
+dependencies = [
+ "frame-benchmarking",
+ "frame-support",
+ "frame-system",
+ "parity-scale-codec",
+ "scale-info",
+ "sp-core",
+ "sp-io",
+ "sp-runtime",
+ "sp-std",
 ]
 
 [[package]]
@@ -6796,7 +7206,7 @@ dependencies = [
 [[package]]
 name = "ring"
 version = "0.1.0"
-source = "git+https://github.com/w3f/ring-proof#9d79ccf8bb72b132262ccc86e4e42e4396d1bfb8"
+source = "git+https://github.com/w3f/ring-proof#61e7b528bc0170d6bf541be32440d569b784425d"
 dependencies = [
  "ark-ec",
  "ark-ff",
@@ -6940,6 +7350,21 @@ dependencies = [
  "serde",
  "thiserror",
  "webrtc-util",
+]
+
+[[package]]
+name = "runtime-common"
+version = "0.1.0"
+dependencies = [
+ "bevm-primitives",
+ "frame-support",
+ "frame-system",
+ "pallet-balances",
+ "pallet-transaction-payment",
+ "smallvec",
+ "sp-runtime",
+ "sp-staking",
+ "static_assertions",
 ]
 
 [[package]]
@@ -7140,6 +7565,34 @@ dependencies = [
 ]
 
 [[package]]
+name = "sc-authority-discovery"
+version = "0.10.0-dev"
+source = "git+https://github.com/btclayer2/polkadot-sdk?branch=polkadot-v1.3.0#7c9fd83805cc446983a7698c7a3281677cf655c8"
+dependencies = [
+ "async-trait",
+ "futures",
+ "futures-timer",
+ "ip_network",
+ "libp2p",
+ "log",
+ "multihash",
+ "parity-scale-codec",
+ "prost",
+ "prost-build",
+ "rand 0.8.5",
+ "sc-client-api",
+ "sc-network",
+ "sp-api",
+ "sp-authority-discovery",
+ "sp-blockchain",
+ "sp-core",
+ "sp-keystore",
+ "sp-runtime",
+ "substrate-prometheus-endpoint",
+ "thiserror",
+]
+
+[[package]]
 name = "sc-basic-authorship"
 version = "0.10.0-dev"
 source = "git+https://github.com/btclayer2/polkadot-sdk?branch=polkadot-v1.3.0#7c9fd83805cc446983a7698c7a3281677cf655c8"
@@ -7326,25 +7779,31 @@ dependencies = [
 ]
 
 [[package]]
-name = "sc-consensus-aura"
+name = "sc-consensus-babe"
 version = "0.10.0-dev"
 source = "git+https://github.com/btclayer2/polkadot-sdk?branch=polkadot-v1.3.0#7c9fd83805cc446983a7698c7a3281677cf655c8"
 dependencies = [
  "async-trait",
+ "fork-tree",
  "futures",
  "log",
+ "num-bigint",
+ "num-rational",
+ "num-traits",
  "parity-scale-codec",
- "sc-block-builder",
+ "parking_lot 0.12.1",
  "sc-client-api",
  "sc-consensus",
+ "sc-consensus-epochs",
  "sc-consensus-slots",
  "sc-telemetry",
+ "sc-transaction-pool-api",
  "sp-api",
  "sp-application-crypto",
  "sp-block-builder",
  "sp-blockchain",
  "sp-consensus",
- "sp-consensus-aura",
+ "sp-consensus-babe",
  "sp-consensus-slots",
  "sp-core",
  "sp-inherents",
@@ -7352,6 +7811,41 @@ dependencies = [
  "sp-runtime",
  "substrate-prometheus-endpoint",
  "thiserror",
+]
+
+[[package]]
+name = "sc-consensus-babe-rpc"
+version = "0.10.0-dev"
+source = "git+https://github.com/btclayer2/polkadot-sdk?branch=polkadot-v1.3.0#7c9fd83805cc446983a7698c7a3281677cf655c8"
+dependencies = [
+ "futures",
+ "jsonrpsee",
+ "sc-consensus-babe",
+ "sc-consensus-epochs",
+ "sc-rpc-api",
+ "serde",
+ "sp-api",
+ "sp-application-crypto",
+ "sp-blockchain",
+ "sp-consensus",
+ "sp-consensus-babe",
+ "sp-core",
+ "sp-keystore",
+ "sp-runtime",
+ "thiserror",
+]
+
+[[package]]
+name = "sc-consensus-epochs"
+version = "0.10.0-dev"
+source = "git+https://github.com/btclayer2/polkadot-sdk?branch=polkadot-v1.3.0#7c9fd83805cc446983a7698c7a3281677cf655c8"
+dependencies = [
+ "fork-tree",
+ "parity-scale-codec",
+ "sc-client-api",
+ "sc-consensus",
+ "sp-blockchain",
+ "sp-runtime",
 ]
 
 [[package]]
@@ -7392,6 +7886,26 @@ dependencies = [
  "sp-keystore",
  "sp-runtime",
  "substrate-prometheus-endpoint",
+ "thiserror",
+]
+
+[[package]]
+name = "sc-consensus-grandpa-rpc"
+version = "0.10.0-dev"
+source = "git+https://github.com/btclayer2/polkadot-sdk?branch=polkadot-v1.3.0#7c9fd83805cc446983a7698c7a3281677cf655c8"
+dependencies = [
+ "finality-grandpa",
+ "futures",
+ "jsonrpsee",
+ "log",
+ "parity-scale-codec",
+ "sc-client-api",
+ "sc-consensus-grandpa",
+ "sc-rpc",
+ "serde",
+ "sp-blockchain",
+ "sp-core",
+ "sp-runtime",
  "thiserror",
 ]
 
@@ -7643,6 +8157,24 @@ dependencies = [
  "sp-core",
  "sp-runtime",
  "thiserror",
+]
+
+[[package]]
+name = "sc-network-statement"
+version = "0.10.0-dev"
+source = "git+https://github.com/btclayer2/polkadot-sdk?branch=polkadot-v1.3.0#7c9fd83805cc446983a7698c7a3281677cf655c8"
+dependencies = [
+ "array-bytes 6.2.0",
+ "async-channel",
+ "futures",
+ "libp2p",
+ "log",
+ "parity-scale-codec",
+ "sc-network",
+ "sc-network-common",
+ "sp-consensus",
+ "sp-statement-store",
+ "substrate-prometheus-endpoint",
 ]
 
 [[package]]
@@ -7909,6 +8441,25 @@ dependencies = [
  "parity-scale-codec",
  "parking_lot 0.12.1",
  "sp-core",
+]
+
+[[package]]
+name = "sc-sync-state-rpc"
+version = "0.10.0-dev"
+source = "git+https://github.com/btclayer2/polkadot-sdk?branch=polkadot-v1.3.0#7c9fd83805cc446983a7698c7a3281677cf655c8"
+dependencies = [
+ "jsonrpsee",
+ "parity-scale-codec",
+ "sc-chain-spec",
+ "sc-client-api",
+ "sc-consensus-babe",
+ "sc-consensus-epochs",
+ "sc-consensus-grandpa",
+ "serde",
+ "serde_json",
+ "sp-blockchain",
+ "sp-runtime",
+ "thiserror",
 ]
 
 [[package]]
@@ -8570,6 +9121,19 @@ dependencies = [
  "serde",
  "sp-std",
  "static_assertions",
+]
+
+[[package]]
+name = "sp-authority-discovery"
+version = "4.0.0-dev"
+source = "git+https://github.com/btclayer2/polkadot-sdk?branch=polkadot-v1.3.0#7c9fd83805cc446983a7698c7a3281677cf655c8"
+dependencies = [
+ "parity-scale-codec",
+ "scale-info",
+ "sp-api",
+ "sp-application-crypto",
+ "sp-runtime",
+ "sp-std",
 ]
 
 [[package]]
@@ -11380,6 +11944,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "xpallet-ethereum-chain-id"
+version = "0.1.0"
+dependencies = [
+ "frame-support",
+ "frame-system",
+ "parity-scale-codec",
+ "scale-info",
+]
+
+[[package]]
 name = "xpallet-gateway-bitcoin"
 version = "0.1.0"
 dependencies = [
@@ -11619,6 +12193,19 @@ version = "0.1.0"
 dependencies = [
  "hex",
  "sp-std",
+]
+
+[[package]]
+name = "xpallet-system"
+version = "0.1.0"
+dependencies = [
+ "frame-support",
+ "frame-system",
+ "parity-scale-codec",
+ "scale-info",
+ "sp-runtime",
+ "sp-std",
+ "xp-protocol",
 ]
 
 [[package]]

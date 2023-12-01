@@ -1,0 +1,121 @@
+[package]
+name = "bevm-cli"
+version = "0.1.0"
+description = "A bevm substrate node"
+build = "build.rs"
+authors = { workspace = true }
+edition = { workspace = true }
+repository = { workspace = true }
+homepage = { workspace = true }
+
+[package.metadata.docs.rs]
+targets = ["x86_64-unknown-linux-gnu"]
+
+[[bin]]
+name = "bevm"
+path = "bin/main.rs"
+required-features = ["cli"]
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+clap = { workspace = true, optional = true }
+futures = { workspace = true }
+jsonrpsee = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+hex-literal = { workspace = true }
+hex = { workspace = true }
+
+sc-authority-discovery = { workspace = true }
+sc-basic-authorship = { workspace = true }
+sc-chain-spec = { workspace = true }
+sc-cli = { workspace = true, optional = true }
+sc-client-api = { workspace = true }
+sc-consensus-babe = { workspace = true }
+sc-consensus = { workspace = true }
+sc-consensus-grandpa = { workspace = true }
+sc-executor = { workspace = true }
+sc-network = { workspace = true }
+sc-network-sync = { workspace = true }
+sc-network-statement = { workspace = true }
+sc-offchain = { workspace = true }
+sc-rpc = { workspace = true }
+sc-rpc-api = { workspace = true }
+sc-service = { workspace = true }
+sc-sync-state-rpc = { workspace = true }
+sc-telemetry = { workspace = true }
+sc-transaction-pool = { workspace = true }
+sc-transaction-pool-api = { workspace = true }
+
+sp-api = { workspace = true }
+sp-authority-discovery = { workspace = true }
+sp-blockchain = { workspace = true }
+sp-block-builder = { workspace = true }
+sp-core = { workspace = true }
+sp-consensus-babe = { workspace = true }
+sp-consensus-grandpa = { workspace = true }
+sp-io = { workspace = true }
+sp-inherents = { workspace = true }
+sp-keyring = { workspace = true }
+sp-runtime = { workspace = true }
+sp-transaction-storage-proof = { workspace = true }
+sp-timestamp = { workspace = true }
+
+frame-system = { workspace = true }
+frame-system-rpc-runtime-api = { workspace = true }
+substrate-frame-rpc-system = { workspace = true }
+pallet-im-online = { workspace = true }
+pallet-transaction-payment = { workspace = true, default-features = false }
+pallet-transaction-payment-rpc = { workspace = true }
+
+# These dependencies are used for runtime benchmarking
+frame-benchmarking = { workspace = true }
+frame-benchmarking-cli = { workspace = true, optional = true }
+
+# Local Dependencies
+bevm-runtime = { path = "../runtime/bevm" }
+bevm-primitives = { path = "../primitives" }
+bevm-executor = { path = "../executor" }
+bevm-rpc = { path = "../rpc" }
+
+xp-assets-registrar = { path = "../primitives/assets-registrar" }
+xp-protocol = { path = "../primitives/protocol" }
+xpallet-gateway-bitcoin = { path = "../xpallets/gateway/bitcoin" }
+xpallet-gateway-common = { path = "../xpallets/gateway/common" }
+
+# CLI-specific dependencies
+try-runtime-cli = { workspace = true, optional = true }
+
+[build-dependencies]
+substrate-build-script-utils = { workspace = true, optional = true }
+
+[features]
+default = [ "cli" ]
+cli = [
+	"clap",
+	"frame-benchmarking-cli",
+	"sc-cli",
+	"sc-service/rocksdb",
+	"substrate-build-script-utils",
+	"try-runtime-cli",
+]
+# Dependencies that are only required if runtime benchmarking should be build.
+runtime-benchmarks = [
+	"frame-benchmarking-cli/runtime-benchmarks",
+	"frame-benchmarking/runtime-benchmarks",
+	"frame-system/runtime-benchmarks",
+	"bevm-runtime/runtime-benchmarks",
+	"sc-service/runtime-benchmarks",
+	"sp-runtime/runtime-benchmarks",
+]
+# Enable features that allow the runtime to be tried and debugged. Name might be subject to change
+# in the near future.
+try-runtime = [
+	"frame-system/try-runtime",
+	"bevm-runtime/try-runtime",
+	"pallet-transaction-payment/try-runtime",
+	"sp-runtime/try-runtime",
+	"try-runtime-cli/try-runtime",
+]

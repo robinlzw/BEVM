@@ -1,7 +1,10 @@
 [workspace]
 members = [
-  "node",
-  "runtime",
+  "cli",
+  "executor",
+  "runtime/bevm",
+  "runtime/common",
+  "rpc",
 
   "primitives/assets-registrar",
   "primitives/gateway/bitcoin",
@@ -17,6 +20,7 @@ members = [
   "xpallets/btc-ledger",
   "xpallets/btc-ledger/rpc",
   "xpallets/btc-ledger/rpc/runtime-api",
+  "xpallets/ethereum-chain-id",
   "xpallets/gateway/bitcoin",
   "xpallets/gateway/bitcoin/rpc",
   "xpallets/gateway/bitcoin/rpc/runtime-api",
@@ -30,6 +34,7 @@ members = [
   "xpallets/staking/rpc",
   "xpallets/staking/rpc/runtime-api",
   "xpallets/support",
+  "xpallets/system",
   "xpallets/transaction-fee",
   "xpallets/transaction-fee/rpc",
   "xpallets/transaction-fee/rpc/runtime-api"
@@ -59,20 +64,32 @@ futures = "0.3.28"
 hex-literal = "0.4.1"
 serde_json = "1.0.108"
 lazy_static = "1.4"
+smallvec = "1.11.1"
+static_assertions = "1.1.0"
 
 # Substrate Client
+sc-authority-discovery = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0" }
 sc-basic-authorship = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0" }
+sc-chain-spec = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0" }
 sc-cli = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0" }
 sc-client-api = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0" }
 sc-consensus = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0" }
-sc-consensus-aura = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0" }
+sc-consensus-babe = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0" }
+sc-consensus-babe-rpc = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0" }
 sc-consensus-grandpa = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0" }
+sc-consensus-grandpa-rpc = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0" }
+sc-consensus-slots = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0" }
 sc-executor = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0" }
 sc-network = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0" }
+sc-network-sync = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0" }
+sc-network-statement = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0" }
 sc-offchain = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0" }
 sc-rpc = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0" }
 sc-rpc-api = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0" }
+sc-rpc-spec-v2 = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0" }
 sc-service = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0" }
+sc-statement-store = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0" }
+sc-sync-state-rpc = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0" }
 sc-telemetry = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0" }
 sc-transaction-pool = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0" }
 sc-transaction-pool-api = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0" }
@@ -80,25 +97,29 @@ sc-transaction-pool-api = { git = "https://github.com/btclayer2/polkadot-sdk", b
 sp-application-crypto = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
 sp-arithmetic = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
 sp-api = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+sp-authority-discovery = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
 sp-block-builder = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
 sp-blockchain = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
 sp-consensus = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
-sp-consensus-aura = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+sp-consensus-babe = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
 sp-consensus-grandpa = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
 sp-core = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
 sp-genesis-builder = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
 sp-inherents = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
 sp-io = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
 sp-keyring = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+sp-keystore = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
 sp-offchain = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
 sp-runtime = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
 sp-runtime-interface = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
 sp-session = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
 sp-std = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
 sp-staking = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+sp-statement-store = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
 sp-storage = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
 sp-timestamp = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
 sp-transaction-pool = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+sp-transaction-storage-proof = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
 sp-version = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
 
 # Substrate FRAME
@@ -108,16 +129,34 @@ frame-support = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "p
 frame-system = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
 frame-system-benchmarking = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
 frame-system-rpc-runtime-api = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
-pallet-aura = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+pallet-authorship = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+pallet-authority-discovery = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+pallet-babe = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
 pallet-balances = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+pallet-bounties = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+pallet-collective = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+pallet-democracy = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
 pallet-elections-phragmen = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+pallet-identity = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+pallet-indices = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+pallet-im-online = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
 pallet-grandpa = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+pallet-membership = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+pallet-multisig = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+pallet-offences = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+pallet-proxy = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+pallet-preimage = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+pallet-scheduler = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
 pallet-sudo = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
 pallet-session = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
 pallet-timestamp = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+pallet-tips = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+pallet-treasury = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
 pallet-transaction-payment = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
 pallet-transaction-payment-rpc = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0" }
 pallet-transaction-payment-rpc-runtime-api = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+pallet-utility = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+
 # Substrate Utility
 frame-benchmarking-cli = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0" }
 substrate-build-script-utils = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0" }
