@@ -189,27 +189,23 @@ fn build_dev_genesis(
 			..Default::default()
 		},
 		babe: dev::BabeConfig {
-			authorities: vec![],
 			epoch_config: Some(dev::BABE_GENESIS_EPOCH_CONFIG),
 			..Default::default()
 		},
-		grandpa: dev::GrandpaConfig {
-			authorities: vec![],
-			..Default::default()
-		},
-		council: dev::CouncilConfig::default(),
+		grandpa: Default::default(),
+		council: Default::default(),
 		technical_committee: Default::default(),
 		technical_membership: dev::TechnicalMembershipConfig {
 			members: tech_comm_members.try_into().unwrap(),
 			phantom: Default::default(),
 		},
-		democracy: dev::DemocracyConfig::default(),
+		democracy: Default::default(),
 		treasury: Default::default(),
 		elections: dev::ElectionsConfig {
 			members: phragmen_members,
 		},
-		im_online: dev::ImOnlineConfig { keys: vec![] },
-		authority_discovery: dev::AuthorityDiscoveryConfig { keys: vec![], ..Default::default() },
+		im_online: Default::default(),
+		authority_discovery: Default::default(),
 		session: dev::SessionConfig {
 			keys: initial_authorities
 				.iter()
@@ -228,7 +224,7 @@ fn build_dev_genesis(
 				.collect::<Vec<_>>(),
 		},
 		balances: dev::BalancesConfig { balances },
-		indices: dev::IndicesConfig { indices: vec![] },
+		indices: Default::default(),
 		x_gateway_common: dev::XGatewayCommonConfig { trustees },
 		x_gateway_bitcoin: dev::XGatewayBitcoinConfig {
 			genesis_trustees: btc_genesis_trustees,

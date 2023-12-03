@@ -276,7 +276,7 @@ pub mod pallet {
 impl<T: Config> Pallet<T> {
 	pub fn set_admin_inner(new_admin: T::AccountId) -> Weight {
 		Admin::<T>::mutate(|admin| *admin = Some(new_admin));
-		T::DbWeight::get().write.into()
+		T::DbWeight::get().reads_writes(1,1)
 	}
 
 	pub fn apply_direct_deposit_btc(evm_account: H160, amount: u128) -> DispatchResult {
