@@ -5,7 +5,7 @@
 
 use sp_std::collections::btree_map::BTreeMap;
 
-use parity_scale_codec::Codec;
+use codec::Codec;
 
 pub use bevm_primitives::{AssetId, Decimals};
 pub use xp_assets_registrar::Chain;

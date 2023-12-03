@@ -2,9 +2,9 @@
 
 use sp_std::{cmp::Ordering, vec::Vec};
 
+use codec::Encode;
 use frame_support::weights::Weight;
 use frame_system::pallet_prelude::BlockNumberFor;
-use parity_scale_codec::Encode;
 use sp_arithmetic::traits::BaseArithmetic;
 use sp_core::crypto::UncheckedFrom;
 use sp_runtime::{traits::Hash, Perbill};

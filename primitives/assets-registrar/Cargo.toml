@@ -7,14 +7,14 @@ repository = { workspace = true }
 homepage = { workspace = true }
 
 [dependencies]
-parity-scale-codec = { workspace = true, default-features = false }
-scale-info = { workspace = true, default-features = false }
-serde = { workspace = true, optional = true }
-impl-trait-for-tuples = { workspace = true }
+codec = { package = "parity-scale-codec", version = "3.6.5", default-features = false, features = ["derive", "max-encoded-len"] }
+scale-info = { version = "2.10.0", default-features = false, features = ["derive"] }
+serde = { version = "1.0.192", default-features = false, features = ["derive", "alloc"] }
+impl-trait-for-tuples = "0.2.2"
 
 # Substrate primitives
-sp-runtime = { workspace = true, default-features = false }
-sp-std = { workspace = true, default-features = false }
+sp-runtime = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+sp-std = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
 
 # BEVM primitives
 bevm-primitives = { path = "../../primitives", default-features = false }
@@ -22,9 +22,9 @@ bevm-primitives = { path = "../../primitives", default-features = false }
 [features]
 default = ["std"]
 std = [
-    "parity-scale-codec/std",
+    "codec/std",
     "scale-info/std",
-    "serde",
+    "serde/std",
     # Substrate primitives
     "sp-runtime/std",
     # BEVM primitives

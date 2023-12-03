@@ -1,6 +1,8 @@
 // Copyright 2023 BEVM Project Authors. Licensed under GPL-3.0.
 
 use super::*;
+#[allow(unused_imports)]
+use micromath::F32Ext;
 use sp_std::vec::Vec;
 
 mod proposal09;

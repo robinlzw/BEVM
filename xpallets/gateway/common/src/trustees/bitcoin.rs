@@ -1,6 +1,6 @@
 // Copyright 2023 BEVM Project Authors. Licensed under GPL-3.0.
 
-use parity_scale_codec::{Decode, Encode, Error as CodecError};
+use codec::{Decode, Encode, Error as CodecError};
 #[cfg(feature = "std")]
 use serde::{Deserialize, Serialize};
 

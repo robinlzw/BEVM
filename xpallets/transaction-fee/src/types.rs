@@ -1,6 +1,6 @@
 // Copyright 2019-2023 ChainX Project Authors. Licensed under GPL-3.0.
 
-use parity_scale_codec::{Decode, Encode};
+use codec::{Decode, Encode};
 use scale_info::TypeInfo;
 #[cfg(feature = "std")]
 use serde::{Deserialize, Serialize};

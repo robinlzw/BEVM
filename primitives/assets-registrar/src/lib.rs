@@ -5,10 +5,8 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 #![deny(missing_docs)]
 
-use parity_scale_codec::{Decode, Encode, MaxEncodedLen};
+use codec::{Decode, Encode, MaxEncodedLen};
 use scale_info::TypeInfo;
-#[cfg(feature = "std")]
-use serde::{Deserialize, Serialize};
 
 use sp_runtime::{DispatchError, DispatchResult, RuntimeDebug};
 use sp_std::slice::Iter;
@@ -31,8 +29,9 @@ const CHAINS: [Chain; 1] = [Chain::Bitcoin];
 	RuntimeDebug,
 	MaxEncodedLen,
 	TypeInfo,
+	serde::Serialize,
+	serde::Deserialize,
 )]
-#[cfg_attr(feature = "std", derive(Serialize, Deserialize))]
 pub enum Chain {
 	/// Bitcoin
 	#[default]
@@ -75,8 +74,22 @@ impl RegistrarHandler for Tuple {
 	}
 }
 
-#[derive(PartialEq, Eq, Clone, Default, Encode, Decode, RuntimeDebug, TypeInfo)]
-#[cfg_attr(feature = "std", derive(Serialize, Deserialize))]
+#[derive(
+	PartialEq,
+	Eq,
+	Ord,
+	PartialOrd,
+	Clone,
+	Copy,
+	Default,
+	Encode,
+	Decode,
+	RuntimeDebug,
+	MaxEncodedLen,
+	TypeInfo,
+	serde::Serialize,
+	serde::Deserialize,
+)]
 #[cfg_attr(feature = "std", serde(rename_all = "camelCase"))]
 /// BTC withdraw limit parameters
 pub struct WithdrawalLimit<Balance> {

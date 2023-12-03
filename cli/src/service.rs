@@ -4,20 +4,20 @@
 
 //! Service implementation. Specialized wrapper over substrate service.
 
-use crate::Cli;
-use frame_benchmarking_cli::SUBSTRATE_REFERENCE_HARDWARE;
+use bevm_executor::BevmExecutorDispatch;
+use bevm_primitives::Block;
+use bevm_runtime::RuntimeApi;
+use codec::Encode;
 use frame_system_rpc_runtime_api::AccountNonceApi;
 use futures::prelude::*;
-use bevm_runtime::RuntimeApi;
-use bevm_executor::BevmExecutor;
-use bevm_primitives::Block;
 use sc_client_api::{Backend, BlockBackend};
 use sc_consensus_babe::{self, SlotProportion};
 use sc_executor::NativeElseWasmExecutor;
-use sc_consensus_grandpa as grandpa;
 use sc_network::{event::Event, NetworkEventStream, NetworkService};
 use sc_network_sync::{warp::WarpSyncParams, SyncingService};
-use sc_service::{config::Configuration, error::Error as ServiceError, RpcHandlers, TaskManager};
+use sc_service::{
+	config::Configuration, error::Error as ServiceError, PruningMode, RpcHandlers, TaskManager,
+};
 use sc_telemetry::{Telemetry, TelemetryWorker};
 use sc_transaction_pool_api::OffchainTransactionPoolFactory;
 use sp_api::ProvideRuntimeApi;
@@ -27,20 +27,21 @@ use std::sync::Arc;
 
 /// The full client type definition.
 pub type FullClient =
-	sc_service::TFullClient<Block, RuntimeApi, NativeElseWasmExecutor<BevmExecutor>>;
+	sc_service::TFullClient<Block, RuntimeApi, NativeElseWasmExecutor<BevmExecutorDispatch>>;
 type FullBackend = sc_service::TFullBackend<Block>;
 type FullSelectChain = sc_consensus::LongestChain<FullBackend, Block>;
 type FullGrandpaBlockImport =
 	grandpa::GrandpaBlockImport<FullBackend, Block, FullClient, FullSelectChain>;
 
-/// The transaction pool type definition.
-pub type TransactionPool = sc_transaction_pool::FullPool<Block, FullClient>;
-
 /// The minimum period of blocks on which justifications will be
 /// imported and generated.
 const GRANDPA_JUSTIFICATION_PERIOD: u32 = 512;
 
+/// The transaction pool type defintion.
+pub type TransactionPool = sc_transaction_pool::FullPool<Block, FullClient>;
+
 /// Creates a new partial node.
+#[allow(clippy::type_complexity, clippy::redundant_clone)]
 pub fn new_partial(
 	config: &Configuration,
 ) -> Result<
@@ -77,7 +78,7 @@ pub fn new_partial(
 		})
 		.transpose()?;
 
-	let executor = sc_service::new_native_or_wasm_executor(&config);
+	let executor = sc_service::new_native_or_wasm_executor(config);
 
 	let (client, backend, keystore_container, task_manager) =
 		sc_service::new_full_parts::<Block, RuntimeApi, _>(
@@ -118,8 +119,8 @@ pub fn new_partial(
 	)?;
 
 	let slot_duration = babe_link.config().slot_duration();
-	let (import_queue, babe_worker_handle) =
-		sc_consensus_babe::import_queue(sc_consensus_babe::ImportQueueParams {
+	let (import_queue, babe_worker_handle) = sc_consensus_babe::import_queue(
+		sc_consensus_babe::ImportQueueParams {
 			link: babe_link.clone(),
 			block_import: block_import.clone(),
 			justification_import: Some(Box::new(justification_import)),
@@ -129,10 +130,10 @@ pub fn new_partial(
 				let timestamp = sp_timestamp::InherentDataProvider::from_system_time();
 
 				let slot =
-				sp_consensus_babe::inherents::InherentDataProvider::from_timestamp_and_slot_duration(
-					*timestamp,
-					slot_duration,
-				);
+                    sp_consensus_babe::inherents::InherentDataProvider::from_timestamp_and_slot_duration(
+                        *timestamp,
+                        slot_duration,
+                    );
 
 				Ok((slot, timestamp))
 			},
@@ -140,7 +141,8 @@ pub fn new_partial(
 			registry: config.prometheus_registry(),
 			telemetry: telemetry.as_ref().map(|x| x.handle()),
 			offchain_tx_pool_factory: OffchainTransactionPoolFactory::new(transaction_pool.clone()),
-		})?;
+		},
+	)?;
 
 	let import_setup = (block_import, grandpa_link, babe_link);
 
@@ -163,6 +165,14 @@ pub fn new_partial(
 		let keystore = keystore_container.keystore();
 		let chain_spec = config.chain_spec.cloned_box();
 
+		let rpc_backend = backend.clone();
+		let is_archive_mode = match &config.state_pruning {
+			Some(m) => match m {
+				PruningMode::Constrained(_) => false,
+				PruningMode::ArchiveAll | PruningMode::ArchiveCanonical => true,
+			},
+			None => true,
+		};
 		let rpc_extensions_builder = move |deny_unsafe, subscription_executor| {
 			let deps = bevm_rpc::FullDeps {
 				client: client.clone(),
@@ -181,6 +191,7 @@ pub fn new_partial(
 					subscription_executor,
 					finality_provider: finality_proof_provider.clone(),
 				},
+				backend: rpc_backend.clone(),
 			};
 
 			bevm_rpc::create_full(deps).map_err(Into::into)
@@ -197,12 +208,7 @@ pub fn new_partial(
 		select_chain,
 		import_queue,
 		transaction_pool,
-		other: (
-			rpc_extensions_builder,
-			import_setup,
-			rpc_setup,
-			telemetry,
-		),
+		other: (rpc_extensions_builder, import_setup, rpc_setup, telemetry),
 	})
 }
 
@@ -225,11 +231,21 @@ pub struct NewFullBase {
 /// Creates a full service from the configuration.
 pub fn new_full_base(
 	config: Configuration,
+	disable_hardware_benchmarks: bool,
 	with_startup_data: impl FnOnce(
 		&sc_consensus_babe::BabeBlockImport<Block, FullClient, FullGrandpaBlockImport>,
 		&sc_consensus_babe::BabeLink<Block>,
 	),
 ) -> Result<NewFullBase, ServiceError> {
+	let hwbench = if !disable_hardware_benchmarks {
+		config.database.path().map(|database_path| {
+			let _ = std::fs::create_dir_all(database_path);
+			sc_sysinfo::gather_hwbench(Some(database_path))
+		})
+	} else {
+		None
+	};
+
 	let sc_service::PartialComponents {
 		client,
 		backend,
@@ -244,10 +260,10 @@ pub fn new_full_base(
 	let shared_voter_state = rpc_setup;
 	let auth_disc_publish_non_global_ips = config.network.allow_non_globals_in_dht;
 	let mut net_config = sc_network::config::FullNetworkConfiguration::new(&config.network);
-
-	let genesis_hash = client.block_hash(0).ok().flatten().expect("Genesis block exists; qed");
-
-	let grandpa_protocol_name = grandpa::protocol_standard_name(&genesis_hash, &config.chain_spec);
+	let grandpa_protocol_name = grandpa::protocol_standard_name(
+		&client.block_hash(0).ok().flatten().expect("Genesis block exists; qed"),
+		&config.chain_spec,
+	);
 	net_config.add_notification_protocol(grandpa::grandpa_peers_set_config(
 		grandpa_protocol_name.clone(),
 	));
@@ -273,10 +289,8 @@ pub fn new_full_base(
 
 	let role = config.role.clone();
 	let force_authoring = config.force_authoring;
-	// we are not interested in using any backoff from block authoring in case finality is
-	// lagging, in particular because we use a small session duration (50 slots) and this
-	// could be problematic.
-	let backoff_authoring_blocks: Option<()> = None;
+	let backoff_authoring_blocks =
+		Some(sc_consensus_slots::BackoffAuthoringOnFinalizedHeadLagging::default());
 	let name = config.network.node_name.clone();
 	let enable_grandpa = !config.disable_grandpa;
 	let prometheus_registry = config.prometheus_registry().cloned();
@@ -296,6 +310,19 @@ pub fn new_full_base(
 		sync_service: sync_service.clone(),
 		telemetry: telemetry.as_mut(),
 	})?;
+
+	if let Some(hwbench) = hwbench {
+		sc_sysinfo::print_hwbench(&hwbench);
+
+		if let Some(ref mut telemetry) = telemetry {
+			let telemetry_handle = telemetry.handle();
+			task_manager.spawn_handle().spawn(
+				"telemetry_hwbench",
+				None,
+				sc_sysinfo::initialize_hwbench_telemetry(telemetry_handle, hwbench),
+			);
+		}
+	}
 
 	let (block_import, grandpa_link, babe_link) = import_setup;
 
@@ -326,10 +353,10 @@ pub fn new_full_base(
 					let timestamp = sp_timestamp::InherentDataProvider::from_system_time();
 
 					let slot =
-						sp_consensus_babe::inherents::InherentDataProvider::from_timestamp_and_slot_duration(
-							*timestamp,
-							slot_duration,
-						);
+                        sp_consensus_babe::inherents::InherentDataProvider::from_timestamp_and_slot_duration(
+                            *timestamp,
+                            slot_duration,
+                        );
 
 					let storage_proof =
 						sp_transaction_storage_proof::registration::new_data_provider(
@@ -394,7 +421,7 @@ pub fn new_full_base(
 	let grandpa_config = grandpa::Config {
 		// FIXME #1578 make this available through chainspec
 		gossip_duration: std::time::Duration::from_millis(333),
-		justification_generation_period: GRANDPA_JUSTIFICATION_PERIOD,
+		justification_generation_period: 1, /* https://github.com/paritytech/substrate/pull/14423#issuecomment-1633837906 */
 		name: Some(name),
 		observer_enabled: false,
 		keystore,
@@ -410,7 +437,7 @@ pub fn new_full_base(
 		// and vote data availability than the observer. The observer has not
 		// been tested extensively yet and having most nodes in a network run it
 		// could lead to finality stalls.
-		let grandpa_params = grandpa::GrandpaParams {
+		let grandpa_config = grandpa::GrandpaParams {
 			config: grandpa_config,
 			link: grandpa_link,
 			network: network.clone(),
@@ -427,7 +454,7 @@ pub fn new_full_base(
 		task_manager.spawn_essential_handle().spawn_blocking(
 			"grandpa-voter",
 			None,
-			grandpa::run_grandpa_voter(grandpa_params)?,
+			grandpa::run_grandpa_voter(grandpa_config)?,
 		);
 	}
 
@@ -445,7 +472,7 @@ pub fn new_full_base(
 				network_provider: network.clone(),
 				is_validator: role.is_authority(),
 				enable_http_requests: true,
-				custom_extensions: move |_| { vec![] },
+				custom_extensions: move |_| vec![],
 			})
 			.run(client.clone(), task_manager.spawn_handle())
 			.boxed(),
@@ -464,9 +491,10 @@ pub fn new_full_base(
 }
 
 /// Builds a new service for a full client.
-pub fn new_full(config: Configuration) -> Result<TaskManager, ServiceError> {
-	let task_manager = new_full_base(config, |_, _| ())
-		.map(|NewFullBase { task_manager, .. }| task_manager)?;
-
-	Ok(task_manager)
+pub fn new_full(
+	config: Configuration,
+	disable_hardware_benchmarks: bool,
+) -> Result<TaskManager, ServiceError> {
+	new_full_base(config, disable_hardware_benchmarks, |_, _| ())
+		.map(|NewFullBase { task_manager, .. }| task_manager)
 }

@@ -1,9 +1,7 @@
 // Copyright 2023 BEVM Project Authors. Licensed under GPL-3.0.
 
-use parity_scale_codec::{Decode, Encode};
+use codec::{Decode, Encode};
 use scale_info::TypeInfo;
-#[cfg(feature = "std")]
-use serde::{Deserialize, Serialize};
 
 use sp_runtime::RuntimeDebug;
 use sp_std::{convert::TryFrom, prelude::Vec};
@@ -13,8 +11,17 @@ use bevm_primitives::Text;
 use crate::traits::BytesLike;
 
 /// The config of trustee info.
-#[derive(PartialEq, Clone, Encode, Decode, Default, RuntimeDebug, TypeInfo)]
-#[cfg_attr(feature = "std", derive(Serialize, Deserialize))]
+#[derive(
+	PartialEq,
+	Clone,
+	Encode,
+	Decode,
+	Default,
+	RuntimeDebug,
+	TypeInfo,
+	serde::Serialize,
+	serde::Deserialize,
+)]
 #[cfg_attr(feature = "std", serde(rename_all = "camelCase"))]
 pub struct TrusteeInfoConfig {
 	pub min_trustee_count: u32,
@@ -22,8 +29,17 @@ pub struct TrusteeInfoConfig {
 }
 
 /// The trustee session info.
-#[derive(PartialEq, Eq, Clone, Encode, Decode, RuntimeDebug, TypeInfo)]
-#[cfg_attr(feature = "std", derive(Serialize, Deserialize))]
+#[derive(
+	PartialEq,
+	Eq,
+	Clone,
+	Encode,
+	Decode,
+	RuntimeDebug,
+	TypeInfo,
+	serde::Serialize,
+	serde::Deserialize,
+)]
 #[cfg_attr(feature = "std", serde(rename_all = "camelCase"))]
 pub struct TrusteeSessionInfo<AccountId, BlockNumber, TrusteeAddress: BytesLike> {
 	/// Trustee account
@@ -45,8 +61,17 @@ pub struct TrusteeSessionInfo<AccountId, BlockNumber, TrusteeAddress: BytesLike>
 /// Aggregate public key script and corresponding personal public key index.
 ///
 /// Each aggregate public key corresponds to multiple accounts.
-#[derive(PartialEq, Eq, Clone, Encode, Decode, RuntimeDebug, TypeInfo)]
-#[cfg_attr(feature = "std", derive(Serialize, Deserialize))]
+#[derive(
+	PartialEq,
+	Eq,
+	Clone,
+	Encode,
+	Decode,
+	RuntimeDebug,
+	TypeInfo,
+	serde::Serialize,
+	serde::Deserialize,
+)]
 #[cfg_attr(feature = "std", serde(rename_all = "camelCase"))]
 pub struct ScriptInfo<AccountId> {
 	pub agg_pubkeys: Vec<Vec<u8>>,
@@ -54,16 +79,34 @@ pub struct ScriptInfo<AccountId> {
 }
 
 /// Used to record the rewards distributed by the trustee.
-#[derive(PartialEq, Eq, Clone, Encode, Decode, RuntimeDebug, TypeInfo)]
-#[cfg_attr(feature = "std", derive(Serialize, Deserialize))]
+#[derive(
+	PartialEq,
+	Eq,
+	Clone,
+	Encode,
+	Decode,
+	RuntimeDebug,
+	TypeInfo,
+	serde::Serialize,
+	serde::Deserialize,
+)]
 #[cfg_attr(feature = "std", serde(rename_all = "camelCase"))]
 pub struct RewardInfo<AccountId, Balance> {
 	pub rewards: Vec<(AccountId, Balance)>,
 }
 
 /// The generic trustee session info.
-#[derive(PartialEq, Eq, Clone, Encode, Decode, RuntimeDebug, TypeInfo)]
-#[cfg_attr(feature = "std", derive(Serialize, Deserialize))]
+#[derive(
+	PartialEq,
+	Eq,
+	Clone,
+	Encode,
+	Decode,
+	RuntimeDebug,
+	TypeInfo,
+	serde::Serialize,
+	serde::Deserialize,
+)]
 #[cfg_attr(feature = "std", serde(rename_all = "camelCase"))]
 pub struct GenericTrusteeSessionInfo<AccountId, BlockNumber>(
 	pub TrusteeSessionInfo<AccountId, BlockNumber, Vec<u8>>,
@@ -109,8 +152,17 @@ impl<AccountId, BlockNumber, TrusteeAddress: BytesLike>
 }
 
 /// The trustee intention properties.
-#[derive(PartialEq, Eq, Clone, Encode, Decode, RuntimeDebug, TypeInfo)]
-#[cfg_attr(feature = "std", derive(Serialize, Deserialize))]
+#[derive(
+	PartialEq,
+	Eq,
+	Clone,
+	Encode,
+	Decode,
+	RuntimeDebug,
+	TypeInfo,
+	serde::Serialize,
+	serde::Deserialize,
+)]
 #[cfg_attr(feature = "std", serde(rename_all = "camelCase"))]
 pub struct TrusteeIntentionProps<AccountId, TrusteeEntity: BytesLike> {
 	pub proxy_account: Option<AccountId>,
@@ -121,8 +173,17 @@ pub struct TrusteeIntentionProps<AccountId, TrusteeEntity: BytesLike> {
 }
 
 /// The generic trustee intention properties.
-#[derive(PartialEq, Eq, Clone, Encode, Decode, RuntimeDebug, TypeInfo)]
-#[cfg_attr(feature = "std", derive(Serialize, Deserialize))]
+#[derive(
+	PartialEq,
+	Eq,
+	Clone,
+	Encode,
+	Decode,
+	RuntimeDebug,
+	TypeInfo,
+	serde::Serialize,
+	serde::Deserialize,
+)]
 #[cfg_attr(feature = "std", serde(rename_all = "camelCase"))]
 pub struct GenericTrusteeIntentionProps<AccountId>(pub TrusteeIntentionProps<AccountId, Vec<u8>>);
 

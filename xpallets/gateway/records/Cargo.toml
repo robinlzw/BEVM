@@ -1,25 +1,25 @@
 [package]
 name = "xpallet-gateway-records"
-version = "0.1.0"
+version = { workspace = true }
 authors = { workspace = true }
 edition = { workspace = true }
 repository = { workspace = true }
 homepage = { workspace = true }
 
 [dependencies]
-parity-scale-codec = { workspace = true, default-features = false }
-scale-info = { workspace = true, default-features = false }
-serde = { workspace = true, optional = true }
-log = { workspace = true, default-features = false }
+codec = { package = "parity-scale-codec", version = "3.6.5", default-features = false, features = ["derive", "max-encoded-len"] }
+scale-info = { version = "2.10.0", default-features = false, features = ["derive"] }
+serde = { version = "1.0.192", features = ["derive", "alloc"], optional = true }
+log = { version = "0.4.17", default-features = false }
 
 # Substrate primitives
-sp-runtime = { workspace = true, default-features = false }
-sp-std = { workspace = true, default-features = false }
+sp-runtime = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+sp-std = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
 
 # Substrate pallets
-frame-benchmarking = { workspace = true, optional = true }
-frame-support = { workspace = true, default-features = false }
-frame-system = { workspace = true, default-features = false }
+frame-benchmarking = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false, optional = true }
+frame-support = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+frame-system = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
 
 # BEVM primitives
 bevm-primitives = { path = "../../../primitives", default-features = false }
@@ -32,14 +32,14 @@ xpallet-btc-ledger = { path = "../../btc-ledger", default-features = false }
 xpallet-support = { path = "../../support", default-features = false }
 
 [dev-dependencies]
-sp-io = { workspace = true }
-sp-core = { workspace = true }
-pallet-balances = { workspace = true }
+sp-io = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0" }
+sp-core = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0" }
+pallet-balances = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0" }
 
 [features]
 default = ["std"]
 std = [
-    "parity-scale-codec/std",
+    "codec/std",
     "scale-info/std",
     "serde",
     "log/std",
@@ -60,6 +60,6 @@ std = [
     "xpallet-support/std",
 ]
 runtime-benchmarks = [
-    "frame-benchmarking",
+    "frame-benchmarking/runtime-benchmarks",
 ]
 try-runtime = ["frame-support/try-runtime"]

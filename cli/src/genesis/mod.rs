@@ -5,14 +5,13 @@ use std::convert::TryFrom;
 use hex_literal::hex;
 use serde::Deserialize;
 
-use sp_core::sr25519;
-use xp_assets_registrar::Chain;
 use bevm_primitives::AccountId;
 use bevm_runtime::{
-    h256_rev, trustees, BtcHeader, BtcNetwork,
-    Compact as BtcCompact, TrusteeInfoConfig,
+    h256_rev, trustees, BtcHeader, BtcNetwork, Compact as BtcCompact, TrusteeInfoConfig,
     H256 as BtcHash,
 };
+use sp_core::sr25519;
+use xp_assets_registrar::Chain;
 
 use crate::chain_spec::get_account_id_from_seed;
 

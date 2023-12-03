@@ -17,13 +17,13 @@ pub use abi::*;
 pub mod recover;
 pub use recover::*;
 
+use codec::Encode;
 use frame_support::{
 	ensure,
 	pallet_prelude::*,
 	traits::{Currency, ExistenceRequirement, IsType, ReservableCurrency, WithdrawReasons},
 	transactional,
 };
-use parity_scale_codec::Encode;
 use sp_core::{ecdsa, H160, U256};
 use sp_io::{crypto::secp256k1_ecdsa_recover, hashing::keccak_256};
 use sp_runtime::traits::{StaticLookup, UniqueSaturatedInto, Zero};
@@ -276,7 +276,7 @@ pub mod pallet {
 impl<T: Config> Pallet<T> {
 	pub fn set_admin_inner(new_admin: T::AccountId) -> Weight {
 		Admin::<T>::mutate(|admin| *admin = Some(new_admin));
-		T::DbWeight::get().reads_writes(1,1)
+		T::DbWeight::get().reads_writes(1, 1)
 	}
 
 	pub fn apply_direct_deposit_btc(evm_account: H160, amount: u128) -> DispatchResult {

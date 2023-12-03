@@ -708,6 +708,7 @@ pub mod pallet {
 	pub(super) type Immortals<T: Config> = StorageValue<_, Vec<T::AccountId>>;
 
 	#[pallet::genesis_config]
+	#[derive(frame_support::DefaultNoBound)]
 	pub struct GenesisConfig<T: Config> {
 		pub validator_count: u32,
 		pub minimum_validator_count: u32,
@@ -723,32 +724,6 @@ pub mod pallet {
 		pub glob_dist_ratio: (u32, u32),
 		pub mining_ratio: (u32, u32),
 		pub candidate_requirement: (BalanceOf<T>, BalanceOf<T>),
-	}
-
-	#[cfg(feature = "std")]
-	impl<T: Config> Default for GenesisConfig<T> {
-		fn default() -> Self {
-			Self {
-				validator_count: Default::default(),
-				minimum_validator_count: Default::default(),
-				maximum_validator_count: DEFAULT_MAXIMUM_VALIDATOR_COUNT,
-				sessions_per_era: 12,
-				bonding_duration: BlockNumberFor::<T>::saturated_from::<u64>(
-					DEFAULT_BONDING_DURATION,
-				),
-				validator_bonding_duration: BlockNumberFor::<T>::saturated_from::<u64>(
-					DEFAULT_VALIDATOR_BONDING_DURATION,
-				),
-				maximum_unbonded_chunk_size: DEFAULT_MAXIMUM_UNBONDED_CHUNK_SIZE,
-				upper_bound_factor: 10u32,
-				force_era: Default::default(),
-				minimum_penalty: Default::default(),
-				validators: Default::default(),
-				glob_dist_ratio: Default::default(),
-				mining_ratio: Default::default(),
-				candidate_requirement: Default::default(),
-			}
-		}
 	}
 
 	#[pallet::genesis_build]

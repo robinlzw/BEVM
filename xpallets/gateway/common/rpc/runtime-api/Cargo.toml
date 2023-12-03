@@ -1,6 +1,6 @@
 [package]
 name = "xpallet-gateway-common-rpc-runtime-api"
-version = "0.1.0"
+version = { workspace = true }
 authors = { workspace = true }
 edition = { workspace = true }
 repository = { workspace = true }
@@ -10,12 +10,12 @@ homepage = { workspace = true }
 targets = ["x86_64-unknown-linux-gnu"]
 
 [dependencies]
-parity-scale-codec = { workspace = true, default-features = false }
+codec = { package = "parity-scale-codec", version = "3.6.5", default-features = false, features = ["derive", "max-encoded-len"] }
 
 # Substrate primitives
-sp-api = { workspace = true, default-features = false }
-sp-runtime = { workspace = true, default-features = false }
-sp-std = { workspace = true, default-features = false }
+sp-api = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+sp-runtime = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+sp-std = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
 
 # BEVM primitives
 bevm-primitives = { path = "../../../../../primitives", default-features = false }
@@ -29,7 +29,7 @@ xpallet-gateway-records = { path = "../../../records", default-features = false 
 [features]
 default = ["std"]
 std = [
-    "parity-scale-codec/std",
+    "codec/std",
     # Substrate primitives
     "sp-api/std",
     "sp-runtime/std",

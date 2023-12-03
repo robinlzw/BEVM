@@ -5,21 +5,23 @@
 use static_assertions::const_assert;
 
 use frame_support::{
-    parameter_types, pallet_prelude::DispatchClass, traits::Currency,
-    weights::{constants::WEIGHT_REF_TIME_PER_SECOND, Weight},
+	pallet_prelude::DispatchClass,
+	parameter_types,
+	traits::Currency,
+	weights::{constants::WEIGHT_REF_TIME_PER_SECOND, Weight},
 };
 use frame_system::limits;
 use pallet_transaction_payment::{Multiplier, TargetedFeeAdjustment};
-use sp_runtime::{FixedPointNumber, Perbill, Perquintill, traits::Bounded};
+use sp_runtime::{traits::Bounded, FixedPointNumber, Perbill, Perquintill};
 
 pub use frame_support::weights::constants::{
-    BlockExecutionWeight, ExtrinsicBaseWeight, RocksDbWeight,
+	BlockExecutionWeight, ExtrinsicBaseWeight, RocksDbWeight,
 };
 #[cfg(any(feature = "std", test))]
 pub use sp_runtime::BuildStorage;
 
 pub type NegativeImbalance<T> = <pallet_balances::Pallet<T> as Currency<
-    <T as frame_system::Config>::AccountId,
+	<T as frame_system::Config>::AccountId,
 >>::NegativeImbalance;
 
 /// We assume that ~10% of the block weight is consumed by `on_initialize` handlers.
@@ -30,25 +32,25 @@ const AVERAGE_ON_INITIALIZE_RATIO: Perbill = Perbill::from_percent(10);
 const NORMAL_DISPATCH_RATIO: Perbill = Perbill::from_percent(75);
 /// We allow for 2 seconds of compute with a 6 second average block time, with maximum proof size.
 const MAXIMUM_BLOCK_WEIGHT: Weight =
-    Weight::from_parts(WEIGHT_REF_TIME_PER_SECOND.saturating_mul(2), u64::MAX);
+	Weight::from_parts(WEIGHT_REF_TIME_PER_SECOND.saturating_mul(2), u64::MAX);
 
 // Common constants used in all runtimes.
 parameter_types! {
-    /// The portion of the `NORMAL_DISPATCH_RATIO` that we adjust the fees with. Blocks filled less
-    /// than this will decrease the weight and more will increase.
-    pub const TargetBlockFullness: Perquintill = Perquintill::from_percent(25);
-    /// The adjustment variable of the runtime. Higher values will cause `TargetBlockFullness` to
-    /// change the fees more rapidly.
-    pub AdjustmentVariable: Multiplier = Multiplier::saturating_from_rational(3, 100_000);
-    /// Minimum amount of the multiplier. This value cannot be too low. A test case should ensure
-    /// that combined with `AdjustmentVariable`, we can recover from the minimum.
-    /// See `multiplier_can_grow_from_zero`.
-    pub MinimumMultiplier: Multiplier = Multiplier::saturating_from_rational(1, 1_000_000_000u128);
-    pub MaximumMultiplier: Multiplier = Bounded::max_value();
-    /// Maximum length of block. Up to 5MB.
-    pub RuntimeBlockLength: limits::BlockLength =
-        limits::BlockLength::max_with_normal_ratio(5 * 1024 * 1024, NORMAL_DISPATCH_RATIO);
-    /// Block weights base values and limits.
+	/// The portion of the `NORMAL_DISPATCH_RATIO` that we adjust the fees with. Blocks filled less
+	/// than this will decrease the weight and more will increase.
+	pub const TargetBlockFullness: Perquintill = Perquintill::from_percent(25);
+	/// The adjustment variable of the runtime. Higher values will cause `TargetBlockFullness` to
+	/// change the fees more rapidly.
+	pub AdjustmentVariable: Multiplier = Multiplier::saturating_from_rational(3, 100_000);
+	/// Minimum amount of the multiplier. This value cannot be too low. A test case should ensure
+	/// that combined with `AdjustmentVariable`, we can recover from the minimum.
+	/// See `multiplier_can_grow_from_zero`.
+	pub MinimumMultiplier: Multiplier = Multiplier::saturating_from_rational(1, 1_000_000_000u128);
+	pub MaximumMultiplier: Multiplier = Bounded::max_value();
+	/// Maximum length of block. Up to 5MB.
+	pub RuntimeBlockLength: limits::BlockLength =
+		limits::BlockLength::max_with_normal_ratio(5 * 1024 * 1024, NORMAL_DISPATCH_RATIO);
+	/// Block weights base values and limits.
 	pub RuntimeBlockWeights: limits::BlockWeights = limits::BlockWeights::builder()
 		.base_block(BlockExecutionWeight::get())
 		.for_class(DispatchClass::all(), |weights| {
@@ -72,25 +74,25 @@ parameter_types! {
 const_assert!(NORMAL_DISPATCH_RATIO.deconstruct() >= AVERAGE_ON_INITIALIZE_RATIO.deconstruct());
 
 parameter_types! {
-    /// A limit for off-chain phragmen unsigned solution submission.
-    ///
-    /// We want to keep it as high as possible, but can't risk having it reject,
-    /// so we always subtract the base block execution weight.
-    pub OffchainSolutionWeightLimit: Weight = RuntimeBlockWeights::get()
-        .get(DispatchClass::Normal)
-        .max_extrinsic
-        .expect("Normal extrinsics have weight limit configured by default; qed")
-        .saturating_sub(BlockExecutionWeight::get());
+	/// A limit for off-chain phragmen unsigned solution submission.
+	///
+	/// We want to keep it as high as possible, but can't risk having it reject,
+	/// so we always subtract the base block execution weight.
+	pub OffchainSolutionWeightLimit: Weight = RuntimeBlockWeights::get()
+		.get(DispatchClass::Normal)
+		.max_extrinsic
+		.expect("Normal extrinsics have weight limit configured by default; qed")
+		.saturating_sub(BlockExecutionWeight::get());
 }
 
 /// Parameterized slow adjusting fee updated based on
 /// https://w3f-research.readthedocs.io/en/latest/polkadot/Token%20Economics.html#-2.-slow-adjusting-mechanism
 pub type SlowAdjustingFeeUpdate<R> = TargetedFeeAdjustment<
-    R,
-    TargetBlockFullness,
-    AdjustmentVariable,
-    MinimumMultiplier,
-    MaximumMultiplier,
+	R,
+	TargetBlockFullness,
+	AdjustmentVariable,
+	MinimumMultiplier,
+	MaximumMultiplier,
 >;
 
 /// The type used for currency conversion.

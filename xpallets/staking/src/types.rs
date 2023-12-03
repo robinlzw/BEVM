@@ -2,10 +2,8 @@
 
 use sp_std::vec::Vec;
 
-use parity_scale_codec::{Decode, Encode};
+use codec::{Decode, Encode};
 use scale_info::TypeInfo;
-#[cfg(feature = "std")]
-use serde::{Deserialize, Serialize};
 
 use sp_runtime::{
 	traits::{SaturatedConversion, Saturating},
@@ -22,8 +20,20 @@ use crate::{AssetMining, BalanceOf, Config, EraIndex, Event, Pallet};
 pub type VoteWeight = WeightType;
 
 /// Detailed types of reserved balances in Staking.
-#[derive(PartialEq, PartialOrd, Ord, Eq, Clone, Copy, Encode, Decode, RuntimeDebug, TypeInfo)]
-#[cfg_attr(feature = "std", derive(Serialize, Deserialize))]
+#[derive(
+	PartialEq,
+	PartialOrd,
+	Ord,
+	Eq,
+	Clone,
+	Copy,
+	Encode,
+	Decode,
+	RuntimeDebug,
+	TypeInfo,
+	serde::Serialize,
+	serde::Deserialize,
+)]
 pub enum LockedType {
 	/// Locked balances when nominator calls `bond`.
 	Bonded,
@@ -33,7 +43,17 @@ pub enum LockedType {
 }
 
 /// Destination for minted fresh PCX on each new session.
-#[derive(PartialEq, Eq, Clone, Encode, Decode, RuntimeDebug, TypeInfo)]
+#[derive(
+	PartialEq,
+	Eq,
+	Clone,
+	Encode,
+	Decode,
+	RuntimeDebug,
+	TypeInfo,
+	serde::Serialize,
+	serde::Deserialize,
+)]
 pub enum MintedDestination<AccountId> {
 	Validator(AccountId),
 	Asset(AssetId),
@@ -54,8 +74,17 @@ pub struct BondRequirement<Balance> {
 }
 
 /// Type for noting when the unbonded fund can be withdrawn.
-#[derive(PartialEq, Eq, Clone, Encode, Decode, RuntimeDebug, TypeInfo)]
-#[cfg_attr(feature = "std", derive(Serialize, Deserialize))]
+#[derive(
+	PartialEq,
+	Eq,
+	Clone,
+	Encode,
+	Decode,
+	RuntimeDebug,
+	TypeInfo,
+	serde::Serialize,
+	serde::Deserialize,
+)]
 #[cfg_attr(feature = "std", serde(rename_all = "camelCase"))]
 pub struct Unbonded<Balance, BlockNumber> {
 	/// Amount of funds to be unlocked.
@@ -65,8 +94,18 @@ pub struct Unbonded<Balance, BlockNumber> {
 }
 
 /// Vote weight properties of validator.
-#[derive(PartialEq, Eq, Clone, Default, Encode, Decode, RuntimeDebug, TypeInfo)]
-#[cfg_attr(feature = "std", derive(Serialize, Deserialize))]
+#[derive(
+	PartialEq,
+	Eq,
+	Clone,
+	Default,
+	Encode,
+	Decode,
+	RuntimeDebug,
+	TypeInfo,
+	serde::Serialize,
+	serde::Deserialize,
+)]
 #[cfg_attr(feature = "std", serde(rename_all = "camelCase"))]
 pub struct ValidatorLedger<Balance, VoteWeight, BlockNumber> {
 	/// The total amount of all the nominators' vote balances.
@@ -78,8 +117,18 @@ pub struct ValidatorLedger<Balance, VoteWeight, BlockNumber> {
 }
 
 /// Vote weight properties of nominator.
-#[derive(PartialEq, Eq, Clone, Default, Encode, Decode, RuntimeDebug, TypeInfo)]
-#[cfg_attr(feature = "std", derive(Serialize, Deserialize))]
+#[derive(
+	PartialEq,
+	Eq,
+	Clone,
+	Default,
+	Encode,
+	Decode,
+	RuntimeDebug,
+	TypeInfo,
+	serde::Serialize,
+	serde::Deserialize,
+)]
 #[cfg_attr(feature = "std", serde(rename_all = "camelCase"))]
 pub struct NominatorLedger<Balance, VoteWeight, BlockNumber> {
 	/// The amount of vote.
@@ -95,8 +144,18 @@ pub struct NominatorLedger<Balance, VoteWeight, BlockNumber> {
 /// Profile of staking validator.
 ///
 /// These fields are static or updated less frequently.
-#[derive(PartialEq, Eq, Clone, Default, Encode, Decode, RuntimeDebug, TypeInfo)]
-#[cfg_attr(feature = "std", derive(Serialize, Deserialize))]
+#[derive(
+	PartialEq,
+	Eq,
+	Clone,
+	Default,
+	Encode,
+	Decode,
+	RuntimeDebug,
+	TypeInfo,
+	serde::Serialize,
+	serde::Deserialize,
+)]
 #[cfg_attr(feature = "std", serde(rename_all = "camelCase"))]
 pub struct ValidatorProfile<BlockNumber> {
 	/// Block number at which point it's registered on chain.
@@ -126,8 +185,19 @@ pub struct ActiveEraInfo {
 }
 
 /// Mode of era-forcing.
-#[derive(Copy, Clone, PartialEq, Eq, Default, Encode, Decode, RuntimeDebug, TypeInfo)]
-#[cfg_attr(feature = "std", derive(Serialize, Deserialize))]
+#[derive(
+	Copy,
+	Clone,
+	PartialEq,
+	Eq,
+	Default,
+	Encode,
+	Decode,
+	RuntimeDebug,
+	TypeInfo,
+	serde::Serialize,
+	serde::Deserialize,
+)]
 pub enum Forcing {
 	/// Not forcing anything - just let whatever happen.
 	#[default]
@@ -141,8 +211,19 @@ pub enum Forcing {
 }
 
 /// Top level shares of various reward destinations.
-#[derive(Copy, Clone, PartialEq, Eq, Default, Encode, Decode, RuntimeDebug, TypeInfo)]
-#[cfg_attr(feature = "std", derive(Serialize, Deserialize))]
+#[derive(
+	Copy,
+	Clone,
+	PartialEq,
+	Eq,
+	Default,
+	Encode,
+	Decode,
+	RuntimeDebug,
+	TypeInfo,
+	serde::Serialize,
+	serde::Deserialize,
+)]
 pub struct GlobalDistribution {
 	pub treasury: u32,
 	pub mining: u32,
@@ -158,8 +239,19 @@ impl GlobalDistribution {
 	}
 }
 
-#[derive(Copy, Clone, PartialEq, Eq, Default, Encode, Decode, RuntimeDebug, TypeInfo)]
-#[cfg_attr(feature = "std", derive(Serialize, Deserialize))]
+#[derive(
+	Copy,
+	Clone,
+	PartialEq,
+	Eq,
+	Default,
+	Encode,
+	Decode,
+	RuntimeDebug,
+	TypeInfo,
+	serde::Serialize,
+	serde::Deserialize,
+)]
 pub struct MiningDistribution {
 	pub asset: u32,
 	pub staking: u32,
@@ -238,8 +330,19 @@ pub enum SlashOutcome<Balance> {
 /// Struct for performing the slash.
 ///
 /// Abstracted for caching the treasury account.
-#[derive(Copy, Clone, PartialEq, Eq, Default, Encode, Decode, RuntimeDebug, TypeInfo)]
-#[cfg_attr(feature = "std", derive(Serialize, Deserialize))]
+#[derive(
+	Copy,
+	Clone,
+	PartialEq,
+	Eq,
+	Default,
+	Encode,
+	Decode,
+	RuntimeDebug,
+	TypeInfo,
+	serde::Serialize,
+	serde::Deserialize,
+)]
 pub struct Slasher<T: Config>(T::AccountId);
 
 impl<T: Config> Slasher<T> {

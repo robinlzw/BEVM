@@ -1,6 +1,6 @@
 [package]
 name = "xpallet-transaction-fee"
-version = "0.1.0"
+version = { workspace = true }
 authors = { workspace = true }
 edition = { workspace = true }
 repository = { workspace = true }
@@ -10,23 +10,23 @@ homepage = { workspace = true }
 targets = ["x86_64-unknown-linux-gnu"]
 
 [dependencies]
-parity-scale-codec = { workspace = true, default-features = false }
-scale-info = { workspace = true, default-features = false }
-serde = { workspace = true, optional = true }
+codec = { package = "parity-scale-codec", version = "3.6.5", default-features = false, features = ["derive", "max-encoded-len"] }
+scale-info = { version = "2.10.0", default-features = false, features = ["derive"] }
+serde = { version = "1.0.192", features = ["derive", "alloc"], optional = true }
 
 # Substrate primitives
-sp-runtime = { workspace = true }
-sp-std = { workspace = true }
+sp-runtime = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+sp-std = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
 
 # Substrate pallets
-frame-support = { workspace = true, default-features = false }
-frame-system = { workspace = true, default-features = false }
-pallet-transaction-payment = { workspace = true, default-features = false }
+frame-support = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+frame-system = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+pallet-transaction-payment = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
 
 [features]
 default = ["std"]
 std = [
-    "parity-scale-codec/std",
+    "codec/std",
     "serde",
     "scale-info/std",
     # Substrate primitives

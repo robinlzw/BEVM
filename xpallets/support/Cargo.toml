@@ -1,16 +1,16 @@
 [package]
 name = "xpallet-support"
-version = "0.1.0"
+version = { workspace = true }
 authors = { workspace = true }
 edition = { workspace = true }
 repository = { workspace = true }
 homepage = { workspace = true }
 
 [dependencies]
-hex = { workspace = true, default-features = false }
+hex = { version = "0.4.3", features = ["alloc"], default-features = false }
 
 # Substrate primitives
-sp-std = { workspace = true, default-features = false }
+sp-std = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
 
 [features]
 default = ["std"]

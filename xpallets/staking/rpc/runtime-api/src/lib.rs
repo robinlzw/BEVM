@@ -7,7 +7,7 @@
 
 use sp_std::{collections::btree_map::BTreeMap, prelude::*};
 
-use parity_scale_codec::Codec;
+use codec::Codec;
 
 pub use xpallet_mining_staking::{
 	NominatorInfo, NominatorLedger, Unbonded, ValidatorInfo, ValidatorLedger, VoteWeight,

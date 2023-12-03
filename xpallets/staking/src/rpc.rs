@@ -3,7 +3,7 @@
 #![allow(clippy::type_complexity)]
 use sp_std::{collections::btree_map::BTreeMap, vec::Vec};
 
-use parity_scale_codec::{Decode, Encode};
+use codec::{Decode, Encode};
 #[cfg(feature = "std")]
 use serde::{Deserialize, Serialize};
 

@@ -1,6 +1,6 @@
 // Copyright 2023 BEVM Project Authors. Licensed under GPL-3.0.
 
-use parity_scale_codec::{Codec, Decode, Encode};
+use codec::{Codec, Decode, Encode};
 use scale_info::TypeInfo;
 #[cfg(feature = "std")]
 use serde::{Deserialize, Serialize};

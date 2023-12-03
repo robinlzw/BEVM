@@ -2,7 +2,7 @@
 
 use std::{fmt::Display, str::FromStr, sync::Arc};
 
-use parity_scale_codec::Codec;
+use codec::Codec;
 
 use sp_api::ProvideRuntimeApi;
 use sp_blockchain::HeaderBackend;

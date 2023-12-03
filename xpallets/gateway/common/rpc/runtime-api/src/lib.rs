@@ -5,7 +5,7 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 #![allow(clippy::too_many_arguments, clippy::unnecessary_mut_passed)]
 
-use parity_scale_codec::Codec;
+use codec::Codec;
 use sp_runtime::DispatchError;
 use sp_std::{collections::btree_map::BTreeMap, prelude::*};
 

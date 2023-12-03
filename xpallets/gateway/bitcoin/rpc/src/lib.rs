@@ -1,8 +1,8 @@
 // Copyright 2023 BEVM Project Authors. Licensed under GPL-3.0.
 
 //! RPC interface for the transaction verification.
+use codec::Codec;
 use jsonrpsee::{core::RpcResult, proc_macros::rpc};
-use parity_scale_codec::Codec;
 use std::{sync::Arc, vec::Vec};
 
 use sp_api::ProvideRuntimeApi;

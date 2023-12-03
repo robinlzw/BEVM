@@ -2,8 +2,8 @@
 
 use std::{collections::BTreeMap, fmt::Display, str::FromStr, sync::Arc};
 
+use codec::Codec;
 use jsonrpsee::{core::RpcResult, proc_macros::rpc};
-use parity_scale_codec::Codec;
 use serde::{Deserialize, Serialize};
 
 use sp_api::ProvideRuntimeApi;

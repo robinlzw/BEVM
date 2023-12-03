@@ -4,7 +4,7 @@
 
 #![cfg_attr(not(feature = "std"), no_std)]
 
-use parity_scale_codec::Codec;
+use codec::Codec;
 use sp_runtime::DispatchError;
 use sp_std::vec::Vec;
 pub use xpallet_gateway_bitcoin::{types::BtcHeaderInfo, BtcHeader, BtcWithdrawalProposal, H256};

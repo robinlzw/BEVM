@@ -13,6 +13,7 @@ mod mock;
 mod tests;
 
 pub use self::imbalances::{NegativeImbalance, PositiveImbalance};
+use codec::{Codec, Decode, Encode, MaxEncodedLen};
 use frame_support::{
 	ensure,
 	pallet_prelude::{DispatchResult, Get},
@@ -27,7 +28,6 @@ use frame_support::{
 	},
 	PalletId,
 };
-use parity_scale_codec::{Codec, Decode, Encode, MaxEncodedLen};
 use scale_info::TypeInfo;
 use sp_runtime::{
 	traits::{
@@ -227,7 +227,6 @@ pub mod pallet {
 		pub balances: Vec<(T::AccountId, T::Balance)>,
 	}
 
-	#[cfg(feature = "std")]
 	impl<T: Config> Default for GenesisConfig<T> {
 		fn default() -> Self {
 			Self { balances: Default::default() }
@@ -243,17 +242,17 @@ pub mod pallet {
 			<StorageVersion<T>>::put(Releases::V1_0_0);
 
 			// ensure no duplicates exist.
-			let endowed_accounts = self
-				.balances
-				.iter()
-				.map(|(x, _)| x)
-				.cloned()
-				.collect::<std::collections::BTreeSet<_>>();
+			let endowed_accounts: Vec<T::AccountId> =
+				self.balances.iter().map(|(x, _)| x).cloned().collect();
 
-			assert!(
-				endowed_accounts.len() == self.balances.len(),
-				"duplicate balances in genesis."
-			);
+			let mut duplicated = false;
+			for (i, item) in endowed_accounts.iter().enumerate() {
+				if endowed_accounts.iter().skip(i + 1).any(|x| x == item) {
+					duplicated = true;
+				}
+			}
+
+			assert!(!duplicated, "duplicate balances in genesis.");
 
 			for &(ref who, free) in self.balances.iter() {
 				AccountStore::<T>::insert(

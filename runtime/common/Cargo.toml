@@ -1,6 +1,6 @@
 [package]
 name = "runtime-common"
-version = "0.1.0"
+version = { workspace = true }
 authors = { workspace = true }
 edition = { workspace = true }
 repository = { workspace = true }
@@ -10,18 +10,20 @@ homepage = { workspace = true }
 targets = ["x86_64-unknown-linux-gnu"]
 
 [dependencies]
-smallvec = { workspace = true }
-static_assertions = { workspace = true }
+smallvec = "1.11.1"
+static_assertions = "1.1.0"
 
 # Substrate primitives
-sp-runtime = { workspace = true, default-features = false }
-sp-staking = { workspace = true, default-features = false }
+sp-runtime = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+sp-staking = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+
 
 # Substrate pallets
-frame-support =  { workspace = true, default-features = false }
-frame-system =  { workspace = true, default-features = false }
-pallet-balances =  { workspace = true, default-features = false }
-pallet-transaction-payment =  { workspace = true, default-features = false }
+frame-support = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+frame-system = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+pallet-balances = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+pallet-transaction-payment = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+
 
 # BEVM primitives
 bevm-primitives = { path = "../../primitives", default-features = false }

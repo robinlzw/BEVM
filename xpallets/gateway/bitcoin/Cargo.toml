@@ -1,35 +1,35 @@
 [package]
 name = "xpallet-gateway-bitcoin"
-version = "0.1.0"
+version = { workspace = true }
 authors = { workspace = true }
 edition = { workspace = true }
 repository = { workspace = true }
 homepage = { workspace = true }
 
 [dependencies]
-parity-scale-codec = { workspace = true, default-features = false }
-scale-info = { workspace = true, default-features = false }
-hex = { workspace = true, default-features = false }
-serde = { workspace = true, optional = true }
-bs58 = { workspace = true, default-features = false }
-log = { workspace = true, default-features = false }
+codec = { package = "parity-scale-codec", version = "3.6.5", default-features = false, features = ["derive", "max-encoded-len"] }
+scale-info = { version = "2.10.0", default-features = false, features = ["derive"] }
+serde = { version = "1.0.192", features = ["derive", "alloc"], optional = true }
+hex = { version = "0.4.3", features = ["alloc"], default-features = false }
+bs58 = { version = "0.3", features = ["alloc"], default-features = false }
+log = { version = "0.4.17", default-features = false}
 
 # Substrate primitives
-sp-core = { workspace = true, default-features = false }
-sp-io = { workspace = true, default-features = false }
-sp-runtime = { workspace = true, default-features = false }
-sp-std = { workspace = true, default-features = false }
+sp-core = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+sp-io = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+sp-runtime = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+sp-std = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
 
 # Substrate pallets
-frame-benchmarking = { workspace = true, optional = true }
-frame-support = { workspace = true, default-features = false }
-frame-system = { workspace = true, default-features = false }
-pallet-timestamp = { workspace = true, default-features = false }
-pallet-evm = { workspace = true, default-features = false }
+frame-benchmarking = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false, optional = true }
+frame-support = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+frame-system = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+pallet-timestamp = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+
+pallet-evm = { git = "https://github.com/btclayer2/frontier", branch = "polkadot-sdk-v1.3.0", default-features = false }
 
 # Asset bridge
 xpallet-assets-bridge = { path = "../../assets-bridge", default-features = false }
-
 
 # BEVM primitives
 bevm-primitives = { path = "../../../primitives", default-features = false }
@@ -45,23 +45,23 @@ xpallet-gateway-records = { path = "../records", default-features = false }
 xpallet-support = { path = "../../support", default-features = false }
 
 # light-bitcoin
-light-bitcoin = { workspace = true, default-features = false }
+light-bitcoin = { git = "https://github.com/btclayer2/light-bitcoin", branch = "develop-2022", default-features = false }
 
 [dev-dependencies]
-hex = { workspace = true }
-hex-literal = { workspace = true }
-lazy_static = { workspace = true }
-serde_json = { workspace = true }
-sp-keyring = { workspace = true }
-frame-benchmarking = { workspace = true }
-pallet-balances = { workspace = true }
-pallet-elections-phragmen = { workspace = true }
+hex = { version = "0.4.3", features = ["alloc"] }
+hex-literal = "0.4.1"
+serde_json = "1.0.108"
+lazy_static = "1.4"
+sp-keyring = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0" }
+frame-benchmarking = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0" }
+pallet-balances = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0" }
+pallet-elections-phragmen = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0" }
 
 
 [features]
 default = ["std"]
 std = [
-    "parity-scale-codec/std",
+    "codec/std",
     "scale-info/std",
     "hex/std",
     "serde",
@@ -94,6 +94,6 @@ std = [
     # light-bitcoin
     "light-bitcoin/std",
 ]
-runtime-benchmarks = ["frame-benchmarking"]
+runtime-benchmarks = ["frame-benchmarking/runtime-benchmarks"]
 ss58check = ["xp-gateway-common/ss58check"]
 try-runtime = ["frame-support/try-runtime"]

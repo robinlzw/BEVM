@@ -4,8 +4,8 @@
 #![allow(clippy::type_complexity)]
 use std::{collections::btree_map::BTreeMap, fmt::Display, str::FromStr, sync::Arc};
 
+use codec::Codec;
 use jsonrpsee::{core::RpcResult, proc_macros::rpc};
-use parity_scale_codec::Codec;
 
 use sp_api::ProvideRuntimeApi;
 use sp_blockchain::HeaderBackend;

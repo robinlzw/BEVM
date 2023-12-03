@@ -1,30 +1,33 @@
 [package]
 name = "xpallet-mining-staking"
-version = "0.1.0"
+version = { workspace = true }
 authors = { workspace = true }
 edition = { workspace = true }
 repository = { workspace = true }
 homepage = { workspace = true }
 
 [dependencies]
-parity-scale-codec = { workspace = true, default-features = false }
-scale-info = { workspace = true, default-features = false }
-serde = { workspace = true, optional = true }
-log = { workspace = true, default-features = false }
+codec = { package = "parity-scale-codec", version = "3.6.5", default-features = false, features = ["derive", "max-encoded-len"] }
+scale-info = { version = "2.10.0", default-features = false, features = ["derive"] }
+log = { version = "0.4.17", default-features = false }
+serde = { version = "1.0.192", default-features = false, features = ["derive", "alloc"] }
+micromath = { version="2.1.0", default-features = false }
 
 # Substrate primitives
-sp-arithmetic =  { workspace = true, default-features = false }
-sp-core =  { workspace = true, default-features = false }
-sp-runtime =  { workspace = true, default-features = false }
-sp-staking =  { workspace = true, default-features = false }
-sp-std =  { workspace = true, default-features = false }
+sp-arithmetic = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+sp-core = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+sp-runtime = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+sp-staking = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+sp-std = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+
 
 # Substrate pallets
-frame-benchmarking = { workspace = true, optional = true }
-frame-support = { workspace = true, default-features = false }
-frame-system = { workspace = true, default-features = false }
-pallet-balances = { workspace = true, default-features = false }
-pallet-session = { workspace = true, default-features = false }
+frame-benchmarking = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false, optional = true }
+frame-support = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+frame-system = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+pallet-balances = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+pallet-session = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+
 
 # BEVM primitives
 bevm-primitives = { path = "../../primitives", default-features = false }
@@ -37,18 +40,18 @@ xp-runtime = { path = "../../primitives/runtime", default-features = false }
 xpallet-support = { path = "../support", default-features = false }
 
 [dev-dependencies]
-sp-core = { workspace = true }
-sp-io = { workspace = true }
-frame-benchmarking = { workspace = true }
-pallet-timestamp = { workspace = true }
+sp-core = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0" }
+sp-io = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0" }
+frame-benchmarking = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0" }
+pallet-timestamp = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0" }
 xp-protocol = { path = "../../primitives/protocol" }
 
 [features]
 default = ["std"]
 std = [
-    "parity-scale-codec/std",
+    "codec/std",
     "scale-info/std",
-    "serde",
+    "serde/std",
     "log/std",
     # Substate primitives
     "sp-arithmetic/std",

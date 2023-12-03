@@ -1,18 +1,20 @@
 [package]
 name = "bevm-executor"
-version = "0.1.0"
+version = { workspace = true }
 authors = { workspace = true }
 edition = { workspace = true }
 repository = { workspace = true }
 homepage = { workspace = true }
 
+[package.metadata.docs.rs]
+targets = ["x86_64-unknown-linux-gnu"]
+
 [dependencies]
-frame-benchmarking = { workspace = true , default-features = true }
-sc-executor = { workspace = true }
-
-# BEVM runtime
 bevm-runtime = { path = "../runtime/bevm" }
-
-
 # BEVM primitives
 xp-io = { path = "../primitives/io" }
+
+frame-benchmarking = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0" }
+sc-executor = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0" }
+
+

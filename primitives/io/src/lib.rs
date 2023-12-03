@@ -2,7 +2,7 @@
 
 #![cfg_attr(not(feature = "std"), no_std)]
 
-use parity_scale_codec::{Decode, Encode};
+use codec::{Decode, Encode};
 
 use sp_core::crypto::AccountId32;
 use sp_runtime::RuntimeDebug;

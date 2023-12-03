@@ -4,8 +4,8 @@
 
 use std::sync::Arc;
 
+use codec::{Codec, Decode};
 use jsonrpsee::{core::RpcResult, proc_macros::rpc};
-use parity_scale_codec::{Codec, Decode};
 
 use sp_api::ProvideRuntimeApi;
 use sp_blockchain::HeaderBackend;

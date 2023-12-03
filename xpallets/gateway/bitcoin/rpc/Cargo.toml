@@ -1,6 +1,6 @@
 [package]
 name = "xpallet-gateway-bitcoin-rpc"
-version = "0.1.0"
+version = { workspace = true }
 authors = { workspace = true }
 edition = { workspace = true }
 repository = { workspace = true }
@@ -10,16 +10,16 @@ homepage = { workspace = true }
 targets = ["x86_64-unknown-linux-gnu"]
 
 [dependencies]
-parity-scale-codec = { workspace = true }
-serde = { workspace = true }
-hex = { workspace = true }
-jsonrpsee = { workspace = true, features = ["client-core", "server", "macros"] }
+codec = { package = "parity-scale-codec", version = "3.6.5", features = ["derive", "max-encoded-len"] }
+serde = { version = "1.0.192", features = ["derive", "alloc"] }
 
+hex = { version = "0.4.3", features = ["alloc"] }
+jsonrpsee = { version = "0.16.2", features = ["client-core", "server", "macros"] }
 
 # Substrate primitives
-sp-api = { workspace = true }
-sp-blockchain = { workspace = true }
-sp-runtime = { workspace = true }
+sp-api = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0" }
+sp-blockchain = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0" }
+sp-runtime = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0" }
 
 # BEVM primitives
 xp-rpc = { path = "../../../../primitives/rpc" }

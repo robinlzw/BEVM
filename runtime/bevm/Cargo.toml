@@ -1,75 +1,27 @@
 [package]
 name = "bevm-runtime"
-version = "0.1.0"
-description = "A bevm runtime"
+description = "Substrate node bevm runtime."
+build = "build.rs"
+version = { workspace = true }
 authors = { workspace = true }
 edition = { workspace = true }
 repository = { workspace = true }
 homepage = { workspace = true }
 
+
 [package.metadata.docs.rs]
 targets = ["x86_64-unknown-linux-gnu"]
 
 [dependencies]
-parity-scale-codec = { workspace = true, default-features = false }
-scale-info = { workspace = true, default-features = false }
-serde = { workspace = true, optional = true }
-smallvec = { workspace = true }
-static_assertions = { workspace = true }
-log = { workspace = true, optional = true }
 
-# Substrate primitives
-sp-api = { workspace = true, default-features = false }
-sp-authority-discovery = { workspace = true, default-features = false }
-sp-block-builder = { workspace = true, default-features = false }
-sp-consensus-babe = { workspace = true, default-features = false }
-sp-consensus-grandpa = { workspace = true, default-features = false }
-sp-core = { workspace = true, default-features = false }
-sp-inherents = { workspace = true, default-features = false }
-sp-io = { workspace = true, default-features = false }
-sp-offchain = { workspace = true, default-features = false }
-sp-runtime = { workspace = true, default-features = false }
-sp-session = { workspace = true, default-features = false }
-sp-staking = { workspace = true, default-features = false }
-sp-std = { workspace = true, default-features = false }
-sp-transaction-pool = { workspace = true, default-features = false }
-sp-version = { workspace = true, default-features = false }
+# third-party dependencies
+codec = { package = "parity-scale-codec", version = "3.6.5", default-features = false, features = ["derive", "max-encoded-len"] }
+scale-info = { version = "2.10.0", default-features = false, features = ["derive"] }
+static_assertions = "1.1.0"
+log = { version = "0.4.17", default-features = false }
+smallvec = "1.11.1"
 
-# Substrate pallets
-frame-executive = { workspace = true, default-features = false }
-frame-support = { workspace = true, default-features = false }
-frame-system = { workspace = true, default-features = false }
-frame-system-rpc-runtime-api = { workspace = true, default-features = false }
-pallet-authority-discovery = { workspace = true, default-features = false }
-pallet-authorship = { workspace = true, default-features = false }
-pallet-babe = { workspace = true, default-features = false }
-pallet-balances = { workspace = true, default-features = false }
-pallet-bounties = { workspace = true, default-features = false }
-pallet-collective = { workspace = true, default-features = false }
-pallet-democracy = { workspace = true, default-features = false }
-pallet-elections-phragmen = { workspace = true, default-features = false }
-pallet-grandpa = { workspace = true, default-features = false }
-pallet-identity = { workspace = true, default-features = false }
-pallet-im-online = { workspace = true, default-features = false }
-pallet-indices = { workspace = true, default-features = false }
-pallet-membership = { workspace = true, default-features = false }
-pallet-multisig = { workspace = true, default-features = false }
-pallet-offences = { workspace = true, default-features = false }
-pallet-proxy = { workspace = true, default-features = false }
-pallet-preimage = { workspace = true, default-features = false }
-pallet-scheduler = { workspace = true, default-features = false }
-pallet-session = { workspace = true, default-features = false, features = ["historical"] }
-pallet-sudo = { workspace = true, default-features = false }
-pallet-timestamp = { workspace = true, default-features = false }
-pallet-tips = { workspace = true, default-features = false }
-pallet-transaction-payment = { workspace = true, default-features = false }
-pallet-transaction-payment-rpc-runtime-api = { workspace = true, default-features = false }
-pallet-treasury = { workspace = true, default-features = false }
-pallet-utility = { workspace = true, default-features = false }
-
-frame-benchmarking = { workspace = true, default-features = false, optional = true }
-frame-system-benchmarking = { workspace = true, default-features = false, optional = true }
-frame-try-runtime = { workspace = true, default-features = false, optional = true }
+primitive-types = { version = "0.12.0", default-features = false, features = ["codec", "scale-info"] }
 
 # BEVM primitives
 bevm-primitives = { path = "../../primitives", default-features = false }
@@ -84,12 +36,12 @@ xp-assets-registrar = { path = "../../primitives/assets-registrar", default-feat
 # BEVM pallets
 xpallet-assets-bridge = { path = "../../xpallets/assets-bridge", default-features = false }
 xpallet-ethereum-chain-id = { path = "../../xpallets/ethereum-chain-id", default-features = false }
-xpallet-gateway-bitcoin = { path = "../../xpallets/gateway/bitcoin", default-features = false }
-xpallet-gateway-bitcoin-rpc-runtime-api = { path = "../../xpallets/gateway/bitcoin/rpc/runtime-api", default-features = false }
-xpallet-gateway-common = { path = "../../xpallets/gateway/common", default-features = false }
-xpallet-gateway-common-rpc-runtime-api = { path = "../../xpallets/gateway/common/rpc/runtime-api", default-features = false }
-xpallet-gateway-records = { path = "../../xpallets/gateway/records", default-features = false }
-xpallet-gateway-records-rpc-runtime-api = { path = "../../xpallets/gateway/records/rpc/runtime-api", default-features = false }
+#xpallet-gateway-bitcoin = { path = "../../xpallets/gateway/bitcoin", default-features = false }
+#xpallet-gateway-bitcoin-rpc-runtime-api = { path = "../../xpallets/gateway/bitcoin/rpc/runtime-api", default-features = false }
+#xpallet-gateway-common = { path = "../../xpallets/gateway/common", default-features = false }
+#xpallet-gateway-common-rpc-runtime-api = { path = "../../xpallets/gateway/common/rpc/runtime-api", default-features = false }
+#xpallet-gateway-records = { path = "../../xpallets/gateway/records", default-features = false }
+#xpallet-gateway-records-rpc-runtime-api = { path = "../../xpallets/gateway/records/rpc/runtime-api", default-features = false }
 xpallet-mining-staking = { path = "../../xpallets/staking", default-features = false }
 xpallet-mining-staking-rpc-runtime-api = { path = "../../xpallets/staking/rpc/runtime-api", default-features = false }
 xpallet-support = { path = "../../xpallets/support", default-features = false }
@@ -98,40 +50,104 @@ xpallet-transaction-fee = { path = "../../xpallets/transaction-fee", default-fea
 xpallet-btc-ledger = { path = "../../xpallets/btc-ledger", default-features = false }
 xpallet-btc-ledger-runtime-api = { path = "../../xpallets/btc-ledger/rpc/runtime-api", default-features = false }
 
+# primitives
+sp-authority-discovery = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+sp-consensus-babe = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+sp-consensus-grandpa = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+sp-block-builder = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+sp-inherents = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+sp-offchain = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+sp-core = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+sp-std = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+sp-api = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+sp-runtime = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+sp-staking = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+sp-session = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+sp-transaction-pool = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+sp-version = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+sp-io = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+
+# frame dependencies
+frame-benchmarking = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false, optional = true }
+frame-executive = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+frame-support = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+frame-system = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+frame-system-rpc-runtime-api = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+frame-try-runtime = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", optional = true }
+pallet-authority-discovery = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+pallet-authorship = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+pallet-babe = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+pallet-balances = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+pallet-bounties = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+pallet-collective = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+pallet-democracy = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+pallet-elections-phragmen = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+pallet-grandpa = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+pallet-im-online = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+pallet-indices = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+pallet-identity = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+pallet-membership = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+pallet-multisig = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+pallet-offences = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+pallet-preimage = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+pallet-session = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+pallet-scheduler = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+pallet-sudo = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+pallet-timestamp = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+pallet-tips = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+pallet-treasury = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+pallet-utility = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+pallet-transaction-payment = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+pallet-transaction-payment-rpc-runtime-api = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false }
+
+pallet-proxy = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false, optional = true}
+pallet-offences-benchmarking = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false, optional = true}
+pallet-session-benchmarking = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false, optional = true}
+frame-system-benchmarking = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", default-features = false, optional = true}
+
 
 [build-dependencies]
-substrate-wasm-builder = { workspace = true,  optional = true }
+substrate-wasm-builder = { git = "https://github.com/btclayer2/polkadot-sdk", branch = "polkadot-v1.3.0", optional = true }
 
 [features]
-default = ["std"]
+default = [ "std" ]
 std = [
-	"parity-scale-codec/std",
+	"codec/std",
 	"scale-info/std",
-	"serde",
 	"log/std",
-	# Substrate primitives
-	"sp-api/std",
-	"sp-authority-discovery/std",
-	"sp-block-builder/std",
-	"sp-consensus-babe/std",
-	"sp-consensus-grandpa/std",
-	"sp-core/std",
-	"sp-inherents/std",
-	"sp-io/std",
-	"sp-offchain/std",
-	"sp-runtime/std",
-	"sp-session/std",
-	"sp-staking/std",
-	"sp-std/std",
-	"sp-transaction-pool/std",
-	"sp-version/std",
-	# Substrate pallets
+
+	"frame-benchmarking/std",
 	"frame-executive/std",
 	"frame-support/std",
-	"frame-system/std",
 	"frame-system-rpc-runtime-api/std",
-	"frame-benchmarking/std",
-	"frame-try-runtime/std",
+	"frame-system/std",
+	"frame-try-runtime?/std",
+
+	# BEVM primitives
+	"bevm-primitives/std",
+	"runtime-common/std",
+	"xp-gateway-bitcoin/std",
+	"xp-mining-staking/std",
+	"xp-protocol/std",
+	"xp-runtime/std",
+	"xp-assets-registrar/std",
+	# BEVM pallets
+	"xpallet-assets-bridge/std",
+	"xpallet-ethereum-chain-id/std",
+#	"xpallet-gateway-bitcoin/std",
+#	"xpallet-gateway-bitcoin-rpc-runtime-api/std",
+#	"xpallet-gateway-common/std",
+#	"xpallet-gateway-common-rpc-runtime-api/std",
+#	"xpallet-gateway-records/std",
+#	"xpallet-gateway-records-rpc-runtime-api/std",
+	"xpallet-mining-staking/std",
+	"xpallet-mining-staking-rpc-runtime-api/std",
+	"xpallet-support/std",
+	"xpallet-system/std",
+	"xpallet-transaction-fee/std",
+	"xpallet-btc-ledger/std",
+	"xpallet-btc-ledger-runtime-api/std",
+
 	"pallet-authority-discovery/std",
 	"pallet-authorship/std",
 	"pallet-babe/std",
@@ -147,62 +163,72 @@ std = [
 	"pallet-membership/std",
 	"pallet-multisig/std",
 	"pallet-offences/std",
-	"pallet-proxy/std",
 	"pallet-preimage/std",
 	"pallet-scheduler/std",
 	"pallet-session/std",
 	"pallet-sudo/std",
 	"pallet-timestamp/std",
 	"pallet-tips/std",
-	"pallet-transaction-payment/std",
 	"pallet-transaction-payment-rpc-runtime-api/std",
+	"pallet-transaction-payment/std",
 	"pallet-treasury/std",
 	"pallet-utility/std",
+	"pallet-proxy/std",
+
+	"primitive-types/std",
+	"sp-api/std",
+	"sp-authority-discovery/std",
+	"sp-block-builder/std",
+	"sp-consensus-babe/std",
+	"sp-consensus-grandpa/std",
+	"sp-core/std",
+	"sp-inherents/std",
+	"sp-io/std",
+	"sp-offchain/std",
+	"sp-runtime/std",
+	"sp-session/std",
+	"sp-staking/std",
+	"sp-std/std",
+	"sp-transaction-pool/std",
+	"sp-version/std",
 	"substrate-wasm-builder",
-	# BEVM primitives
-	"bevm-primitives/std",
-	"runtime-common/std",
-	"xp-gateway-bitcoin/std",
-	"xp-mining-staking/std",
-	"xp-protocol/std",
-	"xp-runtime/std",
-	"xp-assets-registrar/std",
-	# BEVM pallets
-	"xpallet-assets-bridge/std",
-	"xpallet-ethereum-chain-id/std",
-	"xpallet-gateway-bitcoin/std",
-	"xpallet-gateway-bitcoin-rpc-runtime-api/std",
-	"xpallet-gateway-common/std",
-	"xpallet-gateway-common-rpc-runtime-api/std",
-	"xpallet-gateway-records/std",
-	"xpallet-gateway-records-rpc-runtime-api/std",
-	"xpallet-mining-staking/std",
-	"xpallet-mining-staking-rpc-runtime-api/std",
-	"xpallet-support/std",
-	"xpallet-system/std",
-	"xpallet-transaction-fee/std",
-	"xpallet-btc-ledger/std",
-	"xpallet-btc-ledger-runtime-api/std",
 ]
+
 runtime-benchmarks = [
-	"frame-benchmarking",
+	"frame-benchmarking/runtime-benchmarks",
 	"frame-support/runtime-benchmarks",
-	"frame-system-benchmarking",
 	"frame-system/runtime-benchmarks",
 	"sp-runtime/runtime-benchmarks",
+	"pallet-babe/runtime-benchmarks",
 	"pallet-balances/runtime-benchmarks",
+	"pallet-bounties/runtime-benchmarks",
 	"pallet-collective/runtime-benchmarks",
-	"xpallet-gateway-bitcoin/runtime-benchmarks",
-	"xpallet-gateway-common/runtime-benchmarks",
-	"xpallet-gateway-records/runtime-benchmarks",
-	"xpallet-mining-staking/runtime-benchmarks",
+	"pallet-democracy/runtime-benchmarks",
+	"pallet-elections-phragmen/runtime-benchmarks",
+	"pallet-grandpa/runtime-benchmarks",
+	"pallet-identity/runtime-benchmarks",
+	"pallet-im-online/runtime-benchmarks",
+	"pallet-indices/runtime-benchmarks",
+	"pallet-membership/runtime-benchmarks",
+	"pallet-multisig/runtime-benchmarks",
+	"pallet-proxy/runtime-benchmarks",
+	"pallet-scheduler/runtime-benchmarks",
+	"pallet-timestamp/runtime-benchmarks",
+	"pallet-tips/runtime-benchmarks",
+	"pallet-treasury/runtime-benchmarks",
+	"pallet-utility/runtime-benchmarks",
+	"pallet-preimage/runtime-benchmarks",
+	"pallet-offences-benchmarking",
+	"pallet-session-benchmarking",
+	"frame-system-benchmarking",
+	"pallet-sudo/runtime-benchmarks",
 ]
 
 try-runtime = [
-	"frame-try-runtime",
 	"frame-executive/try-runtime",
+	"frame-support/try-runtime",
 	"frame-system/try-runtime",
-
+	"frame-try-runtime/try-runtime",
 	"pallet-authority-discovery/try-runtime",
 	"pallet-authorship/try-runtime",
 	"pallet-babe/try-runtime",
@@ -218,7 +244,6 @@ try-runtime = [
 	"pallet-membership/try-runtime",
 	"pallet-multisig/try-runtime",
 	"pallet-offences/try-runtime",
-	"pallet-proxy/try-runtime",
 	"pallet-preimage/try-runtime",
 	"pallet-scheduler/try-runtime",
 	"pallet-session/try-runtime",
@@ -228,11 +253,5 @@ try-runtime = [
 	"pallet-transaction-payment/try-runtime",
 	"pallet-treasury/try-runtime",
 	"pallet-utility/try-runtime",
-
-	# BEVM pallets
-	"xpallet-gateway-bitcoin/try-runtime",
-	"xpallet-gateway-common/try-runtime",
-	"xpallet-gateway-records/try-runtime",
-	"xpallet-mining-staking/try-runtime",
-	"xpallet-btc-ledger/try-runtime",
+	"sp-runtime/try-runtime",
 ]
