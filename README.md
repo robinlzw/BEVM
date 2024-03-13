@@ -2,6 +2,35 @@
 <img width="800" alt="WechatIMG475" src="https://github.com/btclayer2/BEVM/assets/9285062/a1e76f9f-0e9a-4cfc-9f43-ad0c8f51b619">
 
 ## [An EVM-compatible Bitcoin Layer 2 with BTC as gas](https://github.com/btclayer2/BEVM-white-paper)
+
+### Taproot Consensus is developed for the BEVM as part of the BTClayer2 technology suite. It parallels the ETHlayer2 Rollup technology solution in terms of its position and objectives.
+The Taproot consensus is composed of three parts, combined to form a cohesive technical solution.
+- The first part: Taproot technology, which includes Musig2, Schnorr signatures, MAST, and more.
+- The second part: A BFT PoS network composed of Bitcoin SPVs.
+- The third part: Threshold node communication formed through the Signal Protocol.
+
+### What is Taproot?
+Taproot is the most significant foundational framework upgrade for BTC since its introduction. It primarily comprises the following three BIPs:
+- BIP340 (Schnorr signature): Schnorr's key aggregation feature allows participants of a single  multi-signature transaction to collaborate in combining their public keys, and produce an aggregate signature that is valid for the sum of their public keys. This saves block space, enhances privacy, and achieves faster transaction verification.
+- BIP341 (Taproot): Bitcoin Improvement Proposal (BIP) 341 defines Pay-to-Taproot (P2TR), a new way of sending bitcoin. P2TR combines the functionality of Pay-to-Public-Key (P2PK) and Pay-to-Script-Hash (P2SH) scripts, giving users great flexibility and privacy benefits.
+- BIP342 (Tapscript): Updates the script language used for writing BTC transaction parameters to accommodate users opting into the Schnorr and Taproot technologies.
+
+### A BFT PoS network composed of Bitcoin SPVs
+- 1. Bitcoin SPV: Bitcoin lightweight nodes, which do not require all BTC transactions, only need the block header and transactions interacting with layer2 to verify the validity and correctness of transactions.
+
+- 2. BFT PoS Network: Utilizes a Substrate blockchain framework that combines Aura block production consensus and Grandpa BFT consensus.
+
+### How does BEVM design Taproot Consensus?
+#### Taproot Consensus nodes
+Taproot Consensus nodes are primarily Bitcoin SPV nodes, which are then elected as Taproot Consensus nodes through governance voting by the entire network of BTC/BEVM stakers, ensuring the security of Taproot Consensus node elections through the safety of Layer2 BFT PoS consensus.
+
+#### The Design of Taproot Consensus
+Taproot consensus nodes combine Musig2 and the Signal  protocol to form decentralized on-chain threshold signatures that interact with the Bitcoin mainnet. Musig2 is a threshold signature scheme based on Taproot's security. The Signal protocol integrates the Double Ratchet Algorithm, pre-keys, and a three-pass Elliptic Curve Diffie-Hellman (3-DH) handshake, and uses Curve25519, AES-256, and HMAC-SHA256 algorithms as cryptographic primitives. It is currently the most secure communication protocol, addressing the security of communication between participants in Musig2's multi-party threshold signatures.
+
+Musig2 ensures the security and flexibility of Bitcoin's threshold signatures, while the Signal protocol secures the communication of Taproot consensus nodes' threshold signatures. Bitcoin SPV nodes ensure the decentralization of Taproot threshold signatures, and the BFT PoS consensus of the BEVM layer2 network ensures the on-chain security of the Bitcoin SPV network.
+
+***Taproot Consensus creates a decentralized #BTClayer2 solution by integrating Bitcoin's native Taproot technology stack with a BFT PoS network composed of Bitcoin SPV nodes.***
+
 ### Technical features:
 - ***EVM:*** Fully compatible with EVM ecology, wallets such as metamask, development frameworks such as truffle/hardhat, and solidity programming language.
 - ***BTC native gas:*** Use native BTC as the gas fee for EVM. Similar to ETH layer2 OP/Starknet, ETH is used as the gas fee of Layer2.
@@ -33,13 +62,6 @@
 ### Taproot Threshold Signature
 Musig2 is a multi-signature protocol that only needs two rounds of communication to complete communication. It is a continuation and upgrade of Musig, and its practicability is greatly improved. This repo fully reproduces the multi-signature scheme proposed by [Musig2](https://eprint.iacr.org/2020/1261) Paper which the version is `20210706:150749`.At the same time, we implemented versions for secp256k1 and sr25519, respectively, so that we can use the Musig2 protocol in BTC  and Polka.
 
-### secp256k1
-
-The naming of the functions, states, and variables are aligned with that of the protocol. At the same time, it is compatible with the schnorr signature process proposed by Bitcoin [bip340](https://github.com/bitcoin/bips/blob/master/bip-0340.mediawiki), making it applicable to the Bitcoin network.
-
-### sr25519
-
-Implements musig2 protocol on [Ristretto](https://ristretto.group/) compressed Ed25519 points.
 
 ## Contribution
 Any kinds of contribution are highly welcome. Feel free to submit an issue if you have any question or run into any issues.
