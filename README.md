@@ -1,6 +1,4 @@
 # BEVM
-<img width="800" alt="WechatIMG475" src="https://github.com/btclayer2/BEVM/assets/9285062/a1e76f9f-0e9a-4cfc-9f43-ad0c8f51b619">
-
 ## [An EVM-compatible Bitcoin Layer 2 with BTC as gas](https://github.com/btclayer2/BEVM-white-paper)
 
 ### Taproot Consensus is developed for the BEVM as part of the BTClayer2 technology suite. It parallels the ETHlayer2 Rollup technology solution in terms of its position and objectives.
@@ -62,6 +60,7 @@ Musig2 ensures the security and flexibility of Bitcoin's threshold signatures, w
 ### Taproot Threshold Signature
 Musig2 is a multi-signature protocol that only needs two rounds of communication to complete communication. It is a continuation and upgrade of Musig, and its practicability is greatly improved. This repo fully reproduces the multi-signature scheme proposed by [Musig2](https://eprint.iacr.org/2020/1261) Paper which the version is `20210706:150749`.At the same time, we implemented versions for secp256k1 and sr25519, respectively, so that we can use the Musig2 protocol in BTC  and Polka.
 
+<img width="800" alt="WechatIMG475" src="https://github.com/btclayer2/BEVM/assets/9285062/a1e76f9f-0e9a-4cfc-9f43-ad0c8f51b619">
 
 ## Contribution
 Any kinds of contribution are highly welcome. Feel free to submit an issue if you have any question or run into any issues.
