@@ -74,3 +74,32 @@ pub trait OnAssetChanged<AccountId, Balance> {
         Ok(())
     }
 }
+
+/*
+
+这段代码定义了两个主要的trait(特征):`ChainT`和`OnAssetChanged`,它们是用于区块链资产模块的一部分.
+这些trait为资产的发行,移动和销毁等操作提供了钩子(hooks),允许在这些事件发生前后执行额外的逻辑.
+
+### `ChainT` Trait(特征)
+
+`ChainT`是一个泛型trait,它定义了一个区块链应该具备的属性.对于每个区块链,都会有一个对应的资产ID(例如,
+    对于比特币链,资产ID可能是`X_BTC`).这个trait要求实现以下方法:
+
+- `ASSET_ID`:一个常量,表示该链的原生资产ID.
+- `chain()`:返回表示链类型的`Chain`枚举.
+- `check_addr()`:一个方法,用于检查地址的有效性.这里的实现是一个空实现,因为在trait中没有提供具体的逻辑.
+- `withdrawal_limit()`:返回一个关于资产提款限制的结构体.默认实现返回一个空的`WithdrawalLimit`结构体.
+
+### `OnAssetChanged` Trait(特征)
+
+`OnAssetChanged` trait定义了一系列在资产发生变化时触发的钩子.这些钩子允许在资产被发行,移动或销毁前后执行特定的逻辑.这个trait要求实现以下方法:
+
+- `on_issue_pre()`和`on_issue_post()`:在发行新资产之前和之后触发.
+- `on_move_pre()`和`on_move_post()`:在资产转移之前和之后触发.`on_move_post()`返回`Result<(), AssetErr>`,这意味着它可能会返回一个错误.
+- `on_destroy_pre()`和`on_destroy_post()`:在销毁资产之前和之后触发.
+- `on_set_balance()`:在余额被设置为新值之后触发.这个方法返回`DispatchResult`,允许它返回更广泛的错误类型.
+
+这些trait为区块链资产模块提供了灵活性,允许根据不同的区块链和资产类型来自定义行为.例如,
+一个实现`ChainT`的比特币链可能会有一个特定的资产ID和提款限制,而以太坊链则会有另一个.通过实现`OnAssetChanged`,
+模块可以在资产生命周期的关键点执行额外的检查或更新,例如记录事件,更新状态或执行其他链上逻辑.
+*/

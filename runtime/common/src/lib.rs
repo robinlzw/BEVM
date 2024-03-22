@@ -97,3 +97,38 @@ pub type CurrencyToVote = frame_support::traits::U128CurrencyToVote;
 
 // EVM
 pub const BASE_FEE: u128 = 50_000_000u128;
+
+/*
+这段代码是 ChainX 区块链的共同运行时代码的一部分,它定义了一些关键的参数类型和常量,这些参数和常量对于 ChainX 区块链的运行时配置至关重要.
+
+### 常量定义
+
+- `AVERAGE_ON_INITIALIZE_RATIO`: 假设 `on_initialize` 调用平均消耗区块权重的 0.25%.
+- `NORMAL_DISPATCH_RATIO`: 允许 `Normal` 类型的交易填充至区块的 75%.
+- `MAXIMUM_BLOCK_WEIGHT`: 最大区块权重,设置为每秒权重的两倍.
+
+### 参数类型定义
+
+- `BlockHashCount`: 区块链保留的区块哈希数量.
+- `TargetBlockFullness`: 目标区块饱和度,用于调整交易费用.
+- `AdjustmentVariable`: 运行时的调整变量,用于影响费用调整的速度.
+- `MinimumMultiplier`: 调整乘数的最小值,确保费用可以恢复到最低值.
+- `BlockLength`: 区块的最大长度,设置为 5MB.
+- `BlockWeights`: 区块权重的基值和限制.
+
+### 慢速调整费用更新
+
+- `SlowAdjustingFeeUpdate`: 基于目标区块饱和度,调整变量和最小乘数的目标费用调整.
+
+### 货币转换类型
+
+- `CurrencyToVote`: 用于货币转换为投票的类型.
+
+### EVM 相关
+
+- `BASE_FEE`: EVM 交易的基础费用.
+
+这些配置确保了 ChainX 区块链的交易费用和区块权重管理能够按照预定的规则和参数运行.
+通过这些配置,ChainX 能够实现有效的区块生产,交易执行和费用调整机制,同时保持网络的稳定性和可靠性.
+
+*/

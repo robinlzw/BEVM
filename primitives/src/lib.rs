@@ -78,3 +78,35 @@ pub type ReferralId = Vec<u8>;
 
 pub type AddrStr = Vec<u8>;
 pub type ChainAddress = Vec<u8>;
+
+
+/*
+这段代码定义了一系列用于区块链开发的数据类型,包括:
+
+BlockNumber:区块号,类型为 u32.
+Signature:交易签名,类型为 MultiSignature.
+AccountId:链上账户的唯一标识,等同于交易签名的公钥,
+类型为 <<Signature as Verify>::Signer as IdentifyAccount>::AccountId.
+
+AccountIndex:账户索引,类型为 u32.
+Balance:账户余额,类型为 u128.
+Moment:时间戳,类型为 u64.
+Index:交易索引,类型为 u32.
+Hash:链上数据的哈希值,类型为 sp_core::H256.
+Timestamp:时间戳,以毫秒为单位的UNIX时间,类型为 u64.
+DigestItem:摘要项类型,类型为 generic::DigestItem.
+Header:区块头类型,类型为 generic::Header<BlockNumber, BlakeTwo256>.
+Block:区块类型,类型为 generic::Block<Header, OpaqueExtrinsic>.
+BlockId:区块ID类型,类型为 generic::BlockId<Block>.
+此外,还定义了用于运行时的一些数据类型:
+
+Amount:已签名的余额类型,类型为 i128.
+Text:运行时的字符串类型,类型为 Vec<u8>.
+AssetId:资产ID类型,类型为 u32.
+Decimals:资产的小数点位数,类型为 u8.
+Token:资产的代币符号,类型为 Vec<u8>.
+Desc:资产的代币描述,类型为 Vec<u8>.
+ReferralId:验证者的推荐ID,类型为 Vec<u8>.
+AddrStr:地址字符串类型,类型为 Vec<u8>.
+ChainAddress:链地址类型,类型为 Vec<u8>.
+*/

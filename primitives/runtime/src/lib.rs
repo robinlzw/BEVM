@@ -88,3 +88,20 @@ impl<T> fp_rpc::ConvertTransaction<T> for Never {
         unreachable!()
     }
 }
+
+/*
+这段代码定义了一个用于ChainX Runtime Modules的共享原始类型模块.
+其中包含了一个用于执行跨链交易时留下的备注信息类型Memo以及对其进行操作的一些函数.
+
+1.xss_check 函数用于检查输入的字节切片是否通过了XSS(跨站脚本攻击)检查.
+如果输入包含字符<或>,则认为可能被用于离链的恶意操作,返回错误.否则返回成功结果.
+
+2.Memo 类型是一个包含字节向量的结构体,支持从Vec<u8>和&[u8]转换,且提供了展示(显示)格式的实现.它还定义了一个方法 check_validity,
+用于检查备注内容的合法性.该方法首先检查备注的字节长度是否超过了最大长度128字节,如果超过则返回错误;否则调用 xss_check 函数进行XSS检查.
+
+3.Never 枚举类型用于EVM RPC(远程过程调用)转换,其实现了 fp_rpc::ConvertTransaction 特征,但该方法使用了 unreachable!() 链接宏,
+意味着该方法永远不应该被调用,因为 Never 类型是不可实例化的.
+
+这些定义为ChainX Runtime Modules提供了一个安全,规范的交易备注机制.
+
+*/

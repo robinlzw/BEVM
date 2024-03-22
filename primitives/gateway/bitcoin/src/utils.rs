@@ -156,3 +156,38 @@ fn test_extract_opreturn_data() {
         b"5QZYGVVUPsp7cbqGUcHsRJUZrnmTuEyh6SLH6jdpfsFxgpRK@Laocius".to_vec()
     );
 }
+
+/*
+这段代码是ChainX项目中用于处理比特币交易脚本和提取相关信息的一组函数.下面是对每个函数的详细解释:
+
+1. **extract_addr_from_transaction**:
+   - 功能:从比特币交易中提取指定输出索引处的地址.
+   - 参数:交易对象,输出索引,网络类型(如主网或测试网).
+   - 返回值:一个可选的地址,如果输出存在且能够提取地址则为`Some(Address)`,否则为`None`.
+
+2. **extract_output_addr**:
+   - 功能:从比特币交易输出脚本中提取地址.
+   - 参数:交易输出对象,网络类型.
+   - 返回值:一个可选的地址,仅当脚本类型为`p2pk`,`p2pkh`,`p2sh`时有效,否则为`None`.
+   - 注意:此函数只支持特定的输出脚本类型,并且会记录错误和警告信息.
+
+3. **is_trustee_addr**:
+   - 功能:检查给定的地址是否是热钱包或冷钱包受托人地址.
+   - 参数:待检查的地址,受托人地址对.
+   - 返回值:如果地址匹配热钱包或冷钱包地址,则为`true`,否则为`false`.
+
+4. **extract_opreturn_data**:
+   - 功能:从比特币的OP_RETURN null数据脚本中提取数据.
+   - 参数:脚本对象.
+   - 返回值:如果脚本是有效的OP_RETURN脚本,则返回包含数据的`Vec<u8>`,否则为`None`.
+   - 注意:此函数检查脚本是否符合OP_RETURN格式,并解析出数据.
+
+5. **test_extract_opreturn_data**:
+   - 功能:测试`extract_opreturn_data`函数是否能正确提取OP_RETURN脚本中的数据.
+   - 参数:无,使用硬编码的脚本字符串进行测试.
+   - 行为:对两个不同的OP_RETURN脚本进行解析,并断言提取的数据与预期相符.
+
+这些函数对于ChainX项目中的比特币网关功能至关重要,因为它们用于解析比特币交易,
+识别交易类型(如存款或提款),并从中提取用户账户信息.这有助于ChainX在处理跨链交易时保持准确性和安全性.
+
+*/

@@ -323,3 +323,52 @@ impl OnRuntimeUpgrade for CustomOnRuntimeUpgrades {
         weight
     }
 }
+
+/*
+这段代码是 ChainX 区块链运行时的一部分,它定义了一系列的运行时升级迁移任务.
+这些迁移任务是在区块链进行升级时自动执行的,用于更新存储结构,删除旧的存储项,修改配置等,以确保区块链的平滑过渡到新版本.
+
+以下是代码中定义的一些关键迁移任务:
+
+### RemoveCollectiveFlip
+- 移除 `RandomnessCollectiveFlip` pallet 中的 `RandomMaterial` 存储项.
+
+### MigratePalletVersionToStorageVersion
+- 将所有 pallet 的版本信息迁移到新的 `StorageVersion` 系统.
+
+### PhragmenElectionDepositRuntimeUpgrade
+- 将 `Elections` pallet 的存款值从旧版本迁移到新版本.
+
+### BabeEpochConfigMigrations
+- 为 `Babe` pallet 添加新的 epoch 配置.
+
+### GrandpaStoragePrefixMigration
+- 修改 `Grandpa` pallet 的存储前缀.
+
+### CouncilStoragePrefixMigration
+- 将 `Council` pallet 的旧存储前缀 `Instance1Collective` 迁移到新前缀 `Council`.
+
+### TechnicalCommitteeStoragePrefixMigration
+- 将 `TechnicalCommittee` pallet 的旧存储前缀 `Instance2Collective` 迁移到新前缀 `TechnicalCommittee`.
+
+### TechnicalMembershipStoragePrefixMigration
+- 将 `TechnicalMembership` pallet 的旧存储前缀 `Instance1Membership` 迁移到新前缀 `TechnicalMembership`.
+
+### MigrateTipsPalletPrefix
+- 将 `Tips` pallet 的旧存储前缀 `Treasury` 迁移到新前缀 `Tips`.
+
+### BountiesPrefixMigration
+- 将 `Bounties` pallet 的旧存储前缀 `Treasury` 迁移到新前缀 `Bounties`.
+
+### ElectionsPrefixMigration
+- 将 `Elections` pallet 的旧存储前缀 `PhragmenElection` 迁移到新前缀 `Elections`.
+
+### XGatewayCommonStorageMigration
+- 对 `XGatewayCommon` pallet 执行 Taproot 迁移.
+
+最后,`CustomOnRuntimeUpgrades` 结构体将所有这些迁移任务组合在一起,以便在区块链升级时一次性执行.
+这通常通过累加每个迁移任务的权重来完成,以确保总的权重不会超过区块链的配置限制.
+
+这些迁移任务是区块链升级过程中的重要部分,它们确保了数据的一致性和完整性,同时允许区块链无缝地适应新的功能和改进.
+通过这些自动化的迁移,ChainX 区块链能够保持其去中心化和安全性,同时为用户提供更好的服务和体验.
+*/

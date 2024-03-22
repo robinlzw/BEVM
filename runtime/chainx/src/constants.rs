@@ -73,3 +73,43 @@ pub mod fee {
         }
     }
 }
+
+/*
+这段代码是一个Rust模块,它定义了ChainX项目运行时使用的一组常量值.ChainX是一个基于Substrate框架的区块链项目.
+这个模块被分为三个子模块:`currency`,`time`和`fee`,每个子模块都包含了与其名称相关的不同类型的常量和函数.
+
+### currency 模块
+
+`currency`模块定义了一些与ChainX项目中的货币单位相关的常量.这些常量包括:
+
+- `PCXS`:项目的最小货币单位,设置为100,000,000,具有8位小数.
+- `DOLLARS`:1美元在ChainX货币体系中的等价值,等于`PCXS / 100`.
+- `CENTS`:1美分在ChainX货币体系中的等价值,等于`DOLLARS / 100`.
+- `MILLICENTS`:1毫美分在ChainX货币体系中的等价值,等于`CENTS / 1,000`.
+
+此外,还有一个`deposit`函数,用于计算存入ChainX网络的费用.该函数接受两个参数:`items`和`bytes`,
+分别代表项目的数量和字节大小,并返回一个`Balance`类型的值,表示总费用.
+
+### time 模块
+
+`time`模块定义了一些与时间相关的常量,用于ChainX项目的区块链时间管理:
+
+- `MILLISECS_PER_BLOCK`:每个区块的预期毫秒数,设置为6,000.
+- `SLOT_DURATION`:插槽持续时间,与`MILLISECS_PER_BLOCK`相同.
+- `EPOCH_DURATION_IN_BLOCKS`:一个时代(epoch)包含的区块数量,设置为5分钟.
+- `MINUTES`,`HOURS`,`DAYS`:分别代表分钟,小时和天数对应的区块数量,基于`MILLISECS_PER_BLOCK`计算得出.
+- `PRIMARY_PROBABILITY`:Babe共识算法中,一个区块成为主区块的概率,设置为1/4.
+
+### fee 模块
+
+`fee`模块定义了一些与交易费用相关的常量和类型.这些常量和类型用于计算和转换交易费用:
+
+- `TARGET_BLOCK_FULLNESS`:区块饱和度的目标百分比,设置为25%.
+- `WeightToFee`:一个结构体,实现了`WeightToFeePolynomial`特征,用于将交易的权重转换为费用.
+它定义了一个多项式,将权重映射到费用上.在`polynomial`方法中,定义了一个一次多项式,其中`CENTS`作为常数项,
+`ExtrinsicBaseWeight::get()`返回的权重值乘以10后作为一次项的系数.
+
+这个模块的目的是为ChainX区块链提供一个标准化的费用计算方法,确保交易费用的合理性和一致性.
+通过定义这些常量和函数,ChainX项目能够确保其经济模型的稳定性和可预测性.
+
+*/

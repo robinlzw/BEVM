@@ -96,3 +96,43 @@ pub fn new_test_ext() -> sp_io::TestExternalities {
 
     ext
 }
+
+/*
+
+这段代码是用于设置和运行 Substrate 框架中的 `btc_ledger` 模块的测试环境.
+它定义了测试用的运行时环境,参数类型,账户 ID 别名,块号和余额类型,并提供了构建和执行测试所需的所有必要组件.
+
+### 核心组件
+
+1. **AccountId**: 用于测试的账户 ID 类型,这里使用了 `AccountId32`.
+
+2. **BlockNumber**: 用于测试的块号类型,这里使用了 `u64`.
+
+3. **Balance**: 用于测试的余额类型,这里使用了 `u128`.
+
+4. **UncheckedExtrinsic** 和 **Block**: 分别用于模拟未检查的交易和区块.
+
+5. **construct_runtime**: 宏用于构建测试运行时环境,包括 `System` 和 `BtcLedger` 两个 Pallet.
+
+### 参数类型
+
+- **BlockWeights**: 定义了区块的权重限制.
+
+- **BtcLedgerPalletId**: 定义了 `btc_ledger` Pallet 的 ID.
+
+### 系统配置
+
+- **frame_system::Config**: 实现了 `frame_system` 配置 trait,定义了测试环境的基本参数,如调用过滤器,区块权重,账户 ID 等.
+
+### `btc_ledger` 配置
+
+- **crate::Config**: 实现了 `btc_ledger` 配置 trait,指定了余额类型,事件类型,理事会起源和 Pallet ID.
+
+### 测试账户和余额
+
+- **ALICE, BOB, CHARLIE**: 定义了三个测试账户的公钥.
+
+- **new_test_ext**: 函数用于创建测试外部环境,初始化存储,设置账户余额,并执行一些初始操作,如增加提供者和设置块号.
+
+整体而言,这段代码为 `btc_ledger` 模块提供了一个完整的测试环境,允许开发者在其中执行测试用例,验证模块的功能和性能.
+*/

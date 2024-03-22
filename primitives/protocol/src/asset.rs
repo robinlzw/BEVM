@@ -55,3 +55,31 @@ pub const S_DOT: AssetId = 0xa0000000 | X_DOT;
 const EXTEND: AssetId = 0x01000000;
 /// USDT asset in ChainX.
 pub const USDT: AssetId = EXTEND | 0x01;
+
+/*
+这段代码是ChainX区块链项目中关于资产ID(AssetId)的定义和解释.
+它详细说明了ChainX如何根据SLIP-0044标准和BIP-0044标准来分配和管理不同类型的资产.以下是对代码中各个部分的详细解释:
+
+1. **ChainX AssetId协议**:
+   - ChainX的AssetId协议遵循SLIP-0044标准中的"coin type"来定义基础代币(base token),
+   所有基础代币都有"X_"前缀,表示跨链(例如,比特币是X_BTC,以太坊是X_ETH).
+   - ChainX的原生代币PCX使用0来表示,而不是SLIP-0044标准中的测试网络索引.
+   - 对于不在SLIP-0044中的代币(如USDT),ChainX使用`0x01000000 | id`的方式来扩展AssetId,其中`id`是ChainX自定义的值.
+
+2. **基础代币的定义**:
+   - PCX:ChainX的原生代币,使用0作为AssetId.
+   - X_BTC:代表ChainX中由主网比特币支持的BTC资产,使用1作为AssetId.
+   - X_ETH:代表ChainX中由主网以太坊支持的ETH资产,使用60作为AssetId.
+   - X_DOT:代表ChainX中由主网波卡支持的DOT资产,使用354作为AssetId.
+
+3. **衍生代币的定义**:
+   - L_BTC:代表锁定的比特币,使用0x90000000与X_BTC的AssetId组合来表示.
+   - S_DOT:代表影子DOT,使用0xa0000000与X_DOT的AssetId组合来表示.
+
+4. **扩展代币的定义**:
+   - EXTEND:用于扩展AssetId的值,表示非SLIP-0044标准的代币.
+   - USDT:在ChainX中的USDT资产,使用EXTEND与自定义的ID(0x01)组合来表示.
+
+这段代码的设计允许ChainX支持多种不同的资产,包括原生代币,通过SLIP-0044标准定义的代币,
+以及不在SLIP-0044中但由ChainX自定义的代币.通过这种方式,ChainX能够提供一个统一和标准化的方式来管理和交易多种区块链资产.
+*/

@@ -395,3 +395,99 @@ mod tests {
         }
     }
 }
+
+/*
+这段代码是ChainX区块链项目的一部分,它定义了一个用于检测比特币交易类型的辅助结构体`BtcTxTypeDetector`.
+这个检测器用于分析比特币交易,以确定其类型(如存款,提款,受托人转换等),并提取相关的账户信息.
+这对于ChainX这样的跨链项目来说非常重要,因为它需要能够正确处理和识别从比特币网络转移到自身网络的资产.
+
+以下是代码中各个部分的详细解释:
+
+1. **导入依赖**:代码开始部分导入了所需的模块,包括Substrate框架的标准库,ChainX项目的原始类型和实用函数.
+
+2. **比特币交易类型检测器**:`BtcTxTypeDetector`结构体包含了比特币网络类型和最小存款值.
+它有几个方法,用于创建新的检测器实例,检测交易类型和解析存款交易的输出.
+
+3. **交易类型检测方法**:`detect_transaction_type`方法用于检测比特币交易的类型.
+它接受比特币交易对象,前一个交易的可选引用(用于提款和受托人转换交易的检测),提取账户信息的函数,当前和之前的受托人地址对.
+该方法根据交易的输入和输出,以及受托人地址对,来判断交易的类型.
+
+4. **存款交易类型检测方法**:`detect_deposit_transaction_type`方法专门用于检测比特币存款交易的类型.
+它解析交易的输出,以确定存款金额,并尝试从OP_RETURN数据中提取账户信息.
+
+5. **输出解析方法**:`parse_deposit_transaction_outputs`方法解析存款交易的输出,提取账户信息和存款金额.
+它检查交易中的OP_RETURN脚本,并使用提供的提取函数来获取账户信息.
+
+6. **测试模块**:代码的最后部分包含了一个测试模块,用于验证`BtcTxTypeDetector`的行为是否符合预期.
+测试用例涵盖了多种不同的交易类型和格式,确保检测器能够正确识别和处理各种情况.
+
+整体而言,这段代码为ChainX区块链提供了一种机制,使其能够有效地处理和识别从比特币网络接收的交易,这对于跨链资产转移和用户资金管理至关重要.
+通过这种方式,ChainX能够确保资产的安全转移,并为用户提供准确的账户信息.
+
+
+这段代码是一个测试函数,用于验证`BtcTxTypeDetector`是否能够正确解析比特币存款交易的输出.测试函数包含了多个案例,
+每个案例都是一个比特币交易的十六进制字符串和一个预期的解析结果.以下是每行代码的注释:
+
+```rust
+// 定义测试函数 test_parse_deposit_transaction_outputs
+#[test]
+fn test_parse_deposit_transaction_outputs() {
+    // 设置默认的SS58地址格式,这里使用的是Chainx账户的地址格式
+    set_default_ss58_version(Ss58AddressFormatRegistry::ChainxAccount.into());
+
+    // 创建一个包含多个测试案例的向量
+    let cases = vec![
+        // 第一个测试案例:MathWallet的交易
+        // 交易ID为 b368d3b822ec6656af441ccfa0ea2c846ec445286fd264e94a9a6edf0d7a1108
+        // 这是一个包含OP_RETURN的交易,带有地址信息
+        // 交易有3个输出:
+        //   - X-BTC热钱包受托人地址(存款价值)
+        //   - 变更地址(不关心)
+        //   - 空数据交易(OP_RETURN数据包含有效的账户信息)
+        (
+            // 交易的十六进制字符串
+            "020000000001012f0f1be54017a91480。。。0000000".parse::<Transaction>().unwrap(),
+            // 预期的解析结果,包含账户信息和存款价值
+            (
+                Some((
+                    OpReturnAccount::Wasm(account("5Uj3ehamDZWPfgA8iAZenhcAmPDakjf4aMbkBB4dXVvjoW6x")),
+                    None
+                )),
+                30000
+            )
+        ),
+        // 后续的测试案例...
+    ];
+
+    // 定义热钱包和冷钱包地址
+    const DEPOSIT_HOT_ADDR: &str = "3LFSUKkP26hun42J1Dy6RATsbgmBJb27NF";
+    const DEPOSIT_COLD_ADDR: &str = "3FLBhPfEqmw4Wn5EQMeUzPLrQtJMprgwnw";
+
+    // 创建一个比特币交易类型检测器实例
+    let btc_tx_detector = BtcTxTypeDetector::new(Network::Mainnet, 0);
+
+    // 构建当前受托人地址对
+    let current_trustee_pair = (
+        DEPOSIT_HOT_ADDR.parse::<Address>().unwrap(),
+        DEPOSIT_COLD_ADDR.parse::<Address>().unwrap(),
+    );
+
+    // 遍历测试案例,对每个案例进行验证
+    for (tx, expect) in cases {
+        // 使用检测器解析交易输出,并与预期结果进行比较
+        let got = btc_tx_detector.parse_deposit_transaction_outputs(
+            &tx,
+            OpReturnExtractor::extract_account,
+            current_trustee_pair,
+        );
+        // 断言解析结果与预期相符
+        assert_eq!(got, expect);
+    }
+}
+```
+
+这个测试函数通过对比实际解析结果和预期结果来验证`BtcTxTypeDetector`的准确性.
+每个测试案例都是一个比特币交易的十六进制字符串,它被解析以确定交易的类型和相关账户信息.
+预期结果包括一个包含账户信息的`Some`值(如果OP_RETURN中包含有效信息)或`None`(如果没有),以及交易中的存款价值.
+通过这种方式,测试确保了`BtcTxTypeDetector`能够正确处理和识别比特币存款交易.
+*/

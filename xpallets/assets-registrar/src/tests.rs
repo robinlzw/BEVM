@@ -176,3 +176,28 @@ fn test_register() {
         );
     })
 }
+
+/*
+这段代码是一个用于测试`xpallet_assets_registrar`模块的Rust单元测试.`xpallet_assets_registrar`是一个Substrate框架的运行时模块,
+用于注册和管理跨链资产.测试的主要目的是验证资产注册,注销,恢复等操作的正确性和边界条件.
+
+以下是代码中的关键部分和它们的功能:
+
+1. **测试环境构建**:使用`frame_support`库中的`construct_runtime!`宏构建了一个名为`Test`的运行时环境,
+其中包含了`System`和`XAssetsRegistrar`两个Pallet.这个环境模拟了一个真实的Substrate区块链,用于测试.
+
+2. **参数配置**:通过`parameter_types!`宏定义了一些参数类型,例如`BlockHashCount`和`SS58Prefix`.
+同时,实现了`frame_system::Config` trait,为测试环境提供了必要的配置.
+
+3. **模拟外部环境**:`ExtBuilder`结构体用于构建测试的外部环境.它可以创建一个包含特定资产的存储状态,
+并构建一个`sp_io::TestExternalities`对象,这个对象模拟了区块链的状态.
+
+4. **测试用例**:`test_register`函数是一个测试用例,它执行了一系列的注册,注销和恢复操作,并验证了操作的结果.
+测试用例使用了`assert_ok!`和`assert_noop!`宏来检查调用是否成功或失败,以及预期的错误是否被返回.
+
+5. **模拟资产**:`btc`函数创建了一个模拟的比特币资产(`X-BTC`),并返回了资产ID和资产信息.这个资产信息用于在测试中注册新的资产.
+
+6. **执行测试**:`ExtBuilder`的`build_and_execute`方法用于构建测试环境并执行一个给定的测试闭包.这允许在测试环境中执行代码并观察其效果.
+
+整体而言,这段代码展示了如何使用Substrate框架的工具和宏来构建和测试区块链运行时模块.通过模拟区块链环境和执行测试用例,开发者可以确保他们的代码在上线前是健壮和可靠的.
+*/

@@ -109,6 +109,16 @@ pub struct FullDeps<C, P, SC, B, A: sc_transaction_pool::ChainApi> {
     pub frontier: FrontierDeps<A>,
 }
 
+/*
+这段代码定义了多个结构体,每个结构体都是一组依赖项,用于在区块链客户端中实现不同的功能.这些结构体包括:
+
+BabeDeps:包含BABE协议的配置,待处理的epoch更改,节点的密钥存储等.
+GrandpaDeps:包含GRANDPA投票的共享状态,授权集信息,验证事件通知等.
+FrontierDeps:包含图池实例,节点权威标志,网络服务,以太坊过滤器池等.
+FullDeps:包含客户端实例,交易池实例,选择链策略,链规范等.
+这些结构体定义了一系列依赖项,用于构建和配置区块链客户端,支持BABE,GRANDPA和Frontier等不同的共识算法和功能.
+*/
+
 pub fn overrides_handle<C, B>(client: Arc<C>) -> Arc<OverrideHandle<Block>>
 where
     C: ProvideRuntimeApi<Block> + StorageProvider<Block, B> + AuxStore,
@@ -146,6 +156,17 @@ where
 
 /// A IO handler that uses all Full RPC extensions.
 pub type RpcExtension = jsonrpc_core::IoHandler<sc_rpc::Metadata>;
+
+/*
+ 
+这个函数定义了一个泛型函数overrides_handle,它接收一个Arc<C>参数,返回一个Arc<OverrideHandle<Block>>.
+函数功能是创建并返回一个OverrideHandle结构体的Arc引用.其中,C需要实现多个 trait,并且有特定的约束条件.
+函数内部创建了一个BTreeMap,并插入了几个键值对,然后将其和RuntimeApiStorageOverride一起封装成OverrideHandle结构体,
+最后通过Arc::new返回这个结构体的Arc引用.根据提供的client参数,创建了一个包含不同版本存储覆盖的OverrideHandle实例,并返回其可变引用.
+
+RpcExtension是一个类型别名,它代表使用所有 Full RPC 扩展的 IO 处理器.
+*/
+
 
 /// Instantiate all Full RPC extensions.
 pub fn create_full<C, P, SC, B, A>(
@@ -372,3 +393,39 @@ where
 
     Ok(io)
 }
+
+/*
+该函数用于创建一个完整的RPC扩展,它依赖于许多其他模块和插件,包括客户端,交易池,选择链,区块链后端等.
+函数主要通过将各种API扩展添加到IoHandler中来实现,包括系统API,交易支付API,Babe共识API,Grandpa最终性API等.
+此外,还添加了对EVM的支持,包括EthAPI,NetAPI和Web3API等.最后,函数返回一个RpcExtension的结果.
+
+这段代码是一个Rust函数,用于创建一个完整的RPC(远程过程调用)扩展.RPC扩展通常用于区块链节点,允许开发者通过JSON-RPC接口与节点进行交互.
+这个函数是Substrate框架的一部分,Substrate是一个用于构建区块链应用的Rust框架.
+
+函数`create_full`接受一个`FullDeps`结构体和一个`SubscriptionTaskExecutor`类型的参数,并返回一个`Result`类型,其中包含`RpcExtension`或者一个错误.
+
+让我们逐步分析这个函数的组成部分:
+
+1. **泛型参数**:函数使用了多个泛型参数,这意味着它可以适用于多种不同类型的区块链配置.
+这些参数包括`C`(提供运行时API的客户端),`P`(交易池),`SC`(选择链的逻辑),`B`(区块链的后端),`A`(链API)等.
+
+2. **函数签名**:函数定义了一个泛型函数`create_full`,它接受一个`FullDeps`结构体和一个`SubscriptionTaskExecutor`,
+并返回一个`Result`,其中包含`RpcExtension`或错误.
+
+3. **依赖项**:`FullDeps`结构体包含了创建RPC扩展所需的所有依赖项,如客户端,交易池,选择链逻辑,链规范,拒绝不安全的交易,Grandpa和Babe共识机制的依赖项等.
+
+4. **IoHandler**:创建了一个`jsonrpc_core::IoHandler`实例,这是一个处理RPC请求的核心组件.它将被用来注册各种RPC API.
+
+5. **注册API**:函数中通过`extend_with`方法向`IoHandler`注册了多种RPC API.
+例如,`SystemApi`,`TransactionPaymentApi`,`BabeApi`,`GrandpaApi`等.这些API提供了与区块链交互的各种功能,
+如获取系统信息,处理交易支付,处理Babe共识机制等.
+
+6. **EVM相关API**:代码中还包含了与以太坊虚拟机(EVM)相关的API,如`EthApi`,`EthFilterApi`,`NetApi`,`Web3Api`和`EthPubSubApi`.
+这些API允许与EVM进行交互,如获取以太坊网络信息,过滤日志,订阅事件等.
+
+7. **返回结果**:最后,函数返回了配置好的`IoHandler`,现在它已经注册了所有必要的RPC API,可以被用来处理来自客户端的RPC请求.
+
+总的来说,这个函数是区块链节点RPC服务的核心部分,它通过注册各种API来提供与区块链交互的能力.这对于开发者来说是非常有用的,
+因为它允许他们通过JSON-RPC接口与区块链节点进行通信,执行各种操作,如发送交易,查询状态,监听事件等.
+
+*/

@@ -266,3 +266,36 @@ mod tests {
         });
     }
 }
+
+/*
+这段代码是 ChainX 项目中的基准测试套件,用于评估比特币网关模块的性能.它包含了一系列的基准测试,每个测试都对应一个特定的操作,
+如推送区块头,处理交易,创建 Taproot 取款交易等.这些测试使用 `frame_benchmarking` 库来执行,并在 `frame_support` 的基准测试环境中运行.
+
+### 基准测试函数
+
+- **push_header**: 测试推送区块头到 ChainX 链的性能.
+- **push_transaction**: 测试通过 ChainX 链推送比特币交易的性能.
+- **create_taproot_withdraw_tx**: 测试创建 Taproot 取款交易的性能.
+- **set_best_index**: 测试设置最佳区块索引的性能.
+- **set_confirmed_index**: 测试设置已确认区块索引的性能.
+- **remove_pending**: 测试从挂起的存款中移除条目的性能.
+- **remove_proposal**: 测试移除取款提案的性能.
+- **set_btc_withdrawal_fee**: 测试设置比特币取款费用的性能.
+- **set_btc_deposit_limit**: 测试设置比特币存款限额的性能.
+- **set_coming_bot**: 测试设置即将到来的机器人地址的性能.
+
+### 辅助函数
+
+- **generate_blocks_63290_63310**: 生成一个包含指定范围内区块头的 BTreeMap.
+- **account**: 根据公钥生成一个账户 ID.
+- **alice**: 生成一个代表 Alice 用户的账户 ID.
+- **withdraw_tx**: 生成一个取款交易及其相关的默克尔证明和前一个交易.
+
+### 测试模块
+
+- **tests**: 包含一个测试函数 `test_benchmarks`,它构建了一个测试外部环境并执行所有基准测试,确保它们都能成功运行.
+
+### 总结
+
+这些基准测试对于评估 ChainX 项目中比特币网关模块的性能至关重要.通过模拟不同的操作和交易,开发者可以了解模块在不同负载下的表现,从而进行优化和调整,确保系统的稳定性和效率.
+*/

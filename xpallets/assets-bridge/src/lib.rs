@@ -856,3 +856,59 @@ impl<T: Config> Pallet<T> {
         Self::back_foreign_assets().iter().any(|&id| id == asset_id)
     }
 }
+
+/*
+这段代码是一个Substrate智能合约框架中的模块,名为`Assets Bridge`,它提供了一个桥接功能,
+允许在Substrate资产和以太坊上的ERC20代币之间进行互操作.这个模块实现了一系列的功能,
+包括账户声明,资产存取,紧急状态管理,管理员设置等,并且包含了与之相关的事件和错误处理.
+
+以下是代码中定义的一些关键组件和它们的功能:
+
+### 存储结构(Storage Structures)
+
+- `SubAccounts`:映射以太坊地址到Substrate账户.
+- `EvmAccounts`:映射Substrate账户到以太坊地址.
+- `Erc20s`:映射资产ID到以太坊ERC20合约地址.
+- `AssetIds`:映射ERC20合约地址到资产ID.
+- `BackForeign`:存储可以支持跨链返回的资产ID列表.
+- `Admin`:存储当前管理员的账户.
+- `Emergencies`:存储处于紧急状态的资产ID列表.
+
+### 事件(Events)
+
+- `ClaimAccount`:当用户声明以太坊地址与Substrate账户之间的映射关系时触发.
+- `Dissolve`:当用户解除Substrate账户与以太坊地址之间的映射关系时触发.
+- `DepositExecuted`:当资产成功存入ERC20合约时触发.
+- `WithdrawExecuted`:当资产从ERC20合约成功提取到Substrate账户时触发.
+- `Teleport`:当资产在Substrate账户和以太坊地址之间转移时触发.
+- `Register`:当ERC20合约地址与资产ID成功注册时触发.
+- `ForceUnRegister`:当ERC20合约地址与资产ID被强制解除注册时触发.
+- `Paused`和`UnPaused`:当资产管理被暂停或恢复时触发.
+- `BackForeign`:当资产被添加到或从支持跨链返回的资产列表中移除时触发.
+
+### 错误处理(Error Handling)
+
+- `Error`枚举定义了一系列可能发生的错误,例如签名无效,地址已被映射,资产ID映射错误,执行ERC20合约调用失败等.
+
+### 函数(Functions)
+
+- `claim_account`:允许用户通过签名证明来声明以太坊地址与Substrate账户之间的映射关系.
+- `dissolve`:允许用户解除以太坊地址与Substrate账户之间的映射关系.
+- `deposit`:允许用户将Substrate资产存入ERC20合约.
+- `withdraw`:允许用户从ERC20合约提取资产到Substrate账户.
+- `teleport`:允许用户在Substrate账户和以太坊地址之间转移资产.
+- `register`:允许管理员注册ERC20合约地址与资产ID的映射关系.
+- `pause`和`unpause`:允许管理员暂停或恢复资产的存取操作.
+- `back_foreign`:允许管理员添加或移除支持跨链返回的资产.
+- `set_admin`:允许超级管理员设置资产管理模块的管理员.
+- `force_unregister`:允许管理员强制解除ERC20合约地址与资产ID的映射关系.
+
+### 实现细节(Implementation Details)
+
+- `Pallet::call_evm`函数用于调用ERC20合约的方法.
+- `Pallet::is_in_emergency`和`Pallet::is_in_back_foreign`函数用于检查资产是否处于紧急状态或是否支持跨链返回.
+- `Pallet::set_admin_inner`函数用于内部设置管理员账户.
+
+整体来看,这个模块提供了一套完整的机制,使得Substrate链上的资产能够与以太坊链上的ERC20代币进行互操作,
+这对于跨链资产转移和去中心化金融(DeFi)应用是非常重要的.
+*/

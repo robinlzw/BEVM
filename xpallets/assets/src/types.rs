@@ -135,3 +135,42 @@ pub struct WithdrawalLimit<Balance> {
     pub minimal_withdrawal: Balance,
     pub fee: Balance,
 }
+
+/*
+这段代码是区块链资产模块的一部分,它定义了资产类型,资产限制,资产信息结构以及与资产相关的错误类型.下面是对这些组件的详细解释:
+
+### `AssetType` 枚举
+
+`AssetType` 枚举定义了不同类型的资产余额,包括可用余额(Usable),锁定余额(Locked),预留余额(Reserved),
+用于赎回桥接资产的预留余额(ReservedWithdrawal)和用于DEX订单的预留余额(ReservedDexSpot).这些类型用于区分资产的不同用途和状态.
+
+### `AssetRestrictions` 位标志
+
+`AssetRestrictions` 是一个位标志结构,用于定义资产操作的限制.它包括移动(MOVE),转移(TRANSFER),存款(DEPOSIT),提款(WITHDRAW),
+销毁赎回余额(DESTROY_WITHDRAWAL)和销毁可用余额(DESTROY_USABLE)等操作的限制.位标志允许同时对多个限制进行测试和设置.
+
+### `TotalAssetInfo` 结构体
+
+`TotalAssetInfo` 结构体包含了资产的详细信息(`AssetInfo`),每种类型的资产余额(`balance`),资产是否在线(`is_online`)
+以及资产的限制(`restrictions`).这个结构体提供了一个全面的视图,展示了某个资产的所有相关信息.
+
+### `AssetErr` 枚举
+
+`AssetErr` 枚举定义了与资产操作相关的错误类型,包括余额不足(NotEnough),溢出(OverFlow),总资产不足(TotalAssetNotEnough),
+总资产溢出(TotalAssetOverFlow),无效资产(InvalidAsset)和不允许的操作(NotAllow).这些错误类型用于在资产操作失败时提供具体的错误信息.
+
+### `Error` trait 实现
+
+代码中还提供了一个将 `AssetErr` 转换为 `Error<T>` 的实现,其中 `T` 是配置 trait.这允许将资产相关的错误集成到框架的错误处理系统中.
+
+### `BalanceLock` 结构体
+
+`BalanceLock` 结构体表示对账户余额的锁定.它包含一个锁定标识符(`id`)和一个金额(`amount`),表示在锁定生效时可用余额不得低于该金额.
+多个锁定可以同时存在于一个账户上,并且它们可以重叠.
+
+### `WithdrawalLimit` 结构体
+
+`WithdrawalLimit` 结构体定义了最小提款金额(`minimal_withdrawal`)和提款费用(`fee`).这可以用于实施提款策略,例如设置最小提款限额或收取提款手续费.
+
+总的来说,这段代码为区块链资产模块提供了基础的数据结构和错误处理机制,以便在资产操作中进行有效的管理和控制.
+*/

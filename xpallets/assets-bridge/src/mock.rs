@@ -182,3 +182,43 @@ pub(crate) fn last_event() -> Event {
 pub(crate) fn expect_event<E: Into<Event>>(e: E) {
     assert_eq!(last_event(), e.into());
 }
+
+/*
+这段代码是一个用于测试的Substrate框架运行时环境配置,它设置了一个模拟的区块链网络,用于测试`xassets_bridge` pallet.
+这个pallet是ChainX项目的一部分,负责在Substrate资产和以太坊ERC20代币之间建立桥接.以下是代码中定义的一些关键组件和它们的功能:
+
+### 模块和配置
+
+- `xassets_bridge`:桥接pallet,用于在Substrate资产和以太坊ERC20代币之间进行互操作.
+- `AssetId`:用于唯一标识资产的类型.
+- `Config`:包含了pallet配置的类型.
+- `Error`:定义了可能发生的错误类型.
+- `Event`:定义了pallet可能发出的事件类型.
+
+### 运行时构造
+
+使用`frame_support::construct_runtime!`宏来构建一个模拟的运行时环境,其中包括了系统(System),时间戳(Timestamp),余额(Balances),
+以太坊虚拟机(Evm),资产注册(XAssetsRegistrar),资产处理(XAssets)和资产桥接(XAssetsBridge)等模块.
+
+### 参数配置
+
+- `BlockHashCount`:区块哈希计数.
+- `SS58Prefix`:SS58地址前缀.
+- `ExistentialDeposit`:创建新账户所需的最小存款.
+- `MinimumPeriod`:时间戳模块的最小周期.
+- `AssetDeposit`,`ApprovalDeposit`,`StringLimit`,`MetadataDepositBase`,`MetadataDepositPerByte`:与资产注册相关的存款和费用参数.
+- `EvmCaller`:以太坊调用者的地址.
+- `ClaimBond`:声明以太坊地址映射到Substrate账户所需的保证金.
+
+### 配置实现
+
+为Substrate框架的核心模块(如系统,时间戳,余额等)提供了测试配置.这些配置定义了区块链的参数,如账户ID类型,事件类型,余额类型等.
+
+### 测试辅助函数
+
+- `new_test_ext`:创建并返回一个新的测试外部状态,用于模拟区块链网络的状态.
+- `last_event`:获取并返回最后一个发出的事件.
+- `expect_event`:断言最后一个事件是否符合预期的事件类型.
+
+整体来看,这段代码为`xassets_bridge` pallet提供了一个完整的测试环境,允许开发者在不依赖实际区块链网络的情况下进行测试.
+*/

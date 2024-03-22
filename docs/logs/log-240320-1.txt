@@ -1,0 +1,173 @@
+     Running unittests (target/release/deps/chainx-61c2150b906adb68)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests (target/release/deps/chainx_cli-8e1922ed4abe25d5)
+
+running 1 test
+test logger::test_directive ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests (target/release/deps/chainx_executor-3da309c4a6aae053)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests (target/release/deps/chainx_primitives-4baa93df6aa5cc02)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests (target/release/deps/chainx_rpc-21e158b5fe3ca7ac)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests (target/release/deps/chainx_runtime-8f1e38a9f967c235)
+
+running 1 test
+test __construct_runtime_integrity_test::runtime_integrity_tests ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests (target/release/deps/chainx_runtime_common-8ad35ed6778986f7)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests (target/release/deps/chainx_service-8b73ed2e40acc9bf)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests (target/release/deps/dev_runtime-992ba2c3312b4b04)
+
+running 1 test
+test __construct_runtime_integrity_test::runtime_integrity_tests ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests (target/release/deps/malan_runtime-04c0e36039aeb550)
+
+running 1 test
+test __construct_runtime_integrity_test::runtime_integrity_tests ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests (target/release/deps/xp_assets_registrar-24b170b73ede08c1)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests (target/release/deps/xp_gateway_common-44debdfd42301ce8)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests (target/release/deps/xp_genesis_builder-ad887dc65a2b8c05)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests (target/release/deps/xp_io-92f166c9ac51d00c)
+
+running 1 test
+test ss58_check ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests (target/release/deps/xp_mining_common-0d5b7312a2e36d83)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests (target/release/deps/xp_mining_staking-9618f5a973a31e67)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests (target/release/deps/xp_protocol-d71574681e3bcfc8)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests (target/release/deps/xp_rpc-438940a07b43b51d)
+
+running 3 tests
+test tests::test_serde_hex_attr ... ok
+test tests::test_serde_num_str_attr ... ok
+test tests::test_serde_text_attr ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests (target/release/deps/xp_runtime-6f73be40d5e6e5a8)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests (target/release/deps/xpallet_assets-155a25098c517f1a)
+
+running 12 tests
+test mock::__construct_runtime_integrity_test::runtime_integrity_tests ... ok
+[2024-03-20T08:06:05Z ERROR xpallet_assets] Not allowed to destroy usable asset, id:100
+test tests::test_transfer_to_self ... ok
+test tests::test_unlock_issue_and_destroy2 ... ok
+test tests::test_normal_case ... ok
+test tests::test_error_issue_and_destroy2 ... ok
+[2024-03-20T08:06:05Z ERROR xpallet_assets] Not allowed to transfer asset, id:101
+test tests::test_normal_issue_and_destroy ... ok
+test tests::test_balance_btree_map ... ok
+test tests::test_error_issue_and_destroy1 ... ok
+test tests::test_transfer_token ... ok
+test tests::test_genesis ... ok
+test tests::test_error_issue_and_destroy3 ... ok
+test tests::test_move ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests (target/release/deps/xpallet_assets_bridge-8708788da963a36d)
+
+running 15 tests
+test mock::__construct_runtime_integrity_test::runtime_integrity_tests ... ok
+test tests::bridge_accounts_should_equal ... ok
+test tests::more_pause_and_unpause_should_work ... ignored
+test tests::pause_after_pause_should_work ... ignored
+test tests::pause_should_work ... ignored
+test tests::unpause_after_unpause_should_work ... ignored
+test tests::unpause_should_work ... ignored
+test tests::evm_address_mapping_substrate_account ... ok
+test tests::burn_from_abi_encode ... ok
+test tests::mint_into_abi_encode ... ok
+test tests::test_to_ascii_hex ... ok
+test tests::pause_should_not_work ... ok
+test tests::force_unregister_should_work ... ok
+test tests::unpause_should_not_work ... ok
+test tests::recover_eth_address ... ok
+
+test result: ok. 10 passed; 0 failed; 5 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running unittests (target/release/deps/xpallet_assets_registrar-3308e3541e7b0292)
+
+running 3 tests
+test tests::__construct_runtime_integrity_test::runtime_integrity_tests ... ok
+error: test failed, to rerun pass '-p xpallet-assets-registrar --lib'
+
+Caused by:
+  process didn't exit successfully: `/Users/edy/workspace/robinyw/BEVM/target/release/deps/xpallet_assets_registrar-3308e3541e7b0292 --nocapture` (signal: 11, SIGSEGV: invalid memory reference)
+make: *** [test] Error 101
+edy@edydeMBP-4 BEVM % 

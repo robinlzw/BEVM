@@ -421,3 +421,36 @@ fn withdraw<T: Config>(tx: Transaction) -> BtcTxResult {
         BtcTxResult::Failure
     }
 }
+
+/*
+这段代码是 ChainX 项目中处理比特币交易的逻辑,特别是在其比特币网关模块中.它定义了一系列函数,
+用于处理不同类型的比特币交易,包括存款,取款以及受托人转换.以下是代码中各个函数的详细解释:
+
+### 主要函数
+
+- **process_tx**: 这是处理比特币交易的主要入口点.它使用 `BtcTxTypeDetector` 来检测交易类型,并根据交易类型执行相应的处理逻辑.
+
+### 交易处理逻辑
+
+- **trustee_transition**: 处理受托人转换的逻辑.这通常涉及到更新受托人的状态.
+
+- **deposit**: 处理存款逻辑.它会检查交易的输出地址是否允许绑定,并根据操作码返回地址(op_return)和
+输入地址来更新或创建新的账户信息.然后,它会尝试将存款的比特币转换为 ChainX 链上的资产.
+
+- **deposit_token**: 根据账户类型(EVM,WASM,Aptos 或 Named)将比特币存款转换为 ChainX 链上的资产.
+
+- **deposit_wasm**, **deposit_evm**, **deposit_aptos**, **deposit_named**: 
+这些函数是 `deposit_token` 的特化版本,用于处理不同类型的账户和资产转换.
+
+### 辅助函数
+
+- **remove_pending_deposit**: 移除挂起的存款记录,并尝试重新存款.
+
+- **insert_pending_deposit**: 将新的存款记录插入到挂起的存款缓存中.
+
+- **withdraw**: 处理取款逻辑.它会检查是否有匹配的取款提案,并验证交易是否符合预期的格式.然后,它会更新挂起的取款记录,并在成功时记录事件.
+
+### 总结
+
+这些函数共同构成了 ChainX 项目中比特币网关模块的核心处理逻辑.它们确保了比特币交易能够在 ChainX 链上正确处理,无论是存款,取款还是受托人转换.
+*/

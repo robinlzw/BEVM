@@ -73,3 +73,32 @@ pub mod fee {
         }
     }
 }
+
+/*
+这段代码定义了 ChainX 区块链运行时中使用的一组常量值,这些常量分布在三个模块中:货币(currency),时间(time)和费用(fee).
+
+### 货币(currency)模块
+
+- `PCXS`:ChainX 区块链的最小货币单位,设置为 100,000,000,具有 8 位小数.
+- `DOLLARS`:1 美元在 ChainX 货币体系中的等价值,等于 `PCXS / 100`.
+- `CENTS`:1 美分在 ChainX 货币体系中的等价值,等于 `DOLLARS / 100`.
+- `MILLICENTS`:1 毫美分在 ChainX 货币体系中的等价值,等于 `CENTS / 1,000`.
+- `deposit` 函数:计算存入 ChainX 网络的费用,基于项目的数量和字节大小.
+
+### 时间(time)模块
+
+- `MILLISECS_PER_BLOCK`:每个区块的预期毫秒数,设置为 6,000.
+- `SLOT_DURATION`:插槽持续时间,与 `MILLISECS_PER_BLOCK` 相同.
+- `EPOCH_DURATION_IN_BLOCKS`:一个时代(epoch)包含的区块数量,设置为 5 分钟.
+- `MINUTES`,`HOURS`,`DAYS`:分别代表分钟,小时和天数对应的区块数量,基于 `MILLISECS_PER_BLOCK` 计算得出.
+- `PRIMARY_PROBABILITY`:Babe 共识算法中,一个区块成为主区块的概率,设置为 1/4.
+
+### 费用(fee)模块
+
+- `TARGET_BLOCK_FULLNESS`:区块饱和度的目标百分比,设置为 25%.
+- `WeightToFee` 结构:实现了 `WeightToFeePolynomial` trait,用于将权重转换为费用.
+- `polynomial` 方法:定义了一个一次多项式,将权重映射到费用上.在 Polkadot 中,最小的非零权重(即 extrinsic base weight)映射到 1/10 美分.
+
+这些常量和模块为 ChainX 区块链提供了货币单位,时间单位和费用计算的基础,它们对于区块链的运行和交易费用系统至关重要.
+通过这些定义,ChainX 能够确保其经济模型的稳定性和可预测性.
+*/

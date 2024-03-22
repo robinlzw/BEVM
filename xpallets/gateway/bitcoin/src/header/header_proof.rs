@@ -264,3 +264,53 @@ impl<'a> HeaderTimestamp<'a> {
         }
     }
 }
+
+/*
+这段代码是 ChainX 项目中用于比特币区块头验证的逻辑实现.它定义了一系列结构体和函数,用于检查比特币区块头的有效性,
+包括工作量证明(Proof of Work, PoW),时间戳和难度目标(difficulty target).以下是代码中各个组件的详细解释:
+
+### HeaderVerifier 结构体
+
+- `HeaderVerifier`: 用于验证比特币区块头的各个组成部分.它包含三个字段:`work`,`proof_of_work` 和 `timestamp`,分别用于检查区块头的工作量证明,难度和时间戳.
+
+### HeaderWork 结构体
+
+- `HeaderWork`: 用于验证区块头的难度目标.它检查当前区块的难度目标是否与预期相符.
+
+### work_required 函数
+
+- `work_required`: 计算给定区块高度所需的工作量.如果当前高度是调整难度的目标高度,则会重新计算新的难度目标.
+
+### is_retarget_height 函数
+
+- `is_retarget_height`: 判断当前高度是否是调整难度的目标高度.
+
+### work_required_retarget 函数
+
+- `work_required_retarget`: 在达到调整难度的目标高度时,重新计算新的难度目标.这通常是基于过去几个区块的平均时间来调整的.
+
+### retarget_timespan 函数
+
+- `retarget_timespan`: 计算自上次难度调整以来经过的时间.这个时间跨度用于在重新计算难度目标时进行调整.
+
+### range_constrain 函数
+
+- `range_constrain`: 将一个整数限制在一个给定的范围内.
+
+### HeaderProofOfWork 结构体
+
+- `HeaderProofOfWork`: 用于验证区块头的工作量证明是否有效.它检查区块头的哈希值是否满足难度目标.
+
+### is_valid_proof_of_work 函数
+
+- `is_valid_proof_of_work`: 检查给定的哈希值是否满足指定的难度目标.
+
+### HeaderTimestamp 结构体
+
+- `HeaderTimestamp`: 用于验证区块头的时间戳是否在可接受的范围内.如果时间戳过于超前,则可能表明区块头无效.
+
+### 总结
+
+这些组件共同构成了 ChainX 项目中比特币区块头验证的核心逻辑.它们确保了比特币区块头的有效性,防止了恶意矿工提交不满足网络规则的区块.
+通过这些验证,ChainX 项目能够安全地与比特币网络同步,并确保其跨链桥接功能的可靠性.
+*/
