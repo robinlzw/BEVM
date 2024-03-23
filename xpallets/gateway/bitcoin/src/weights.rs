@@ -131,3 +131,25 @@ impl WeightInfo for () {
         (2_887_000 as Weight).saturating_add(RocksDbWeight::get().writes(1 as Weight))
     }
 }
+
+/*
+这段代码是 Substrate 框架中 `xpallet_gateway_bitcoin` 模块的权重信息定义.
+权重信息是 Substrate 系统中用于衡量操作复杂性和资源消耗的一个关键概念.
+每个可能的操作(例如函数调用或交易)都有一个与之关联的权重,
+这有助于在执行操作时计算所需的总权重,并确保系统的稳定性和公平性.
+
+这里的权重信息是为了衡量 `xpallet_gateway_bitcoin` 模块中的各种操作所需的资源.
+这些操作包括推送比特币区块头,推送交易,创建 Taproot 地址的提款交易,设置最佳区块索引,
+设置已确认索引,移除挂起的交易,移除提款提案,设置比特币提款费用,设置比特币存款限额和设置即将到来的机器人账户.
+
+`WeightInfo` trait 定义了一系列的函数,每个函数返回一个 `Weight` 类型,表示相应操作的权重.
+`SubstrateWeight` 结构体实现了这个 trait,为每个操作提供了具体的权重值.
+这些值是在特定的硬件和配置下通过基准测试得到的,以确保它们反映了实际操作的成本.
+
+此外,为了向后兼容性和测试,还有一个为单元结构体 `()` 实现的 `WeightInfo` trait.
+这个实现使用了 `RocksDbWeight`,它是 Substrate 默认的数据库权重配置,
+而不是特定于某个 Substrate 节点配置的 `DbWeight`.
+
+这些权重值是通过 Substrate 的基准测试 CLI 工具生成的,该工具可以模拟执行各种操作并测量它们的资源消耗.
+这些权重值对于调整交易费用和确保网络的运行效率至关重要.
+*/

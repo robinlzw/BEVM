@@ -150,3 +150,47 @@ impl<AccountId, Address: Into<Vec<u8>>> AddressBinding<AccountId, Address> for (
         None
     }
 }
+
+/*
+这段代码定义了一系列的 trait 和它们的默认实现,这些 trait 被用于 ChainX 区块链项目中,
+主要用于处理受托人(trustee)管理,提案提供,总供应量,推荐人绑定和地址绑定等功能.
+
+### 主要 Trait 及其功能:
+
+1. **BytesLike**:
+   - 一个 trait,用于类型可以转换成 `Vec<u8>` 并从 `Vec<u8>` 尝试重建的类型.
+
+2. **ChainProvider**:
+   - 一个 trait,用于获取特定类型关联的链(Chain).
+
+3. **ProposalProvider**:
+   - 一个 trait,用于获取提款提案(withdrawal proposal)的接口.
+
+4. **TotalSupply**:
+   - 一个 trait,用于获取特定资产的总供应量.
+
+5. **TrusteeForChain**:
+   - 一个 trait,定义了与受托人实体相关的操作,如检查受托人实体和生成受托人会话信息.
+
+6. **TrusteeSession**:
+   - 一个 trait,定义了获取受托人会话信息的接口,包括当前会话,代理账户,最后会话和受托人过渡状态.
+
+7. **TrusteeInfoUpdate**:
+   - 一个 trait,用于更新受托人过渡状态和签名记录.
+
+8. **ReferralBinding**:
+   - 一个 trait,用于更新和获取推荐人绑定.
+
+9. **AddressBinding**:
+   - 一个 trait,用于更新和检查地址绑定,以及获取目标链的代理地址和解析地址.
+
+### 默认实现:
+
+每个 trait 都有一个空实现(使用单元结构体 `()` 作为默认实现),这些实现返回错误或 `None`,
+表示没有受托人或不进行任何操作.这些默认实现可以被具体的 pallet 或模块覆盖,以提供实际的逻辑.
+
+### 总结:
+
+这段代码为 ChainX 区块链项目提供了一套标准的接口和默认行为,使得受托人管理和地址绑定等功能
+可以在不同的模块中以统一的方式实现和扩展.
+*/

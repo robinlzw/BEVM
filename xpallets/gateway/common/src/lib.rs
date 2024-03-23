@@ -1119,7 +1119,7 @@ impl<T: Config> Pallet<T> {
         TrusteeSessionInfoLen::<T>::insert(chain, session_number);
         TrusteeSessionInfoOf::<T>::insert(chain, session_number, session_info.0.clone());
         TrusteeMultiSigAddr::<T>::insert(chain, multi_addr);
-        // Remove the information of the previous aggregate public key，Withdrawal is prohibited at this time.
+        // Remove the information of the previous aggregate public key,Withdrawal is prohibited at this time.
         AggPubkeyInfo::<T>::remove_all(None);
         for index in 0..session_info.1.agg_pubkeys.len() {
             AggPubkeyInfo::<T>::insert(
@@ -1403,3 +1403,51 @@ impl<T: Config> Pallet<T> {
         Ok(result)
     }
 }
+
+/*
+这段代码是 ChainX 区块链项目中的一个 pallet,它提供了跨链桥接的共同部分,包括受托人(trustees),
+跨链绑定等功能的实现.这个 pallet 作为 ChainX 区块链的一部分,负责处理与跨链资产转移相关的核心逻辑.
+
+### 主要功能和结构体:
+
+1. **受托人管理** (`trustees`):
+   - 允许设置和更新受托人信息,包括受托人的代理账户,描述,热钱包和冷钱包公钥等.
+
+2. **跨链绑定** (`AddressBinding` 和 `ReferralBinding`):
+   - 管理用户在不同链上的地址绑定,以及推荐人绑定.
+
+3. **受托人会话信息** (`TrusteeSessionInfo`):
+   - 存储受托人会话信息,包括受托人列表,阈值,热钱包地址,冷钱包地址等.
+
+4. **受托人意图属性** (`TrusteeIntentionProps`):
+   - 存储受托人注册时提供的属性,如代理账户,描述,热钱包和冷钱包公钥等.
+
+5. **奖励分配** (`claim_trustee_reward`):
+   - 处理受托人奖励的分配,包括原生资产和非原生资产的奖励.
+
+6. **受托人选举和过渡** (`do_trustee_election` 和 `transition_trustee_session`):
+   - 执行受托人选举和过渡逻辑,确保受托人列表的更新和新旧受托人会话的切换.
+
+7. **事件记录** (`Event`):
+   - 记录和发出与受托人管理和跨链操作相关的事件.
+
+8. **错误处理** (`Error`):
+   - 定义了可能发生的错误类型,并提供了相应的错误信息.
+
+9. **存储** (`Storage`):
+   - 定义了 pallet 使用的存储项,包括受托人会话信息,绑定信息,推荐人信息等.
+
+10. **Genesis 配置** (`GenesisConfig`):
+    - 提供了创世配置,允许在区块链启动时设置初始的受托人信息.
+
+### 基准测试和测试模块:
+
+- **基准测试** (`benchmarking`):
+  - 提供了用于评估 pallet 性能的基准测试.
+
+- **模拟测试** (`mock` 和 `tests`):
+  - 提供了模拟环境和测试用例,用于测试 pallet 的功能是否按预期工作.
+
+这段代码通过定义一系列的函数,结构体和存储项,为 ChainX 区块链项目提供了跨链资产管理和受托人机制的核心功能.
+这些功能对于确保跨链交易的安全性和有效性至关重要.
+*/

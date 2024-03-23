@@ -390,3 +390,93 @@ impl<AccountId, Balance: Display + FromStr, BlockNumber>
         }
     }
 }
+
+/*
+这段代码定义了 ChainX 区块链的交易支付模块的 RPC 接口.
+这个特定的接口专注于 `xpallet_gateway_common` 模块,该模块提供了与网关和资产跨链转移相关的功能.
+
+以下是定义的 RPC 方法及其用途:
+
+1. **bound_addrs**:
+   - 功能:获取指定账户在不同链上的绑定地址.
+   - 参数:`AccountId`(账户ID),`BlockHash`(区块哈希).
+   - 返回值:一个 `BTreeMap`,键是链的类型(`Chain`),值是该账户在该链上的地址列表(`Vec<String>`).
+
+2. **withdrawal_limit**:
+   - 功能:获取指定资产的提款限额.
+   - 参数:`AssetId`(资产ID),`BlockHash`(区块哈希).
+   - 返回值:`WithdrawalLimit<RpcBalance<Balance>>` 结构体,包含提款限额信息.
+
+3. **withdrawal_list_with_fee_info**:
+   - 功能:获取带有提款费用信息的提款列表.
+   - 参数:`AssetId`(资产ID),`BlockHash`(区块哈希).
+   - 返回值:一个 `BTreeMap`,键是提款记录ID(`WithdrawalRecordId`),值是一个元组,
+   包含提款信息(`RpcWithdrawalRecord<AccountId, Balance, BlockNumber>`)
+   和提款限额(`WithdrawalLimit<RpcBalance<Balance>>`).
+
+4. **verify_withdrawal**:
+   - 功能:验证提款申请的有效性,包括资产数量,接收地址和备忘录.
+   - 参数:`AssetId`(资产ID),`u64`(提款金额),`String`(接收地址),`String`(备忘录),`BlockHash`(区块哈希).
+   - 返回值:一个布尔值,表示提款申请是否有效.
+
+5. **multisigs**:
+   - 功能:获取所有受托人的多重签名地址.
+   - 参数:`BlockHash`(区块哈希).
+   - 返回值:一个 `BTreeMap`,键是链的类型(`Chain`),值是受托人账户ID列表(`AccountId`).
+
+6. **btc_trustee_properties**:
+   - 功能:获取指定账户在比特币链上的受托人属性.
+   - 参数:`AccountId`(账户ID),`BlockHash`(区块哈希).
+   - 返回值:`BtcTrusteeIntentionProps<AccountId>` 结构体,包含受托人属性.
+
+7. **btc_trustee_session_info**:
+   - 功能:获取当前会话中比特币链的受托人会话信息.
+   - 参数:`i32`(会话编号),`BlockHash`(区块哈希).
+   - 返回值:`BtcTrusteeSessionInfo<AccountId, BlockNumber>` 结构体,包含受托人会话信息.
+
+8. **btc_generate_trustee_session_info**:
+   - 功能:尝试为一组候选人生成比特币受托人会话信息.
+   - 参数:`Vec<AccountId>`(候选人账户ID列表),`BlockHash`(区块哈希).
+   - 返回值:`BtcTrusteeSessionInfo<AccountId, BlockNumber>` 结构体,包含受托人会话信息.
+
+这些 RPC 方法为 ChainX 区块链的用户提供了一系列工具,以查询和管理他们的资产跨链转移操作.
+通过这些方法,用户可以检查自己的地址绑定情况,提款限额,提款列表,以及验证和生成受托人会话信息.
+
+
+--------------------------------------------------------------------------
+在实际区块链系统中,`XGatewayCommonApi` 接口与 `XAsset` 接口关联在一起,但它们关注的功能点不同.
+下面是它们的关联性和区别:
+
+### 关联性:
+
+1. **跨链交互**:
+   - 两者都参与到跨链交互中.`XGatewayCommonApi` 专注于跨链交易的管理和执行,
+   而 `XAsset` 接口则涉及到资产的创建,转移和查询.
+
+2. **资产处理**:
+   - 在跨链转移中,资产(如代币或其他加密货币)是核心对象.`XGatewayCommonApi` 接口
+   可能会使用 `XAsset` 接口来检查资产的可用性,转移资产或获取资产的相关信息.
+
+3. **用户交互**:
+   - 用户在进行跨链交易时,可能会通过 `XGatewayCommonApi` 接口查询提款限额,验证提款申请等,
+   而这些操作可能依赖于 `XAsset` 接口提供的资产状态信息.
+
+### 区别:
+
+1. **功能焦点**:
+   - `XGatewayCommonApi` 主要关注于跨链交易的管理和执行,如提款限额查询,提款验证,受托人信息管理等.
+   - `XAsset` 接口则更侧重于单个区块链内部的资产管理,如资产的创建,余额查询,资产转移等.
+
+2. **操作范围**:
+   - `XGatewayCommonApi` 通常涉及多个区块链之间的操作,需要处理跨链逻辑和信任设置.
+   - `XAsset` 接口通常只在单个区块链内部操作,处理的是链内的资产状态和交易.
+
+3. **用户场景**:
+   - `XGatewayCommonApi` 通常被用于跨链服务,如交易所的跨链提款和存款,跨链流动性管理等.
+   - `XAsset` 接口则更多被用于日常的资产管理,如用户查询自己的资产余额,执行资产转账等.
+
+在实际的区块链系统中,这些接口可能会相互调用或依赖对方的数据和状态,以提供完整的用户体验.
+例如,用户在执行跨链提款时,可能需要通过 `XGatewayCommonApi` 来验证提款地址和限额,
+同时 `XAsset` 接口可能会用来检查账户的资产余额是否足够.这样,两个接口协同工作,确保了跨链交易的顺利进行.
+
+*/

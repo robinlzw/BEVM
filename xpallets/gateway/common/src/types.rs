@@ -156,3 +156,51 @@ impl<AccountId, TrusteeEntity: BytesLike> TryFrom<GenericTrusteeIntentionProps<A
         })
     }
 }
+
+/*
+这段代码定义了 ChainX 区块链项目中与受托人(trustee)相关的数据结构和类型转换.
+这些结构体用于存储和管理受托人的信息,包括会话信息,意图属性,脚本信息和奖励信息.
+代码还提供了序列化/反序列化的支持,使得这些数据结构可以在网络中传输或存储.
+
+### 主要结构体和类型:
+
+1. **TrusteeInfoConfig**:
+   - 受托人信息配置结构体,包含最小和最大受托人数量.
+
+2. **TrusteeSessionInfo**:
+   - 受托人会话信息结构体,包含受托人列表,阈值,热钱包地址,冷钱包地址,多重签名账户,开始和结束高度.
+
+3. **ScriptInfo**:
+   - 脚本信息结构体,包含聚合公钥和对应的个人账户列表.
+
+4. **RewardInfo**:
+   - 奖励信息结构体,用于记录受托人分配的奖励.
+
+5. **GenericTrusteeSessionInfo**:
+   - 泛型受托人会话信息结构体,用于类型转换.
+
+6. **TrusteeIntentionProps**:
+   - 受托人意图属性结构体,包含代理账户,描述,热钱包实体和冷钱包实体.
+
+7. **GenericTrusteeIntentionProps**:
+   - 泛型受托人意图属性结构体,用于类型转换.
+
+### 类型转换实现:
+
+- **From 和 TryFrom**:
+  - 为 `TrusteeSessionInfo` 和 `GenericTrusteeSessionInfo` 之间,`TrusteeIntentionProps` 
+  和 `GenericTrusteeIntentionProps` 之间提供了类型转换的实现.这些转换用于在不同的上下文中传递和处理受托人信息.
+
+### 序列化/反序列化支持:
+
+- **Encode 和 Decode**:
+  - 通过实现 `Encode` 和 `Decode` trait,这些结构体可以被编码和解码为字节序列,便于在区块链网络中传输.
+
+- **Serialize 和 Deserialize**:
+  - 当启用标准库特性时,通过 `serde` 库提供序列化和反序列化的支持,使得这些结构体可以被转换为 JSON 格式或其他序列化格式.
+
+### 总结:
+
+这段代码为 ChainX 区块链项目提供了一套完整的受托人信息管理工具,包括数据结构的定义,类型转换和序列化/反序列化的支持.
+这些工具对于实现受托人机制和确保区块链网络的安全性和透明度至关重要.
+*/

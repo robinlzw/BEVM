@@ -235,3 +235,52 @@ impl<T: Config> Pallet<T> {
         DefaultDstChain::<T>::insert(address, dst_chain);
     }
 }
+
+/*
+这段代码是 ChainX 区块链项目中的一个 pallet,它实现了 `ReferralBinding` 和 `AddressBinding` trait,
+用于管理用户存款地址的绑定以及推荐人的绑定.这些绑定对于跨链资产转移和追踪推荐关系至关重要.
+
+### 主要功能:
+
+1. **更新推荐人绑定 (`update_binding`)**:
+   - `ReferralBinding` trait 的实现,用于更新或设置特定资产的推荐人绑定.如果提供了推荐人名称,
+   它会检查该推荐人是否存在,并设置或更新绑定.
+
+2. **获取推荐人 (`referral`)**:
+   - `ReferralBinding` trait 的实现,用于获取特定用户和资产的推荐人.
+
+3. **更新用户存款地址绑定 (`update_binding`)**:
+   - `AddressBinding` trait 的实现,用于更新或设置用户的存款地址绑定.
+   这包括对不同链(如 EVM,Aptos,Named)的地址进行处理.
+
+4. **检查允许的绑定 (`check_allowed_binding`)**:
+   - `AddressBinding` trait 的实现,用于检查 BTC 存款信息中的操作返回地址是否允许绑定.
+
+5. **获取目标链的代理地址 (`dst_chain_proxy_address`)**:
+   - `AddressBinding` trait 的实现,用于获取目标链的代理地址.
+
+6. **根据地址获取用户 (`address`)**:
+   - `AddressBinding` trait 的实现,用于根据给定的地址和链类型解析出用户的 `OpReturnAccount`.
+
+7. **导出运行时 API (`bound_addrs`)**:
+   - 提供一个函数,允许外部查询给定用户的绑定地址.
+
+### 辅助函数:
+
+- **`update_wasm_binding`**:
+  - 用于更新 Wasm 链上的地址绑定.
+
+- **`update_dst_chain_binding`**:
+  - 用于更新目标链上的地址绑定.
+
+### 存储修改:
+
+- 这些函数通过修改 `BoundAddressOf` 和 `AddressBindingOf` 等存储项来更新绑定信息.
+
+### 日志记录:
+
+- 使用 `debug`, `error`, `info`, `warn` 等日志记录函数来跟踪绑定操作的状态和潜在的错误.
+
+这段代码通过提供一套完整的绑定管理机制,确保了 ChainX 区块链项目能够正确处理跨链资产转移和推荐关系追踪.
+这对于维护用户资产的安全和推荐系统的有效性至关重要.
+*/

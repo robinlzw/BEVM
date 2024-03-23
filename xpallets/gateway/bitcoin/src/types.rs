@@ -186,3 +186,53 @@ impl Default for BtcTxVerifier {
         Self::Recover
     }
 }
+
+/*
+这段代码定义了在 Substrate 框架下与比特币网关交互所需的数据结构和类型.
+它包括了比特币交易,区块头,提款提案,参数配置等的结构体和枚举类型.
+以下是这些类型和结构体的详细说明:
+
+### BtcAddress
+- 一个简单的 `Vec<u8>` 类型,用于表示比特币地址.
+
+### BtcRelayedTx
+- 包含区块哈希,原始比特币交易和默克尔证明的 `BtcRelayedTx` 结构体.
+
+### BtcRelayedTxInfo
+- 包含区块哈希和默克尔证明的 `BtcRelayedTxInfo` 结构体,用于表示中继交易的信息.
+
+### BtcHeaderInfo
+- 包含比特币区块头和区块高度的 `BtcHeaderInfo` 结构体.
+
+### BtcHeaderIndex
+- 包含区块哈希和高度的 `BtcHeaderIndex` 结构体,用于索引比特币区块头.
+
+### BtcTxState
+- 包含交易类型和交易结果的 `BtcTxState` 结构体,用于表示比特币交易的状态.
+
+### BtcTxResult
+- 一个枚举类型,表示比特币交易的结果,可以是成功(Success)或失败(Failure).
+
+### AccountInfo
+- 一个枚举类型,表示账户信息,可以是一个包含 `OpReturnAccount` 和 `ReferralId` 的元组,或者是一个比特币地址.
+
+### BtcDepositCache
+- 包含交易 ID 和余额的 `BtcDepositCache` 结构体,用于缓存比特币存款信息.
+
+### BtcWithdrawalProposal
+- 包含签名状态,提款 ID 列表,比特币交易和受托人列表的 `BtcWithdrawalProposal` 结构体,用于处理比特币提款提案.
+
+### VoteResult
+- 一个枚举类型,表示投票结果,可以是未完成(Unfinish)或已完成(Finish).
+
+### BtcParams
+- 包含比特币网络参数的 `BtcParams` 结构体,如最大难度值,区块最大未来时间,目标时间跨度,目标间隔时间,难度调整因子等.
+
+### BtcTxVerifier
+- 一个枚举类型,表示比特币交易验证器的类型,可以是 Recover(恢复),
+RuntimeInterface(运行时接口)或 Test(测试),其中 Test 用于基准测试和测试场景,会忽略签名检查并始终返回 true.
+
+这些类型和结构体是构建和运行比特币网关智能合约的基础,它们用于处理比特币交易,
+验证交易的有效性,管理提款提案和缓存存款信息等.通过这些定义,
+Substrate 框架的比特币网关模块可以与比特币区块链进行交互,实现资产的跨链转移和交易.
+*/

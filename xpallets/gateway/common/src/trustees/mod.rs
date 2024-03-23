@@ -146,3 +146,55 @@ impl<T: Config> TrusteeInfoUpdate for Pallet<T> {
         });
     }
 }
+
+/*
+这段代码是 ChainX 区块链项目中负责管理受托人会话信息的模块.`TrusteeSessionManager` 是一个泛型结构体,
+用于处理特定于比特币的受托人会话信息.它实现了 `TrusteeSession` trait,提供了一系列的函数来查询和管理受托人会话.
+
+### 主要功能和结构体:
+
+1. **TrusteeSessionManager**:
+   - 一个泛型结构体,使用 `PhantomData` 来表示它依赖于特定的配置 `T`(即 ChainX 区块链的配置)和受托人地址类型 `TrusteeAddress`.
+   - 实现了 `TrusteeSession` trait,该 trait 定义了获取受托人会话信息,当前会话,代理账户列表,最后会话以及转换状态的方法.
+
+2. **TrusteeSessionInfo**:
+   - 受托人会话信息的结构体,包含受托人列表,阈值,热钱包地址,冷钱包地址,多账户信息,开始和结束高度等字段.
+
+3. **TrusteeSigRecord**:
+   - 受托人签名记录的结构体,用于记录每个受托人签名的金额.
+
+4. **TrusteeTransitionStatus**:
+   - 一个记录受托人转换状态的结构体,用于标记受托人会话是否正在转换.
+
+5. **TrusteeInfoUpdate**:
+   - 一个 trait,定义了更新受托人信息的方法,如更新转换状态和签名记录.
+
+### 主要方法:
+
+- **trustee_session**:
+  - 根据会话编号获取受托人会话信息.
+
+- **current_trustee_session**:
+  - 获取当前活跃的受托人会话信息.
+
+- **current_proxy_account**:
+  - 获取当前会话中所有受托人的代理账户列表.
+
+- **last_trustee_session**:
+  - 获取最后一个受托人会话信息.
+
+- **trustee_transition_state**:
+  - 获取受托人转换状态.
+
+- **update_transition_status**:
+  - 更新受托人转换状态,并在转换完成后更新最后会话的信息.
+
+- **update_trustee_sig_record**:
+  - 更新受托人的签名记录.
+
+### 用途:
+
+`TrusteeSessionManager` 用于 ChainX 区块链中管理比特币受托人的会话信息.
+它允许区块链系统跟踪受托人的当前状态,历史记录以及他们在跨链交易中的角色.
+通过这些功能,ChainX 能够确保比特币资产的安全转移和管理.
+*/
