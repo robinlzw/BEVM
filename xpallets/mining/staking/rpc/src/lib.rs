@@ -228,3 +228,34 @@ where
             .map_err(runtime_error_into_rpc_err)
     }
 }
+
+/*
+这段代码定义了ChainX区块链项目的质押(Staking)模块的RPC(远程过程调用)接口.这个接口允许外部客户端查询有关
+质押状态,验证者信息,质押分红和提名详情的数据.以下是代码的主要组成部分和它们的功能:
+
+1. **`#![allow(clippy::type_complexity)]`**:
+   - 这是一个编译警告抑制属性,用于忽略`clippy`工具报告的复杂类型警告.
+
+2. **依赖项**:
+   - 引入了必要的外部依赖项,包括`std`库中的类型,`codec`库用于序列化和反序列化,`jsonrpc_derive`库用于
+   自动生成RPC方法,以及其他Substrate和ChainX项目中的类型和特质.
+
+3. **`XStakingApi` trait**:
+   - 定义了质押相关的RPC方法.这些方法允许客户端查询:
+     - `validators`: 获取所有潜在验证者的综合信息.
+     - `validator_info_of`: 根据验证者的账户ID,获取验证者的综合信息.
+     - `staking_dividend_of`: 根据质押者的账户ID,获取质押分红信息.
+     - `nomination_details_of`: 根据质押者的账户ID,获取提名详情.
+     - `nominator_info_of`: 根据提名者的账户ID,获取提名者信息.
+
+4. **`XStaking` struct**:
+   - 实现了`XStakingApi` trait,提供了与ChainX区块链节点进行交互的实际RPC方法.它持有对客户端的引用,
+   并使用`PhantomData`来指定它服务的区块链块类型.
+
+5. **实现`XStakingApi` trait**:
+   - 为`XStaking` struct提供了实际的RPC方法实现.这些方法使用客户端的运行时API来获取所需的信息,并将其转换为RPC结果类型.
+   - 使用了`map_err`来将可能发生的运行时错误转换为RPC错误.
+
+整体来看,这段代码为ChainX区块链提供了一个RPC接口,使得外部客户端可以查询质押相关的信息.这对于开发者来说是一个强大的工具,
+因为它允许他们构建应用程序和服务,这些应用程序和服务可以基于区块链上的质押数据进行决策和交互.
+*/

@@ -329,3 +329,39 @@ pub fn t_register(who: AccountId, initial_bond: Balance) -> DispatchResult {
 
     XStaking::register(Origin::signed(who), referral_id, initial_bond)
 }
+
+/*
+这段代码是一个用于测试ChainX区块链网络中质押(Staking)模块的Rust测试框架.
+它构建了一个模拟的运行时环境,包括必要的配置参数和测试辅助函数.以下是对代码中关键部分的详细解释:
+
+### 运行时构造(Construct Runtime)
+- 使用`frame_support::construct_runtime!`宏定义了一个名为`Test`的运行时环境,
+其中包含了`System`,`Timestamp`,`Balances`,`Session`和`XStaking`等模块.
+
+### 参数配置(Parameter Types)
+- 定义了一系列与测试相关的参数类型,如`BlockHashCount`,`SS58Prefix`,`MaxReserves`,`MinimumPeriod`等.
+
+### 模块配置(Module Configuration)
+- 为`frame_system`,`pallet_balances`,`pallet_timestamp`和`pallet_session`等模块提供了测试配置.
+
+### 会话处理(Session Handling)
+- `OtherSessionHandler`是一个自定义的会话处理结构体,用于模拟会话的开始和结束,以及验证者的禁用.
+
+### 奖励金库账户确定器(Reward Pot Account Determiner)
+- `DummyStakingRewardPotAccountDeterminer`是一个模拟的奖励金库账户确定器,它根据验证者的`AccountId`生成奖励金库账户.
+
+### 测试构建器(Test Builder)
+- `ExtBuilder`是一个测试构建器,用于配置和构建测试运行时环境.它允许设置会话长度,选举前瞻和每纪元的会话数等.
+
+### 测试辅助函数(Test Helper Functions)
+- `t_register`函数是一个测试辅助函数,用于模拟验证者注册过程.
+
+### 线程局部存储(Thread Local Storage)
+- 使用`thread_local!`宏定义了一些线程局部变量,如`SESSION`,`SESSION_PER_ERA`,`EXISTENTIAL_DEPOSIT`等,用于在测试中存储会话信息和账户余额.
+
+### 测试执行(Test Execution)
+- `ExtBuilder`的`build_and_execute`方法用于构建测试运行时环境并执行测试代码.
+
+整体而言,这段代码提供了一个完整的测试框架,用于模拟ChainX区块链网络中的质押模块的行为,并允许开发者在隔离的环境中测试他们的代码.
+通过这个框架,开发者可以确保质押逻辑在各种情况下都能按预期工作,从而提高区块链网络的稳定性和安全性.
+*/

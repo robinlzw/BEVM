@@ -199,3 +199,33 @@ impl ExtBuilder {
         ext.execute_with(test);
     }
 }
+
+/*
+这段代码是 ChainX 项目中用于测试的 Substrate 运行时环境的构建和配置.它定义了一个名为 `Test` 的测试运行时,
+其中包含了多个 pallets,包括 `System`,`Balances`,`XAssetsRegistrar`,`XAssets` 和 `XGatewayRecords`.
+此外,它还定义了一些测试用的常量,类型别名和辅助函数.
+
+### 主要组件
+
+- **Test 运行时**: 通过 `construct_runtime!` 宏构建的测试运行时环境,包含了 ChainX 项目中使用的 pallets.
+
+- **参数类型**: 使用 `parameter_types!` 宏定义了一系列的参数类型,如账户 ID,区块编号,余额等.
+
+- **配置 trait**: 实现了 `frame_system::Config`,`pallet_balances::Config`,`xpallet_assets_registrar::Config`,
+`xpallet_assets::Config` 等 trait,为测试运行时提供了必要的配置.
+
+- **事件**: 定义了测试运行时中使用的事件类型.
+
+- **资产配置**: 定义了比特币(`X_BTC`)和以太坊(`X_ETH`)资产的信息和限制.
+
+- **测试账户**: 定义了测试账户 `ALICE`,`BOB`,`CHARLIE` 和 `DAVE` 的账户 ID.
+
+### 辅助函数和结构
+
+- **ExtBuilder**: 一个结构体,用于构建和执行测试.它提供了 `build` 方法来创建测试外部环境,以及 `build_and_execute` 方法来执行测试代码.
+
+### 总结
+
+这段代码为 ChainX 项目的 Substrate 运行时提供了一个完整的测试环境,允许开发者在其中执行测试用例,验证 pallets 的功能和性能.
+通过模拟运行时环境,开发者可以在不部署到实际区块链的情况下进行开发和测试.
+*/

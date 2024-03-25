@@ -85,3 +85,31 @@ impl WeightInfo for () {
             .saturating_add(RocksDbWeight::get().writes(6 as Weight))
     }
 }
+
+/*
+这段代码是一个Substrate框架中的权重(Weight)信息定义文件,用于`xpallet_gateway_records`模块.这个文件是使用Substrate的基准测试工具自动生成的,用于确定执行特定操作所需的计算和存储资源.这些权重信息对于调整交易费用和优化网络性能至关重要.
+
+文件中包含了以下关键部分:
+
+1. 文件头部的注释:
+   - 提供了版权声明和许可证信息.
+   - 描述了文件是如何使用Substrate基准测试CLI工具自动生成的,包括生成日期,步骤数,重复次数,执行环境和配置参数.
+   - 显示了执行的命令行指令,用于生成这个权重文件.
+
+2. 权重信息接口`WeightInfo`:
+   - 定义了`xpallet_gateway_records`模块需要的权重函数.这些函数包括:
+     - `root_deposit()`:根账户执行存款操作的权重.
+     - `root_withdraw()`:根账户执行提现操作的权重.
+     - `set_withdrawal_state()`:设置提现状态的权重.
+     - `set_withdrawal_state_list(u: u32)`:设置提现状态列表的权重,其中`u`是列表的大小.
+
+3. 权重实现`SubstrateWeight<T>`:
+   - 为使用Substrate节点和推荐硬件的`xpallet_gateway_records`模块提供了权重实现.
+   - 实现了`WeightInfo`接口,为每个操作计算权重.权重是基于常量和数据库读写操作的权重组合而成的.
+
+4. 兼容性和测试的权重信息实现:
+   - 为了向后兼容和测试,为`()`(空元组)实现了`WeightInfo`接口.这允许在没有特定类型参数的情况下使用这些权重函数.
+
+权重值是以"Weight"为单位的,这是一个可以表示计算和存储负担的抽象单位.这些权重值是在特定的硬件和网络条件下测量得到的,
+以便在实际的区块链网络中使用.通过这些权重信息,网络可以对交易进行定价,并确保网络的运行效率和公平性.
+*/

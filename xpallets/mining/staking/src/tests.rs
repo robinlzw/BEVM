@@ -898,3 +898,47 @@ fn migration_session_offset_should_work() {
         );
     });
 }
+
+/*
+这段代码是一个Rust编写的测试套件,用于测试ChainX区块链项目中的质押(Staking)模块的功能.
+ChainX是一个基于Substrate框架的区块链项目,而Substrate是Parity Technologies开发的一个区块链开发框架.
+这个测试套件包含了多个测试函数,用于验证ChainX的质押系统的不同方面,包括质押,解质押,奖励分配,惩罚(Slash)等核心功能.
+
+以下是代码中一些关键函数和测试用例的简要说明:
+
+1. `t_issue_pcx`:一个测试辅助函数,用于向指定账户发行PCX(ChainX的代币).
+
+2. `t_register`:注册一个新验证者,需要提供推荐ID和初始质押金额.
+
+3. `t_bond`,`t_rebond`,`t_unbond`:分别用于执行质押,重新质押和解质押操作.
+
+4. `t_withdraw_unbonded`:用于处理解质押资金的提现.
+
+5. `t_system_block_number_inc`:用于模拟区块数量的增加.
+
+6. `assert_bonded_locks` 和 `assert_bonded_withdrawal_locks`:断言函数,用于验证账户的质押和解质押锁定余额是否正确.
+
+7. `cannot_force_chill_should_work`:测试当活跃验证者数量不足时,系统是否阻止强制冷却(chill)操作.
+
+8. `bond_should_work`:测试质押功能是否按预期工作,包括质押后的余额更新和投票权重变化.
+
+9. `total_staking_locked_no_more_than_free_balance_should_work`:确保质押锁定的资金不会超过账户的可用余额.
+
+10. `unbond_should_work` 和 `rebond_should_work`:分别测试解质押和重新质押的功能.
+
+11. `withdraw_unbond_should_work`:测试解质押资金的提现功能.
+
+12. `regular_staking_should_work`:测试常规质押流程,包括会话开始,验证者变更和冷却等.
+
+13. `staking_reward_should_work` 和 `staker_reward_should_work`:测试质押奖励的分配是否正确.
+
+14. `slash_should_work`:测试惩罚机制是否按预期工作,但这个测试用例目前是被忽略的,因为有一个待办事项(todo)需要解决.
+
+15. `mint_should_work` 和 `balances_reserve_should_work`:测试代币发行和余额预留功能.
+
+16. `referral_id_should_work`:测试推荐ID的唯一性和占用情况.
+
+17. `migration_session_offset_should_work`:测试在迁移会话偏移量时奖励计算是否正确.
+
+这些测试用例是ChainX项目质量保证的一部分,确保质押模块在各种情况下都能正确运行.
+*/

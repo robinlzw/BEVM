@@ -207,3 +207,34 @@ mod tests {
         });
     }
 }
+
+/*
+这段代码是ChainX区块链项目的一部分,它定义了一系列基准测试(benchmarks),用于评估和测试与质押(staking)相关的操作的性能.
+这些基准测试使用Substrate框架的`frame_benchmarking`库编写,并在特定的测试环境中执行.以下是代码的主要组成部分和它们的功能:
+
+1. **辅助函数**:
+   - `create_funded_user`: 创建一个拥有资金的用户账户,并为其分配一定数量的代币.
+   - `create_validator`: 创建一个验证者账户,并将其注册为ChainX的验证者.
+   - `b_bond`: 模拟用户与验证者之间的质押行为.
+
+2. **基准测试**:
+   - `register`: 测试注册新验证者的操作.
+   - `bond`: 测试用户与验证者之间的质押操作.
+   - `unbond`: 测试用户取消与验证者的质押操作.
+   - `unlock_unbonded_withdrawal`: 测试解锁未绑定的提现操作.
+   - `rebond`: 测试用户将已解锁的质押重新与另一个验证者绑定的操作.
+   - `claim`: 测试验证者认领奖励的操作.
+   - `chill`: 测试将验证者置于不活跃状态的操作.
+   - `validate`: 测试将验证者重新激活的操作.
+   - `set_validator_count`: 测试设置验证者数量的操作.
+   - `set_minimum_validator_count`: 测试设置最小验证者数量的操作.
+   - `set_bonding_duration`: 测试设置质押绑定持续时间的操作.
+   - `set_validator_bonding_duration`: 测试设置验证者质押绑定持续时间的操作.
+   - `set_minimum_penalty`: 测试设置最小惩罚金额的操作.
+   - `set_sessions_per_era`: 测试设置每个时代会话数量的操作.
+
+3. **测试模块**:
+   - 包含一个测试用例`test_benchmarks`,它构建了一个测试环境并执行了所有的基准测试,确保它们都能够成功运行.
+
+整体来看,这段代码为ChainX区块链提供了一套全面的基准测试,用于确保系统的关键功能在不同负载下的性能.
+*/

@@ -97,3 +97,24 @@ impl<T: Config> Pallet<T> {
         NominatorInfo { last_rebond }
     }
 }
+
+/*
+这段代码是ChainX区块链网络中负责质押(Staking)模块的一部分,它定义了与验证者(Validators)和
+提名者(Nominators)相关的信息结构和辅助函数.以下是对代码中关键部分的详细解释:
+
+### 验证者信息结构(ValidatorInfo)
+- `ValidatorInfo`结构体包含了一个验证者的完整信息,包括其账户ID,质押档案,质押账本,是否正在验证,自我质押金额,奖励金库账户ID和奖励金库余额.
+
+### 提名者信息结构(NominatorInfo)
+- `NominatorInfo`结构体包含了一个提名者的质押档案信息,主要是最后一次`rebond`操作的区块号.
+
+### 辅助函数(Helper Functions)
+- `validators_info`:返回当前所有验证者的详细信息列表.
+- `validator_info_of`:返回特定验证者的详细信息.
+- `staking_dividend_of`:返回一个提名者从所有验证者那里获得的股息信息,以`AccountId`为键,`Balance`为值的映射.
+- `nomination_details_of`:返回一个提名者对所有验证者的提名详细信息,以`AccountId`为键,`NominatorLedger`为值的映射.
+- `nominator_info_of`:返回一个提名者的详细信息.
+
+这些结构和函数为ChainX区块链网络中的质押模块提供了必要的数据结构和查询功能,使得质押和提名的相关信息可以
+被有效地管理和访问.通过这些工具,区块链的参与者可以跟踪自己的质押状态,验证者的信誉和潜在的奖励,从而做出更明智的决策.
+*/

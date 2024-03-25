@@ -453,3 +453,33 @@ where
         UncheckedFrom::unchecked_from(T::Hashing::hash(&buf[..]))
     }
 }
+
+/*
+这段代码是ChainX区块链网络中负责质押和挖矿奖励逻辑的智能合约的一部分,使用Rust语言编写.它实现了几个关键的接口和函数,
+用于计算挖矿权重,分配奖励,处理新的会话和纪元,以及处理违规行为.下面是对这些函数和接口的详细解释:
+
+1. `BaseMiningWeight` trait 的实现:为 `ValidatorLedger` 和 `NominatorLedger` 结构体实现了
+ `BaseMiningWeight` trait,这允许它们被用作挖矿权重计算的基础.这些函数允许获取和设置验证者和提名者的质押金额,最后累积权重和相关的时间戳.
+
+2. `ComputeMiningWeight` trait 的实现:为 `Pallet` 实现了 `ComputeMiningWeight` trait,这允许计算给定提名者和验证者的挖矿权重因子.
+
+3. `calculate_dividend_on_claim` 和 `compute_dividend_at` 函数:这些函数用于计算提名者在给定区块高度向验证者提出索赔时的股息.
+股息是根据验证者的奖励池余额和提名者的权重计算的.
+
+4. `allocate_dividend` 函数:此函数负责将股息从奖励池分配给提名者.
+
+5. `set_nominator_vote_weight` 和 `set_validator_vote_weight` 函数:这些函数用于更新提名者和验证者的
+投票权重,考虑到新的投票权重,区块高度和质押金额的变化.
+
+6. `Claim` trait 的实现:为 `Pallet` 实现了 `Claim` trait,这允许处理提名者向验证者提出的索赔.这包括分配股息,更新投票权重,并在成功索赔时触发事件.
+
+7. `new_session`,`start_session`,`end_session`,`start_era` 和 `end_era` 函数:这些函数处理会话和纪元的开始和结束.
+它们负责分发新的会话奖励,尝试对违规者进行惩罚,更新活跃纪元和处理新的纪元.
+
+8. `OnOffenceHandler` trait 的实现:为 `Pallet` 实现了 `OnOffenceHandler` trait,这允许处理违规行为.
+当检测到违规行为时,此函数将违规者的信息存储在环境存储中,以便稍后进行惩罚.
+
+9. `SimpleValidatorRewardPotAccountDeterminer` 结构体:这是一个简单的验证者奖励池账户确定器,它根据验证者的公钥和注册时间来计算奖励池账户的地址.
+
+整体而言,这段代码为ChainX区块链网络提供了一套完整的质押和挖矿奖励管理机制,包括处理新的会话和纪元,计算挖矿权重,分配奖励,处理违规行为等关键功能.
+*/

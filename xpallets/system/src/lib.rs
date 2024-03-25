@@ -174,3 +174,51 @@ impl<T: Config> Pallet<T> {
             .collect()
     }
 }
+
+/*
+这段代码是一个Substrate框架的区块链项目中的一个名为`xsystem`的pallet(模块).
+这个pallet提供了一些系统级别的功能,包括暂停特定pallet的调用,管理黑名单账户等.
+以下是对代码中定义的trait,结构体,函数和存储项的详细解释:
+
+1. **MultisigAddressFor**:
+   - 一个trait,用于计算多签名地址.它接受一个账户ID的切片和一个阈值作为参数,并返回一个多签名地址.
+
+2. **MultiSig**:
+   - 一个trait,定义了一个`multisig`函数,用于获取多签名地址.
+
+3. **Validator**:
+   - 一个trait,定义了`is_validator`和`validator_for`函数,用于检查账户是否是验证者以及根据名称获取验证者账户ID.
+
+4. **TreasuryAccount**:
+   - 一个trait,定义了`treasury_account`函数,用于获取国库账户ID.
+
+5. **pallet**:
+   - 使用`frame_support::pallet`宏定义的pallet模块,包含了`Config` trait,`Pallet`结构体,`Call`接口,`Event`枚举和存储项.
+
+6. **Config**:
+   - `xsystem` pallet的配置trait,要求实现`frame_system::Config`,并添加了`Event`和`Currency`类型.
+
+7. **Pallet**:
+   - `Pallet`结构体,使用`PhantomData<T>`来表示与`Config`相关的类型.
+
+8. **Call**:
+   - 定义了`modify_paused`和`toggle_blacklist`函数,用于修改pallet调用的暂停状态和切换账户的黑名单状态.
+
+9. **Event**:
+   - 定义了`Blacklisted`和`Unblacklisted`事件,用于通知账户被添加到黑名单或从黑名单中移除.
+
+10. **Storage**:
+    - 定义了`NetworkProps`,`Paused`和`Blacklist`存储项,用于存储网络属性,暂停的pallet调用和黑名单账户.
+
+11. **GenesisConfig**:
+    - 定义了`GenesisConfig`结构体,用于在创世区块时设置网络属性.
+
+12. **GenesisBuild**:
+    - 实现了`GenesisBuild` trait,用于在创世区块时初始化`NetworkProps`.
+
+13. **辅助函数**:
+    - `is_paused`函数用于检查给定的pallet调用是否已暂停.
+    - `get_blacklist`函数用于获取当前的黑名单账户列表.
+
+这个pallet提供了一些基本的系统管理功能,允许区块链的管理员(通常是root账户或sudo权限的账户)管理pallet的调用和账户的黑名单状态.
+*/

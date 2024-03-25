@@ -158,3 +158,42 @@ impl<AccountId, Balance: Display + FromStr, BlockNumber>
         }
     }
 }
+
+/*
+这段代码定义了 `XGatewayRecordsApi`,这是一个 JSON-RPC 接口,用于与 ChainX 项目的跨链交易记录模块进行交互.
+它允许用户查询取款列表,特定链的取款列表以及特定链的挂起取款列表.此外,还提供了 `RpcWithdrawalRecord` 结构体,用于将取款记录序列化为 JSON-RPC 响应.
+
+### 主要组件
+
+1. **XGatewayRecords 结构体**:封装了对客户端的引用,用于与区块链交互.
+
+2. **XGatewayRecordsApi trait**:定义了三个 RPC 方法,用于获取取款列表和挂起取款列表.
+
+3. **RpcWithdrawalRecord 结构体**:表示取款记录的 RPC 版本,包含了取款的详细信息.
+
+### RPC 方法
+
+- **withdrawal_list**:返回当前所有取款记录的映射,包括正在处理和应用中的取款.
+
+- **withdrawal_list_by_chain**:返回特定链上的所有取款记录的映射.
+
+- **pending_withdrawal_list_by_chain**:返回特定链上所有挂起的取款记录的映射.
+
+### 实现细节
+
+- **impl XGatewayRecordsApi**:为 `XGatewayRecords` 结构体实现了 `XGatewayRecordsApi` trait,使其能够处理 RPC 请求.
+
+- **From<Withdrawal<...>> for RpcWithdrawalRecord<...>**:实现了从 `Withdrawal` 类型到 `RpcWithdrawalRecord` 
+类型的转换,以便在序列化前将取款记录转换为 RPC 响应格式.
+
+### 序列化和反序列化
+
+- **serde**:使用 Serde 库来序列化和反序列化 `RpcWithdrawalRecord` 结构体.
+
+- **serde_num_str**:自定义序列化策略,用于将数字类型转换为字符串.
+
+### 总结
+
+`XGatewayRecordsApi` 提供了一个接口,使得外部客户端可以查询 ChainX 区块链上的取款记录,这对于监控跨链资产流动和管理取款过程非常重要.
+通过这些 RPC 方法,用户和开发者可以获取有关取款状态的详细信息,从而更好地理解和使用 ChainX 项目的功能.
+*/
