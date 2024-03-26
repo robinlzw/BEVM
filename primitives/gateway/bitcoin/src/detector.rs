@@ -176,6 +176,43 @@ impl BtcTxTypeDetector {
         }
     }
 
+    /*
+    这段代码定义了一个名为 `parse_deposit_transaction_outputs` 的函数,它用于解析 X-BTC 存款交易的输出,
+    并提取账户信息和存款价值.这个函数是针对比特币交易处理的一部分,特别是在处理与 ChainX 区块链交互的桥接逻辑时.
+
+    函数的参数和返回值如下:
+
+    - `tx`: 指向比特币交易的引用,该交易包含了存款的详细信息.
+    - `extract_account`: 一个闭包或函数,用于从比特币的 `OP_RETURN` 数据中提取账户信息和推荐ID(如果有的话).
+    - `current_trustee_pair`: 当前受托人的密钥对,用于确定热钱包地址.
+
+    函数的返回值是一个元组,包含:
+    - `Option<(OpReturnAccount<AccountId>, Option<ReferralId>)>`: 一个选项,如果成功提取账户信息,
+    则包含 `OpReturnAccount` 和推荐ID;否则为 `None`.
+    - `u64`: 存款的总价值,以比特币单位(satoshi)表示.
+
+    函数的逻辑如下:
+
+    1. 初始化 `account_info` 为 `None`,表示还没有提取到账户信息.
+
+    2. 遍历交易的所有输出,寻找 `OP_RETURN` 脚本.`OP_RETURN` 是比特币脚本中的一种操作码,用于在交易中嵌入数据而不执行任何操作.
+
+    3. 对于每个 `OP_RETURN` 脚本,尝试提取数据并使用提供的 `Extractor` 函数来获取账户信息.
+    如果成功提取,将 `account_info` 设置为这个信息,并跳出循环.
+
+    4. 初始化 `deposit_value` 为 0,表示存款价值的累加器.
+
+    5. 获取当前受托人的热钱包地址.
+
+    6. 再次遍历交易的所有输出,这次是为了计算存款价值.对于每个输出,尝试提取目标地址,并检查它是否与受托人的热钱包地址匹配.
+    如果匹配且输出值大于 0,则将其累加到 `deposit_value` 中.
+
+    7. 使用调试日志打印 `account_info` 和 `deposit_value`.
+
+    8. 返回包含 `account_info` 和 `deposit_value` 的元组.
+
+    这个函数的设计允许 ChainX 区块链的桥接逻辑处理比特币网络中的存款交易,提取相关信息,并计算存款的价值.这对于在 ChainX 和比特币之间进行资产转移的系统来说是必要的.
+     */
     /// Parse the outputs of X-BTC `Deposit` transaction.
     /// Return the account info that extracted from OP_RETURN data and the deposit value.
     pub fn parse_deposit_transaction_outputs<AccountId, Extractor>(
@@ -446,7 +483,7 @@ fn test_parse_deposit_transaction_outputs() {
         //   - 空数据交易(OP_RETURN数据包含有效的账户信息)
         (
             // 交易的十六进制字符串
-            "020000000001012f0f1be54017a91480。。。0000000".parse::<Transaction>().unwrap(),
+            "020000000001012f0f1be54017a91480...0000000".parse::<Transaction>().unwrap(),
             // 预期的解析结果,包含账户信息和存款价值
             (
                 Some((

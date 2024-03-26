@@ -91,6 +91,36 @@ fn set_prometheus_registry(config: &mut Configuration) -> Result<(), ServiceErro
     Ok(())
 }
 
+/*
+这段Rust代码定义了一个名为 `new_partial` 的函数,它是Substrate节点启动过程中的一部分,用于创建节点的部分组件.
+这个函数不接受远程密钥库配置,并设置了Prometheus监控和Telemetry(遥测)服务,创建了执行器,初始化了客户端,后端和任务管理器,
+并配置了交易池,共识导入队列和其他相关组件.以下是对函数及其内部逻辑的详细解释:
+
+### 函数签名
+
+- `pub fn new_partial<RuntimeApi, Executor>(config: &mut Configuration) -> Result<..., ServiceError>`: 
+这是一个公共函数,它接受一个可变引用的 `Configuration` 对象作为参数,并返回一个 `Result` 类型的结果.
+`Result` 包含 `sc_service::PartialComponents` 结构体的实例或 `ServiceError` 错误.
+
+### 函数实现
+
+1. **远程密钥库检查**:如果配置中包含远程密钥库,则返回错误,因为远程密钥库不受支持.
+2. **Prometheus监控设置**:通过调用 `set_prometheus_registry` 函数,根据配置设置Prometheus监控注册表.
+3. **Telemetry初始化**:如果配置了Telemetry端点,则创建Telemetry工作器并启动它.
+4. **执行器创建**:使用 `NativeElseWasmExecutor` 创建一个新的执行器,这个执行器根据配置决定是使用原生执行还是WASM执行.
+5. **客户端和后端初始化**:通过调用 `sc_service::new_full_parts` 函数,创建客户端,后端和任务管理器的组件.
+6. **选择链逻辑**:使用 `sc_consensus::LongestChain` 创建一个新的选择链逻辑实例.
+7. **交易池初始化**:创建一个新的完整交易池实例.
+8. **过滤器池和费用历史缓存初始化**:创建过滤器池和费用历史缓存实例.
+9. **Frontier后端打开**:打开Frontier后端数据库.
+10. **GRANDPA和BABE共识组件初始化**:创建GRANDPA区块导入,BABE区块导入和链接实例.
+11. **导入队列设置**:创建BABE导入队列,并配置相关的内在数据提供者.
+12. **组装部分组件**:将所有创建的组件组装成 `sc_service::PartialComponents` 结构体,并返回.
+
+### 返回类型
+
+- `sc_service::PartialComponents`: 这是一个包含节点部分组件的结构体,它包括客户端,后端,任务管理器,选择链,交易池,导入队列和其他相关设置.
+*/
 pub fn new_partial<RuntimeApi, Executor>(
     config: &mut Configuration,
 ) -> Result<
@@ -248,6 +278,35 @@ where
     })
 }
 
+/*
+这段Rust代码定义了一个名为 `NewFullBase` 的结构体,它似乎是Substrate框架中用于初始化完整节点服务的一部分.
+`NewFullBase` 结构体包含了在节点启动时需要的各种组件和服务的引用.下面是对结构体及其成员的详细解释:
+
+### `NewFullBase` 结构体
+
+- `RuntimeApi`: 这是一个泛型参数,代表运行时API的类型.这个类型需要实现 `ConstructRuntimeApi` trait,
+这个trait用于构造运行时API,并且需要满足一些其他的限制(如 `Send`, `Sync`, `'static`),以确保它可以在多线程环境中安全使用.
+- `Executor`: 这是另一个泛型参数,代表执行器的类型.执行器需要实现 `NativeExecutionDispatch` trait,这个trait定义了如何执行原生(WASM)代码.
+
+### 约束条件
+
+- `RuntimeApi` 需要实现 `ConstructRuntimeApi` trait,这个trait允许 `RuntimeApi` 被构造用于处理区块(`Block`)和完整客户端(`FullClient`).
+- `RuntimeApi::RuntimeApi` 需要实现 `RuntimeApiCollection` trait,这个trait定义了一个运行时API集合.这里的 `StateBackend` 
+被指定为 `sc_client_api::StateBackendFor<FullBackend, Block>`,这意味着状态后端用于存储和检索链的状态信息.
+- `Executor` 需要实现 `NativeExecutionDispatch` trait,这个trait定义了如何调度和执行原生运行时代码.
+
+### 结构体字段
+
+- `task_manager`: 节点的任务管理器.这个字段包含一个 `TaskManager` 类型的值,负责管理和调度节点的各种后台任务.
+- `client`: 节点的客户端实例.这个字段是一个 `Arc`(原子引用计数)智能指针,指向 `FullClient` 类型的值,它包含了与区块链交互所需的所有信息和状态.
+- `network`: 节点的网络服务.这个字段也是一个 `Arc` 智能指针,指向 `NetworkService` 类型的值,负责处理节点的网络通信,如区块和交易的传播.
+- `transaction_pool`: 节点的交易池.这个字段是一个 `Arc` 智能指针,指向 `sc_transaction_pool::FullPool` 类型的值,
+它管理待处理的交易,以及与交易相关的其他任务,如交易选择和验证.
+- `rpc_handlers`: 节点的RPC处理器.这个字段包含了 `RpcHandlers` 类型的值,负责处理通过RPC(远程过程调用)接口发起的请求.
+
+`NewFullBase` 结构体的设计允许它在创建节点服务时,将所有必要的组件封装在一起,从而简化了节点的初始化过程.通过使用 `Arc` 智能指针,
+它确保了这些组件可以在多线程环境中安全地共享和访问.
+*/
 pub struct NewFullBase<RuntimeApi, Executor>
 where
     RuntimeApi:
@@ -277,6 +336,18 @@ fn remote_keystore(_url: &str) -> Result<Arc<LocalKeystore>, &'static str> {
 }
 
 /// Creates a full service from the configuration.
+// 1.创建部分组件:通过调用 new_partial 函数,从配置中创建了节点的部分组件,包括客户端,后端,任务管理器,导入队列,密钥库容器,选择链和交易池等.
+// 2.远程密钥库:如果配置中指定了远程密钥库的URL,尝试连接并设置远程密钥库.
+// 3.导入设置:从 new_partial 函数返回的 PartialComponents 中提取导入设置,包括BABE区块导入,GRANDPA链接和BABE链接.
+// 4.网络和RPC:构建网络服务,系统RPC传输通道和网络启动器,并根据配置启动网络.
+// 5.离线工作器:如果启用了离线工作器,构建并启动它们.
+// 6.角色和共识:根据配置确定节点的角色(权威节点或普通节点),并相应地设置共识机制.如果节点是权威节点,创建BABE提议者和GRANDPA投票者.
+// 7.RPC扩展:构建RPC扩展,包括必要的依赖项和任务执行器.
+// 8.启动任务:使用 spawn_tasks 函数启动RPC和其他相关任务.
+// 9.Frontier EVM任务:启动与Frontier EVM相关的维护任务,包括映射同步工作器,过滤器池任务和费用历史缓存任务.
+// 10.启动GRANDPA:如果启用了GRANDPA共识机制,启动GRANDPA投票者.
+// 11.网络启动:启动网络.
+// 12.返回结果:如果所有步骤都成功完成,返回包含任务管理器,客户端,网络和交易池的 NewFullBase 结构体实例.
 pub fn new_full_base<RuntimeApi, Executor>(
     mut config: Configuration,
 ) -> Result<NewFullBase<RuntimeApi, Executor>, ServiceError>

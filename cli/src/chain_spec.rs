@@ -420,6 +420,44 @@ fn mainnet_session_keys(
     }
 }
 
+/*
+这段代码是ChainX区块链项目的创世配置函数`mainnet_genesis`的实现.它用于创建主网的创世配置,
+这是区块链启动时的初始状态.函数接受几个参数,包括WebAssembly二进制文件(`wasm_binary`),
+初始授权者(`initial_authorities`),资产参数(`assets`),比特币创世参数(`bitcoin`)和受托人信息(`trustees`).
+
+以下是函数的主要步骤和组件:
+
+1. **初始化资产**:
+   - `init_assets`函数被调用以初始化资产和资产限制.
+
+2. **技术委员会成员**:
+   - 创建了一个包含技术委员会成员账户ID的向量.这些账户ID是从十六进制字符串转换而来.
+
+3. **比特币受托人**:
+   - 从`trustees`参数中提取比特币受托人信息.只有当链是比特币链时,才会提取受托人信息.
+
+4. **创建`chainx::GenesisConfig`**:
+   - 使用`chainx::GenesisConfig`结构体构建创世配置,这个结构体包含了ChainX区块链的所有配置信息,
+   包括系统,共识机制,治理,资金,选举,在线状态,资产,比特币网关,质押,挖矿资产,现货交易,
+   创世构建器,以太坊链ID,EVM配置,基础费用等.
+
+5. **各个配置的默认值和特定值**:
+   - 许多字段使用了默认值(`Default::default()`),而一些特定的字段则根据传入的参数或硬编码的值进行了设置.
+   例如,`system`字段设置了WASM代码,`session`字段设置了初始授权者,`x_gateway_bitcoin`字段设置了比特币网关的特定配置.
+
+6. **硬编码的值**:
+   - 在`chainx::XStakingConfig`和`chainx::XMiningAssetConfig`等结构体中,有许多硬编码的值,
+   如质押验证者的数量,会话周期,奖励分配比例,最小惩罚金额等.
+
+7. **比特币网关配置**:
+   - `x_gateway_bitcoin`字段包含了比特币网关的配置,如创世受托人,网络ID,确认数量,创世哈希和比特币参数.
+
+8. **交易对和挖矿功率**:
+   - `x_spot`字段定义了交易对,例如PCX和X_BTC的交易对,以及它们的小数位数,最小交易量和是否启用.
+   - `x_mining_asset`字段定义了挖矿资产的声明限制和挖矿功率映射.
+
+这个函数的输出是一个完整的创世配置,它可以用来初始化ChainX区块链的主网.创世配置是区块链启动时的关键组成部分,它定义了网络的初始状态和参数.
+*/
 fn mainnet_genesis(
     wasm_binary: &[u8],
     initial_authorities: Vec<AuthorityKeysTuple>,

@@ -596,3 +596,47 @@ impl<T: Config> xpallet_assets_registrar::RegistrarHandler for Pallet<T> {
         Ok(())
     }
 }
+
+/*
+这段 Rust 代码是一个实现了 `xpallet_assets_registrar::RegistrarHandler` trait 的函数,用于处理特定于 
+ChainX 区块链 pallet 的资产注销(deregistration)逻辑.当一个资产被注销时,这个函数会检查所有交易对(trading pairs),并更新那些包含已注销资产的交易对的状态.
+
+代码解释如下:
+
+1. `impl<T: Config> xpallet_assets_registrar::RegistrarHandler for Pallet<T>`:
+   - 这是一个 trait 实现,其中 `T` 是一个泛型参数,它必须实现 `Config` trait.`Config` trait 通常包含了 pallet 运行所需的配置类型.
+   - `xpallet_assets_registrar::RegistrarHandler` 是一个 trait,定义了资产注册表处理器的行为.
+
+2. `fn on_deregister(token: &AssetId) -> DispatchResult`:
+   - 这是 `RegistrarHandler` trait 的一个方法,当一个资产被注销时会被调用.
+   - `token` 参数是一个指向 `AssetId` 的引用,表示被注销的资产的 ID.
+   - 方法返回 `DispatchResult` 类型,这是一个枚举,表示操作成功或失败,并可能包含错误信息.
+
+3. `let pair_len = TradingPairCount::<T>::get();`:
+   - 获取当前注册的交易对数量.`TradingPairCount` 是一个存储项,它记录了交易对的数量.
+
+4. `for i in 0..pair_len`:
+   - 遍历从 0 到交易对数量的所有整数,用于迭代所有交易对.
+
+5. `if let Some(mut pair) = TradingPairOf::<T>::get(i)`:
+   - 使用 `get` 方法尝试获取索引 `i` 对应的交易对.
+   - 如果交易对存在,将其绑定到 `pair` 变量上,并创建一个可变的借用 `mut pair`.
+
+6. `if pair.base().eq(token) || pair.quote().eq(token)`:
+   - 检查交易对的基础资产(base)或报价资产(quote)是否与被注销的资产的 ID 相等.
+
+7. `pair.tradable = false;`:
+   - 如果交易对包含已注销的资产,将其 `tradable` 标志设置为 `false`,表示该交易对不再可用于交易.
+
+8. `TradingPairOf::<T>::insert(i, &pair);`:
+   - 将更新后的交易对重新插入到存储中.
+
+9. `Self::deposit_event(Event::<T>::TradingPairUpdated(pair));`:
+   - 存储一个事件,表示交易对已更新.`Event::<T>::TradingPairUpdated` 是一个自定义事件,包含有关更新的交易对的信息.
+
+10. `Ok(())`:
+    - 方法成功执行后返回 `Ok(())`,表示没有错误.
+
+这个实现确保了当一个资产被注销时,所有包含该资产的交易对都会被标记为不可交易,这是为了防止在资产被注销后仍然进行无效的交易.
+同时,通过存储事件,其他 pallet 或外部观察者可以知道交易对的状态已经改变.
+*/

@@ -20,6 +20,35 @@ pub fn extract_addr_from_transaction(
         .and_then(|output| extract_output_addr(output, network))
 }
 
+/*
+这个函数 `extract_output_addr` 的目的是从一个比特币交易输出(`TransactionOutput`)中提取地址.
+它只支持几种特定的输出脚本类型:`p2pk`(Pay to Public Key),`p2pkh`(Pay to Public Key Hash),
+和 `p2sh`(Pay to Script Hash).这些类型分别代表直接支付给公钥,公钥哈希和脚本哈希的交易.
+
+函数的参数和返回值如下:
+
+- `output`: 指向比特币交易输出的引用,该输出包含了要处理的脚本.
+- `network`: 比特币网络的类型(如主网或测试网),这将决定地址的格式和前缀.
+- 返回值是一个 `Option<Address>` 类型,如果成功提取地址,则为 `Some(Address)`;如果无法提取,则为 `None`.
+
+函数的逻辑如下:
+
+1. 使用 `Script::new` 创建一个新的 `Script` 对象,它表示输出脚本的副本.
+
+2. 调用 `script(script_type())` 方法来确定脚本的类型.
+
+3. 使用 `script.extract_destinations()` 方法尝试从脚本中提取目标地址.这个方法可能会失败,如果出现错误,
+它会返回一个错误信息,并通过 `map_err` 处理.`unwrap_or_default` 用于获取提取的地址集合,如果失败,则默认返回空集合.
+
+4. 如果提取的地址数量不等于1,这意味着脚本可能不是预期的类型,或者地址无法从脚本中提取.在这种情况下,函数会记录一个警告信息并返回 `None`.
+
+5. 如果成功提取了一个地址,函数会根据脚本类型创建一个新的 `Address` 对象.`Address` 对象包含了网络类型,地址类型(如公钥或脚本哈希)和地址的哈希值.
+
+6. 最后,函数根据脚本类型返回一个包含地址的 `Some(Address)`,或者如果脚本类型不支持,则返回 `None`.
+
+这个函数在处理比特币交易时非常有用,尤其是在需要确定交易输出的接收地址时.例如,当处理跨链交易或执行链上治理操作时,准确识别交易的接收地址是至关重要的.
+通过这个函数,可以确保只有正确类型的地址被提取和使用.
+*/
 /// Extract address from a transaction output script.
 /// only support `p2pk`, `p2pkh` and `p2sh` output script
 pub fn extract_output_addr(output: &TransactionOutput, network: Network) -> Option<Address> {
